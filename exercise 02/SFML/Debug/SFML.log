@@ -1,0 +1,16 @@
+﻿  World.cpp
+d:\repository\sfml-exercises\exercise 02\sfml\world.cpp(10): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+d:\repository\sfml-exercises\exercise 02\sfml\world.cpp(15): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+d:\repository\sfml-exercises\exercise 02\sfml\world.cpp(21): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\repository\sfml-exercises\exercise 02\sfml\world.cpp(26): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+d:\repository\sfml-exercises\exercise 02\sfml\world.cpp(32): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+d:\repository\sfml-exercises\exercise 02\sfml\world.cpp(39): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+d:\repository\sfml-exercises\exercise 02\sfml\world.cpp(44): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+d:\repository\sfml-exercises\exercise 02\sfml\world.cpp(45): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+  SFML.cpp
+  Player.cpp
+d:\repository\sfml-exercises\exercise 02\sfml\player.cpp(13): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Game.cpp
+  Generating Code...
+  SFML.vcxproj -> D:\Repository\SFML-EXERCISES\exercise 02\Debug\SFML.exe
+  SFML.vcxproj -> D:\Repository\SFML-EXERCISES\exercise 02\Debug\SFML.pdb (Full PDB)

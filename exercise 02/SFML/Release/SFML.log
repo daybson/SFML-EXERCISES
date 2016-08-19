@@ -1,0 +1,8 @@
+﻿  Game.cpp
+d:\repository\sfml-exercises\exercise 02\sfml\Game.h(3): fatal error C1083: Cannot open include file: 'SFML\Graphics.hpp': No such file or directory
+  Player.cpp
+d:\repository\sfml-exercises\exercise 02\sfml\Player.h(3): fatal error C1083: Cannot open include file: 'SFML\Graphics.hpp': No such file or directory
+  SFML.cpp
+SFML.cpp(2): fatal error C1083: Cannot open include file: 'SFML\Graphics.hpp': No such file or directory
+  World.cpp
+d:\repository\sfml-exercises\exercise 02\sfml\World.h(3): fatal error C1083: Cannot open include file: 'SFML\Graphics.hpp': No such file or directory
