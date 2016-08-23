@@ -19,13 +19,13 @@ public:
 	static const int screenHeight = 600;
 	
 	World world;
-	Player player;
+	Player* player;
 
 private:
 	void handlePlayerInput(Keyboard::Key key, bool isPressed);
-	void processEvents();
-	void update();
-	void render();
+	void ProcessEvents();
+	void Update();
+	void Render();
 	
 	Clock clock;
 	RenderWindow mWindow;

@@ -11,15 +11,12 @@ Game::Game(String title, Uint32 style)
 {
 	clock = *new Clock();
 	mWindow.create(VideoMode(screenWidth, screenHeight), title, style);
-	world = *new World();
-	player = *new Player();
-	player.Move(Vector2f(400, 600));
+	player = new Player();
+	//player->Move(Vector2f(400, 600));
 }
 
 Game::~Game()
 {
-	free(&world);
-	free(&player);
 }
 
 void Game::run()
@@ -27,9 +24,10 @@ void Game::run()
 	while (mWindow.isOpen())
 	{
 		clock.restart();
-		processEvents();
-		update();
-		render();
+
+		ProcessEvents();
+		Update();
+		Render();
 	}
 }
 
@@ -54,8 +52,9 @@ void Game::handlePlayerInput(Keyboard::Key key, bool isPressed)
 	}
 }
 
-void Game::processEvents()
+void Game::ProcessEvents()
 {
+
 	Event event;
 
 	while (mWindow.pollEvent(event))
@@ -63,10 +62,10 @@ void Game::processEvents()
 		switch (event.type)
 		{
 		case Event::KeyPressed:
-			handlePlayerInput(event.key.code, false);
+			handlePlayerInput(event.key.code, true);
 			break;
 		case Event::KeyReleased:
-			handlePlayerInput(event.key.code, true);
+			handlePlayerInput(event.key.code, false);
 			break;
 		case Event::Closed:
 			mWindow.close();
@@ -77,37 +76,30 @@ void Game::processEvents()
 	}
 }
 
-void Game::update()
+void Game::Update()
 {
-	Vector2f movement(0.f, 0.f);
+	Vector2f delta(0, 0);
 
 	if (mIsMovingUp)
-		movement.y += 0.1f;
+		delta.y -= 0.1f;
 	if (mIsMovingDown)
-		movement.y -= 0.1f;
+		delta.y += 0.1f;
 	if (mIsMovingLeft)
-		movement.x += 0.1f;
+		delta.x -= 0.1f;
 	if (mIsMovingRight)
-		movement.x -= 0.1f;
+		delta.x += 0.1f;
 
-	if (movement != Vector2f(0.f, 0.f))
-		player.Move(movement);
+	if (delta != Vector2f(0, 0))
+		player->Move(delta);
 
-	player.UpdateSprite(clock.getElapsedTime().asSeconds());
+	player->Update(clock.getElapsedTime().asSeconds());
 }
 
-void Game::render()
+void Game::Render()
 {
 	mWindow.clear();
 
-	//mWindow.draw(world.sky);
-	//mWindow.draw(world.street);
-	//mWindow.draw(world.forestLeft);
-	//mWindow.draw(world.forestRight);
-	//mWindow.draw(world.lineStreetLeft);
-	//mWindow.draw(world.lineStreetRight);
-
-	mWindow.draw(player.sprite);
+	mWindow.draw(player->GetCurrentSprite());
 
 	mWindow.display();
 }

@@ -4,37 +4,25 @@
 
 Player::Player()
 {
-	currentFrameTime = 0.f;
-	if (texture.loadFromFile(pathTexture))
-	{
-		tile = *new IntRect(0, 0, tileWidth, tileHeight);
-		sprite = *new Sprite(texture, tile);
-		sprite.setOrigin(0, 0);
-		sprite.move(0, -tileHeight);
-	}
+	spriteSheet = new SpriteSheet(spriteSheetName);
 }
-
 
 Player::~Player()
 {
+	delete spriteSheet;
 }
 
 void Player::Move(Vector2f delta)
 {
-	sprite.move(delta);
+	spriteSheet->GetSprite().move(delta);
 }
 
-void Player::UpdateSprite(float millisUpdateTime)
+void Player::Update(float millisUpdateTime)
 {
-	currentFrameTime += millisUpdateTime;
+	spriteSheet->UpdateAnimation(millisUpdateTime);
+}
 
-	if (currentFrameTime >= frameTime)
-	{
-		if (tile.left + tileWidth >= 96)
-			tile.left = 0;
-		else
-			tile.left += tileWidth;
-		currentFrameTime = 0.0f;
-		sprite.setTextureRect(tile);
-	}
+Sprite& Player::GetCurrentSprite()
+{
+	return spriteSheet->GetSprite();
 }
