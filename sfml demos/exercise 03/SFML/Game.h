@@ -14,8 +14,8 @@ public:
 	~Game();
 
 	void run();
-	static const int screenWidth = 800;
-	static const int screenHeight = 600;
+	static const int screenWidth = 512;
+	static const int screenHeight = 256;
 	Tile& GetTileMap();
 	Tile& GetBackground();
 private:

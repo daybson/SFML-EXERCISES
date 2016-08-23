@@ -37,18 +37,18 @@ bool Tile::Load(const string & tilesetPath, Vector2u tileSize, const int * tiles
 		return false;
 
 	vertices.setPrimitiveType(Quads);
-	vertices.resize(width*height * 4);
+	vertices.resize(width * height * 4);
 
-	for (unsigned int i = 0; i < width; i++)
+	for (unsigned int i = 0; i < width; ++i)
 	{
-		for (unsigned int j = 0; j < width; j++)
+		for (unsigned int j = 0; j < height; ++j)
 		{
 			int tileNumber = tiles[i + j * width];
 
 			int tu = (int)tileNumber % (tileset.getSize().x / tileSize.x);
 			int tv = (int)tileNumber / (tileset.getSize().x / tileSize.x);
 
-			Vertex* quad = &vertices[(i + j * 4) * 4];
+			Vertex* quad = &vertices[(i + j * width) * 4];
 
 			quad[0].position = Vector2f(i * tileSize.x, j * tileSize.y);
 			quad[1].position = Vector2f((i + 1) * tileSize.x, j * tileSize.y);
