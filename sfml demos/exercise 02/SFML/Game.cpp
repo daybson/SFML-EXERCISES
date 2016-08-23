@@ -12,7 +12,6 @@ Game::Game(String title, Uint32 style)
 	clock = *new Clock();
 	mWindow.create(VideoMode(screenWidth, screenHeight), title, style);
 	player = new Player();
-	//player->Move(Vector2f(400, 600));
 }
 
 Game::~Game()
@@ -54,7 +53,6 @@ void Game::handlePlayerInput(Keyboard::Key key, bool isPressed)
 
 void Game::ProcessEvents()
 {
-
 	Event event;
 
 	while (mWindow.pollEvent(event))
@@ -81,13 +79,13 @@ void Game::Update()
 	Vector2f delta(0, 0);
 
 	if (mIsMovingUp)
-		delta.y -= 0.1f;
+		delta.y -= 0.05f;
 	if (mIsMovingDown)
-		delta.y += 0.1f;
+		delta.y += 0.05f;
 	if (mIsMovingLeft)
-		delta.x -= 0.1f;
+		delta.x -= 0.05f;
 	if (mIsMovingRight)
-		delta.x += 0.1f;
+		delta.x += 0.05f;
 
 	if (delta != Vector2f(0, 0))
 		player->Move(delta);

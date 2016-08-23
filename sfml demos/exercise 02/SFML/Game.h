@@ -21,6 +21,7 @@ public:
 	World world;
 	Player* player;
 
+
 private:
 	void handlePlayerInput(Keyboard::Key key, bool isPressed);
 	void ProcessEvents();

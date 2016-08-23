@@ -14,6 +14,7 @@ Player::~Player()
 
 void Player::Move(Vector2f delta)
 {
+	spriteSheet->SetDirection(delta);
 	spriteSheet->GetSprite().move(delta);
 }
 

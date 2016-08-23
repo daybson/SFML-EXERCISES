@@ -18,6 +18,6 @@ public:
 private:
 
 	SpriteSheet* spriteSheet;
-	string spriteSheetName = "player.png";
+	string spriteSheetName = "dragon.png";
 };
 

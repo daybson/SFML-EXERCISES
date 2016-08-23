@@ -14,6 +14,7 @@ public:
 	SpriteSheet(string pathTexture);
 	~SpriteSheet();
 	void UpdateAnimation(float millisUpdateTime);
+	void SetDirection(Vector2f direction);
 	Sprite& GetSprite();
 	Sprite sprite;
 	

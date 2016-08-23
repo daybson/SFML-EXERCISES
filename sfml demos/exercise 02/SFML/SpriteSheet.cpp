@@ -41,7 +41,7 @@ void SpriteSheet::UpdateAnimation(float millisUpdateTime)
 
 	if (currentFrameTime >= frameTime)
 	{
-		if (currentFrame + 1 >= frameCount)
+		if (currentFrame + 1 == columns)
 		{
 			currentFrame = 0;
 			tile.left = 0;
@@ -52,6 +52,36 @@ void SpriteSheet::UpdateAnimation(float millisUpdateTime)
 			tile.left += tileWidth;
 		}
 
+		currentFrameTime = 0.0f;
+		sprite.setTextureRect(tile);
+	}
+}
+
+void SpriteSheet::SetDirection(Vector2f direction)
+{
+	float newTop = 0;
+	if (direction.x < 0) //left
+	{
+		newTop = tileHeight;
+	}
+	else if (direction.x > 0) //right
+	{
+		newTop = tileHeight * (rows - 2);
+	}
+	else if (direction.y > 0) //down
+	{
+		newTop = 0;
+	}
+	else if (direction.y < 0) //up
+	{
+		newTop = tileHeight * (rows - 1);
+	}
+
+	if (tile.top != newTop)
+	{
+		tile.top = newTop;
+		tile.left = 0;
+		currentFrame = 0;
 		currentFrameTime = 0.0f;
 		sprite.setTextureRect(tile);
 	}
