@@ -3,18 +3,16 @@
 
 Game::Game()
 {
-	mWindow.create(VideoMode(screenWidth, screenHeight), "SFML INPUT");
+	window.create(VideoMode(screenWidth, screenHeight), "SFML INPUT");
 }
 
 Game::Game(String title, Uint32 style)
 {
-	mWindow.create(VideoMode(screenWidth, screenHeight), title, style);
+	window.create(VideoMode(screenWidth, screenHeight), title, style);
 	buttonExit = new UIButton("buttonNormal.png", "buttonClicked.png", Vector2f(100, 100));
-	//if (!texture.loadFromFile("map.png", IntRect(0, 0, 104, 125)))
-		//cout << "Error loading file" << endl;
-
-	//texture.setSmooth(true);
-	//sprite.move(0, 0);
+	gamepad = new Gamepad(0);
+	square.setFillColor(Color::Cyan);
+	square.setSize(Vector2f(20, 20));
 }
 
 Game::~Game()
@@ -23,28 +21,30 @@ Game::~Game()
 
 void Game::run()
 {
-	while (mWindow.isOpen())
+	while (window.isOpen())
 	{
-		ProcessEvents();
+		processEvents();
 		Update();
 		Render();
 	}
 }
 
-void Game::ProcessEvents()
+void Game::processEvents()
 {
 	Event event;
 
-	while (mWindow.pollEvent(event))
+	bool move;
+
+	while (window.pollEvent(event))
 	{
 		switch (event.type)
 		{
 		case Event::Closed:
-			mWindow.close();
+			window.close();
 			break;
 		case Event::KeyPressed:
 			if (event.key.code == Keyboard::Escape)
-				mWindow.close();
+				window.close();
 			break;
 		case Event::MouseButtonPressed:
 			if (event.mouseButton.button == Mouse::Left)
@@ -54,20 +54,29 @@ void Game::ProcessEvents()
 					cout << "Exiting..." << endl;
 			}
 			break;
+		case Event::JoystickMoved:
+			move = true;
+			speed = Vector2f(gamepad->getAxisPosition(gamepad->index, gamepad->X), gamepad->getAxisPosition(gamepad->index, gamepad->Y));
+			break;
+		default:
+			move = false;
+			break;
 		}
 	}
 }
 
 void Game::Update()
 {
+	if (speed.x > gamepad->getDeadZone() || speed.x < -gamepad->getDeadZone() || speed.y > gamepad->getDeadZone() || speed.y < -gamepad->getDeadZone())
+		square.move(speed.x, speed.y);
 }
 
 void Game::Render()
 {
-	mWindow.clear();
+	window.clear();
 
-	//mWindow.draw(sprite);
-	mWindow.draw(buttonExit->getDrawButton());
+	window.draw(square);
+	window.draw(buttonExit->getDrawButton());
 
-	mWindow.display();
+	window.display();
 }

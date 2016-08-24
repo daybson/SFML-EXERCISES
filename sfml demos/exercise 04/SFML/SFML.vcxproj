@@ -20,6 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Gamepad.cpp" />
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="SFML.cpp">
       <FileType>CppHeader</FileType>
     </ClCompile>
@@ -29,6 +31,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Gamepad.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="UIButton.h" />
