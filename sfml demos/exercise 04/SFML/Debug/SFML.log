@@ -1,0 +1,14 @@
+﻿  UIButton.cpp
+d:\repository\sfml-exercises\sfml demos\exercise 04\sfml\uibutton.cpp(20): warning C4101: 'e': unreferenced local variable
+d:\repository\sfml-exercises\sfml demos\exercise 04\sfml\uibutton.cpp(32): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+d:\repository\sfml-exercises\sfml demos\exercise 04\sfml\uibutton.cpp(33): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  Generating Code...
+  Compiling...
+  Game.cpp
+d:\repository\sfml-exercises\sfml demos\exercise 04\sfml\game.cpp(52): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  World.cpp
+  SFML.cpp
+  SFML.vcxproj -> D:\Repository\SFML-EXERCISES\sfml demos\exercise 04\Debug\SFML.exe
+  SFML.vcxproj -> D:\Repository\SFML-EXERCISES\sfml demos\exercise 04\Debug\SFML.pdb (Full PDB)
