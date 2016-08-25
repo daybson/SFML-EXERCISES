@@ -19,9 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Action.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Gamepad.cpp" />
-    <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="SFML.cpp">
       <FileType>CppHeader</FileType>
     </ClCompile>
@@ -30,9 +31,12 @@
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Action.h" />
+    <ClInclude Include="ActionMap.h" />
+    <ClInclude Include="ActionTarget.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Gamepad.h" />
-    <ClInclude Include="InputManager.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="UIButton.h" />
