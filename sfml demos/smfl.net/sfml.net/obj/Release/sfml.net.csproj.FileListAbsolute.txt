@@ -1,0 +1,17 @@
+D:\Repositorio\SFML-EXERCISES\sfml demos\smfl.net\sfml.net\sfml.net\bin\Release\sfml.net.exe.config
+D:\Repositorio\SFML-EXERCISES\sfml demos\smfl.net\sfml.net\sfml.net\bin\Release\dependencies\csfml-audio-2.dll
+D:\Repositorio\SFML-EXERCISES\sfml demos\smfl.net\sfml.net\sfml.net\bin\Release\dependencies\csfml-graphics-2.dll
+D:\Repositorio\SFML-EXERCISES\sfml demos\smfl.net\sfml.net\sfml.net\bin\Release\dependencies\csfml-system-2.dll
+D:\Repositorio\SFML-EXERCISES\sfml demos\smfl.net\sfml.net\sfml.net\bin\Release\dependencies\csfml-window-2.dll
+D:\Repositorio\SFML-EXERCISES\sfml demos\smfl.net\sfml.net\sfml.net\bin\Release\dependencies\libsndfile-1.dll
+D:\Repositorio\SFML-EXERCISES\sfml demos\smfl.net\sfml.net\sfml.net\bin\Release\dependencies\openal32.dll
+D:\Repositorio\SFML-EXERCISES\sfml demos\smfl.net\sfml.net\sfml.net\bin\Release\dependencies\OpenTK.Compatibility.dll
+D:\Repositorio\SFML-EXERCISES\sfml demos\smfl.net\sfml.net\sfml.net\bin\Release\dependencies\OpenTK.dll
+D:\Repositorio\SFML-EXERCISES\sfml demos\smfl.net\sfml.net\sfml.net\bin\Release\sfml.net.exe
+D:\Repositorio\SFML-EXERCISES\sfml demos\smfl.net\sfml.net\sfml.net\bin\Release\sfml.net.pdb
+D:\Repositorio\SFML-EXERCISES\sfml demos\smfl.net\sfml.net\sfml.net\bin\Release\sfmlnet-audio-2.dll
+D:\Repositorio\SFML-EXERCISES\sfml demos\smfl.net\sfml.net\sfml.net\bin\Release\sfmlnet-graphics-2.dll
+D:\Repositorio\SFML-EXERCISES\sfml demos\smfl.net\sfml.net\sfml.net\bin\Release\sfmlnet-system-2.dll
+D:\Repositorio\SFML-EXERCISES\sfml demos\smfl.net\sfml.net\sfml.net\bin\Release\sfmlnet-window-2.dll
+D:\Repositorio\SFML-EXERCISES\sfml demos\smfl.net\sfml.net\sfml.net\obj\Release\sfml.net.exe
+D:\Repositorio\SFML-EXERCISES\sfml demos\smfl.net\sfml.net\sfml.net\obj\Release\sfml.net.pdb
