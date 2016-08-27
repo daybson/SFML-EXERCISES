@@ -1,0 +1,20 @@
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 02\sfml.net\bin\Debug\sfml.net.exe.config
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 02\sfml.net\obj\Debug\sfml.net.exe
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 02\sfml.net\obj\Debug\sfml.net.pdb
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 02\sfml.net\obj\Debug\sfml.net 02.csprojResolveAssemblyReference.cache
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 02\sfml.net\bin\Debug\csfml-audio-2.dll
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 02\sfml.net\bin\Debug\csfml-graphics-2.dll
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 02\sfml.net\bin\Debug\csfml-system-2.dll
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 02\sfml.net\bin\Debug\csfml-window-2.dll
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 02\sfml.net\bin\Debug\libsndfile-1.dll
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 02\sfml.net\bin\Debug\openal32.dll
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 02\sfml.net\bin\Debug\OpenTK.Compatibility.dll
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 02\sfml.net\bin\Debug\OpenTK.dll
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 02\sfml.net\bin\Debug\dragon.png
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 02\sfml.net\bin\Debug\dragon.txt
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 02\sfml.net\bin\Debug\sfml.net.exe
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 02\sfml.net\bin\Debug\sfml.net.pdb
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 02\sfml.net\bin\Debug\sfmlnet-audio-2.dll
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 02\sfml.net\bin\Debug\sfmlnet-graphics-2.dll
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 02\sfml.net\bin\Debug\sfmlnet-system-2.dll
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 02\sfml.net\bin\Debug\sfmlnet-window-2.dll

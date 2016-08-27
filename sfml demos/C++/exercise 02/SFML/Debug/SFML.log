@@ -1,0 +1,21 @@
+﻿  World.cpp
+d:\repository\sfml-exercises\sfml demos\c++\exercise 02\sfml\world.cpp(10): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+d:\repository\sfml-exercises\sfml demos\c++\exercise 02\sfml\world.cpp(15): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+d:\repository\sfml-exercises\sfml demos\c++\exercise 02\sfml\world.cpp(21): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\repository\sfml-exercises\sfml demos\c++\exercise 02\sfml\world.cpp(26): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+d:\repository\sfml-exercises\sfml demos\c++\exercise 02\sfml\world.cpp(32): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+d:\repository\sfml-exercises\sfml demos\c++\exercise 02\sfml\world.cpp(39): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+d:\repository\sfml-exercises\sfml demos\c++\exercise 02\sfml\world.cpp(44): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+d:\repository\sfml-exercises\sfml demos\c++\exercise 02\sfml\world.cpp(45): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+  SpriteSheet.cpp
+d:\repository\sfml-exercises\sfml demos\c++\exercise 02\sfml\spritesheet.cpp(65): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+d:\repository\sfml-exercises\sfml demos\c++\exercise 02\sfml\spritesheet.cpp(69): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+d:\repository\sfml-exercises\sfml demos\c++\exercise 02\sfml\spritesheet.cpp(77): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+d:\repository\sfml-exercises\sfml demos\c++\exercise 02\sfml\spritesheet.cpp(82): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  SFML.cpp
+  Player.cpp
+  Game.cpp
+  Generating Code...
+  LINK : D:\Repository\SFML-EXERCISES\sfml demos\C++\exercise 02\Debug\SFML.exe not found or not built by the last incremental link; performing full link
+  SFML.vcxproj -> D:\Repository\SFML-EXERCISES\sfml demos\C++\exercise 02\Debug\SFML.exe
+  SFML.vcxproj -> D:\Repository\SFML-EXERCISES\sfml demos\C++\exercise 02\Debug\SFML.pdb (Full PDB)

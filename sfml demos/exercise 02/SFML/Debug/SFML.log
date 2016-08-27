@@ -1,9 +1,0 @@
-﻿  SpriteSheet.cpp
-d:\repository\sfml-exercises\sfml demos\exercise 02\sfml\spritesheet.cpp(65): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-d:\repository\sfml-exercises\sfml demos\exercise 02\sfml\spritesheet.cpp(69): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-d:\repository\sfml-exercises\sfml demos\exercise 02\sfml\spritesheet.cpp(77): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-d:\repository\sfml-exercises\sfml demos\exercise 02\sfml\spritesheet.cpp(82): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-  Game.cpp
-  Generating Code...
-  SFML.vcxproj -> D:\Repository\SFML-EXERCISES\sfml demos\exercise 02\Debug\SFML.exe
-  SFML.vcxproj -> D:\Repository\SFML-EXERCISES\sfml demos\exercise 02\Debug\SFML.pdb (Full PDB)
