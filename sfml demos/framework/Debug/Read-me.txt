@@ -1,1 +1,0 @@
-I'm using dynamic link, so you need to put these DLL's on every Debug/ folder where the .exe is executed if you run the project on Debug x86 mode.
