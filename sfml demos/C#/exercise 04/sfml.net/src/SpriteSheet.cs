@@ -78,7 +78,6 @@ namespace sfml.net.src
                     currentFrame++;
                     tile.Left += tileWidth;
                 }
-                Console.WriteLine(currentFrame);
 
                 currentFrameTime = 0.0f;
                 sprite.TextureRect = tile;

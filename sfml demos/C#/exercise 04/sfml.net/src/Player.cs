@@ -17,15 +17,6 @@ namespace sfml.net.src
 
         public Vector2f Direction;
 
-        private RectangleShape body;
-        private RectangleShape legLeft;
-        private RectangleShape legRight;
-        private RectangleShape armLeft;
-        private RectangleShape armRight;
-        private CircleShape head;
-        private CircleShape hat;
-        private CircleShape nose;
-
         private float speed = 4f;
         public bool IsMovingRight;
 
