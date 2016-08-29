@@ -21,6 +21,7 @@ namespace sfml.net.src
 
         private Player player;
         private World world;
+        private Gamepad gamepad0;
 
         public static Clock DeltaTime = new Clock();
         Tile map;
@@ -42,12 +43,20 @@ namespace sfml.net.src
 
             this.player = new Player();
             this.world = new World();
+            this.gamepad0 = new Gamepad(0);
 
             this.window.KeyPressed += ProcessKeyboardPressed;
             this.window.KeyReleased += ProcessKeyboardReleased;
+
             this.window.MouseButtonPressed += ProcessMousePressed;
             this.window.MouseButtonReleased += ProcessMouseReleased;
             this.window.MouseWheelMoved += ProcessMouseWheelMoved;
+
+            this.window.JoystickConnected += ProcessJoystickConnected;
+            this.window.JoystickDisconnected += ProcessJoystickDisconnected;
+            this.window.JoystickMoved += ProcessJoystickMoved;
+            this.window.JoystickButtonPressed += ProcessJoystickButtonPressed;
+            this.window.JoystickButtonReleased += ProcessJoystickButtonReleased;
 
             level = new int[128]
             {
@@ -79,6 +88,8 @@ namespace sfml.net.src
             };
         }
 
+       
+
         public void Run()
         {
             while (window.IsOpen)
@@ -93,8 +104,7 @@ namespace sfml.net.src
         #endregion
 
 
-        #region Private
-
+        #region Keyboad
 
         private void ProcessKeyboardPressed(object sender, KeyEventArgs e)
         {
@@ -105,6 +115,23 @@ namespace sfml.net.src
         {
             ProcessKeyboardInput(e.Code, false);
         }
+
+        private void ProcessKeyboardInput(Keyboard.Key key, bool isPressed)
+        {
+            if (key == Keyboard.Key.A)
+                this.player.IsMovingLeft = isPressed;
+            if (key == Keyboard.Key.S)
+                this.player.IsMovingDown = isPressed;
+            if (key == Keyboard.Key.D)
+                this.player.IsMovingRight = isPressed;
+            if (key == Keyboard.Key.W)
+                this.player.IsMovingUp = isPressed;
+        }
+
+        #endregion
+
+
+        #region Mouse 
 
         private void ProcessMousePressed(object sender, MouseButtonEventArgs e)
         {
@@ -124,25 +151,49 @@ namespace sfml.net.src
             Console.WriteLine("Released: " + e.Button.ToString());
         }
 
-        private void ProcessKeyboardInput(Keyboard.Key key, bool isPressed)
+        #endregion
+
+
+        #region Joystick
+
+        private void ProcessJoystickConnected(object sender, JoystickConnectEventArgs e)
         {
-            if (key == Keyboard.Key.A)
-            {
-                this.player.IsMovingLeft = isPressed;
-            }
-            if (key == Keyboard.Key.S)
-            {
-                this.player.IsMovingDown = isPressed;
-            }
-            if (key == Keyboard.Key.D)
-            {
-                this.player.IsMovingRight = isPressed;
-            }
-            if (key == Keyboard.Key.W)
-            {
-                this.player.IsMovingUp = isPressed;
-            }
+            this.gamepad0 = new Gamepad(0);
         }
+
+        private void ProcessJoystickDisconnected(object sender, JoystickConnectEventArgs e)
+        {
+            //this.gamepad0 = null;
+        }
+
+        private void ProcessJoystickMoved(object sender, JoystickMoveEventArgs e)
+        {
+            var speed = new Vector2f(this.gamepad0.GetAxisPosition(Joystick.Axis.X), this.gamepad0.GetAxisPosition(Joystick.Axis.Y));
+
+            if (speed.X < 0)
+                this.player.IsMovingLeft = true;
+            if (speed.Y > 0)
+                this.player.IsMovingDown = true;
+            if (speed.X > 0)
+                this.player.IsMovingRight = true;
+            if (speed.Y < 0)
+                this.player.IsMovingUp = true;
+        }
+
+        private void ProcessJoystickButtonPressed(object sender, JoystickButtonEventArgs e)
+        {
+            Console.WriteLine(string.Format("Joystick {0} pressed {1}", gamepad0.Index, e.Button));
+        }
+
+        private void ProcessJoystickButtonReleased(object sender, JoystickButtonEventArgs e)
+        {
+            Console.WriteLine(string.Format("Joystick {0} released {1}", gamepad0.Index, e.Button));
+        }
+
+        #endregion
+
+
+        #region Private
 
         private void Update()
         {

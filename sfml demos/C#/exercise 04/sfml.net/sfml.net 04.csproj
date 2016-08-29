@@ -61,6 +61,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Game.cs" />
+    <Compile Include="src\Gamepad.cs" />
     <Compile Include="src\Player.cs" />
     <Compile Include="src\SpriteSheet.cs" />
     <Compile Include="src\Tile.cs" />
