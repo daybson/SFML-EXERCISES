@@ -43,9 +43,11 @@ namespace sfml.net.src
             this.player = new Player();
             this.world = new World();
 
-            this.window.KeyPressed += ProcessPressedEvents;
-            this.window.KeyReleased += ProcessReleasedEvents;
-            this.window.MouseButtonPressed += ProcessMouseInput;
+            this.window.KeyPressed += ProcessKeyboardPressed;
+            this.window.KeyReleased += ProcessKeyboardReleased;
+            this.window.MouseButtonPressed += ProcessMousePressed;
+            this.window.MouseButtonReleased += ProcessMouseReleased;
+            this.window.MouseWheelMoved += ProcessMouseWheelMoved;
 
             level = new int[128]
             {
@@ -94,23 +96,35 @@ namespace sfml.net.src
         #region Private
 
 
-        private void ProcessPressedEvents(object sender, KeyEventArgs e)
+        private void ProcessKeyboardPressed(object sender, KeyEventArgs e)
         {
-            ProcessInput(e.Code, true);
+            ProcessKeyboardInput(e.Code, true);
         }
 
-        private void ProcessReleasedEvents(object sender, KeyEventArgs e)
+        private void ProcessKeyboardReleased(object sender, KeyEventArgs e)
         {
-            ProcessInput(e.Code, false);
+            ProcessKeyboardInput(e.Code, false);
         }
 
-        private void ProcessMouseInput(object sender, MouseButtonEventArgs args)
+        private void ProcessMousePressed(object sender, MouseButtonEventArgs e)
         {
-            if (args.Button == Mouse.Button.Left)
-                button.CheckClick(new Vector2f(args.X, args.Y));
+            Console.WriteLine("Pressed: " + e.Button.ToString());
+            if (e.Button == Mouse.Button.Left)
+                button.CheckClick(new Vector2f(e.X, e.Y));
         }
 
-        private void ProcessInput(Keyboard.Key key, bool isPressed)
+        private void ProcessMouseWheelMoved(object sender, MouseWheelEventArgs e)
+        {
+            if (e.Delta != 0)
+                Console.WriteLine("Mouse wheel delta: " + e.Delta);
+        }
+
+        private void ProcessMouseReleased(object sender, MouseButtonEventArgs e)
+        {
+            Console.WriteLine("Released: " + e.Button.ToString());
+        }
+
+        private void ProcessKeyboardInput(Keyboard.Key key, bool isPressed)
         {
             if (key == Keyboard.Key.A)
             {
