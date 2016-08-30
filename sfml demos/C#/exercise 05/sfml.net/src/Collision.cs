@@ -64,5 +64,58 @@ namespace sfml.net.src
 
             return d <= radius1 + radius2;
         }
+
+
+        public static bool CheckCollistionSeparatingAxisTheorem(Shape s1, Shape s2)
+        {
+            if (IsThereAxisSeparating(s1, s2))
+                return false;
+
+            return !IsThereAxisSeparating(s2, s1);
+        }
+
+        private static bool IsThereAxisSeparating(Shape s1, Shape s2)
+        {
+            uint polycountS1 = s1.GetPointCount();
+
+            for (uint i = 0; i < polycountS1; i++)
+            {
+                var nextPoint = (i + 1) % polycountS1;
+                var side = s1.Transform.TransformPoint(s1.GetPoint(nextPoint)) - s1.Transform.TransformPoint(s1.GetPoint(i));
+                var perpendicular = side.Perpendicular().Unit();
+                var minMax1 = ProjectShape(s1, perpendicular);
+                var minMax2 = ProjectShape(s2, perpendicular);
+
+                if (minMax1.Y < minMax2.X || minMax2.Y < minMax1.X)
+                    return true;
+            }
+
+            return false;
+        }
+
+        private static Vector2f ProjectShape(Shape shape, Vector2f axis)
+        {
+            var point = shape.Transform.TransformPoint(shape.GetPoint(0));
+            var initial = point.Dot(axis);
+            var minmax = new Vector2f(initial, initial);
+
+            for (uint i = 0; i < shape.GetPointCount(); i++)
+            {
+                point = shape.Transform.TransformPoint(shape.GetPoint(i));
+                var projected = point.Dot(axis);
+
+                if (projected < minmax.X)
+                    minmax.X = projected;
+                if (projected > minmax.Y)
+                    minmax.Y = projected;
+            }
+            return minmax;
+        }
+
+
+        private static bool SAT(Shape s1, Shape s2)
+        {
+            return false;
+        }
     }
 }

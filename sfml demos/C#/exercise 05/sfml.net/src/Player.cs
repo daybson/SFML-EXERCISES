@@ -21,8 +21,8 @@ namespace sfml.net.src
         public bool IsMovingRight;
 
         private SpriteSheet spriteSheet;
-        private RectangleShape collisionBound;
-        public RectangleShape BoundingBox { get { return collisionBound; } }
+        private CircleShape collisionBound;
+        public CircleShape BoundingBox { get { return collisionBound; } }
 
         private string spriteSheetName = "dragon.png";
 
@@ -36,7 +36,7 @@ namespace sfml.net.src
             spriteSheet = new SpriteSheet(spriteSheetName);
             Direction = new Vector2f(0.0f, 0.0f);
             spriteSheet.Sprite.Position = Direction;
-            collisionBound = new RectangleShape(new Vector2f(spriteSheet.Sprite.GetLocalBounds().Width, spriteSheet.Sprite.GetLocalBounds().Height));
+            collisionBound = new CircleShape(spriteSheet.Sprite.GetLocalBounds().Width / 2, 5);//(new Vector2f(spriteSheet.Sprite.GetLocalBounds().Width, spriteSheet.Sprite.GetLocalBounds().Height));
             collisionBound.OutlineColor = Color.Magenta;
             collisionBound.FillColor = new Color(0, 0, 0, 0);
             collisionBound.OutlineThickness = 2;

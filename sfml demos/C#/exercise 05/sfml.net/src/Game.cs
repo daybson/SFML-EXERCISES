@@ -180,6 +180,7 @@ namespace sfml.net.src
             //Console.WriteLine("Collision state: " + Collision.CheckCollisionRectangleAxisAligned(this.player1.BoundingBox, this.player2.BoundingBox));
             //Console.WriteLine("Collision circle state: " + Collision.CheckCollisionSphere(this.player1.BoundingBox, this.player2.BoundingBox));
             //Console.WriteLine("Collision circle state: " + Collision.CheckCollisionExtentsRectangleAxisAligned(this.player1.BoundingBox, this.player2.BoundingBox));
+            Console.WriteLine("Collision axis separating state: " + Collision.CheckCollistionSeparatingAxisTheorem(this.player1.BoundingBox, this.player2.BoundingBox));
 
         }
 
