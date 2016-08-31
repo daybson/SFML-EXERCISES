@@ -27,6 +27,7 @@ namespace sfml.net.src
 
         private Music music;
         private string musicFilePath = "98_Lost_Mine.wav";
+        private float volume = 100;
         #endregion
 
 
@@ -111,6 +112,14 @@ namespace sfml.net.src
                 else
                     music.Play();
             }
+
+            if (key == Keyboard.Key.Add && isPressed)
+                music.Volume++;
+
+            if (key == Keyboard.Key.Subtract && isPressed)
+                music.Volume--;
+
+            Console.WriteLine("Volume: " + music.Volume);
 
             if (key == Keyboard.Key.Left)
                 this.player2.IsMovingLeft = isPressed;
@@ -197,7 +206,7 @@ namespace sfml.net.src
             //Console.WriteLine("Collision state: " + Collision.CheckCollisionRectangleAxisAligned(this.player1.BoundingBox, this.player2.BoundingBox));
             //Console.WriteLine("Collision circle state: " + Collision.CheckCollisionSphere(this.player1.BoundingBox, this.player2.BoundingBox));
             //Console.WriteLine("Collision circle state: " + Collision.CheckCollisionExtentsRectangleAxisAligned(this.player1.BoundingBox, this.player2.BoundingBox));
-            Console.WriteLine("Is Colliding: " + Collision.CheckCollistionSeparatingAxisTheorem(this.player1.BoundingBox, this.player2.BoundingBox));
+            //Console.WriteLine("Is Colliding: " + Collision.CheckCollistionSeparatingAxisTheorem(this.player1.BoundingBox, this.player2.BoundingBox));
 
             //Collision.SAT(this.player1.BoundingBox, this.player2.BoundingBox);
 
@@ -214,8 +223,8 @@ namespace sfml.net.src
             //if(Collision.gap.Length > 0)
             //   window.Draw(Collision.gap, PrimitiveType.Lines);
 
-            if (Collision.perpendicular.Length > 0)
-                window.Draw(Collision.perpendicular, PrimitiveType.Lines);
+            //if (Collision.perpendicular.Length > 0)
+              //  window.Draw(Collision.perpendicular, PrimitiveType.Lines);
 
             window.Display();
         }
