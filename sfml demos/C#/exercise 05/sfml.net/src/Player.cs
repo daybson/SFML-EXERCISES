@@ -14,7 +14,7 @@ namespace sfml.net.src
         public bool IsMovingLeft { get; set; }
         public bool IsMovingDown { get; internal set; }
         public bool IsMovingUp { get; internal set; }
-
+        public Vector2f Origin { get { return origin.Position; } }
         public Vector2f Direction;
 
         private float speed = 4f;
@@ -22,6 +22,7 @@ namespace sfml.net.src
 
         private SpriteSheet spriteSheet;
         private CircleShape collisionBound;
+        private CircleShape origin;
         public CircleShape BoundingBox { get { return collisionBound; } }
 
         private string spriteSheetName = "dragon.png";
@@ -40,6 +41,12 @@ namespace sfml.net.src
             collisionBound.OutlineColor = Color.Magenta;
             collisionBound.FillColor = new Color(0, 0, 0, 0);
             collisionBound.OutlineThickness = 2;
+
+            origin = new CircleShape(2);//(new Vector2f(spriteSheet.Sprite.GetLocalBounds().Width, spriteSheet.Sprite.GetLocalBounds().Height));
+            origin.OutlineColor = Color.Magenta;
+            origin.FillColor = Color.Magenta;
+            origin.OutlineThickness = 2;
+            origin.Position = new Vector2f(spriteSheet.Sprite.GetLocalBounds().Width / 2, spriteSheet.Sprite.GetLocalBounds().Height / 2);
             SetAbsolutePosition(new Vector2f(Game.WINDOW_WIDTH / 2 / speed, Game.WINDOW_HEIGHT / 2 / speed));
         }
 
@@ -47,16 +54,16 @@ namespace sfml.net.src
         {
             Direction = new Vector2f(0, 0);
 
-            if (IsMovingLeft)
+            if(IsMovingLeft)
                 Direction.X -= 1;
-            if (IsMovingDown)
+            if(IsMovingDown)
                 Direction.Y += 1;
-            if (IsMovingRight)
+            if(IsMovingRight)
                 Direction.X += 1;
-            if (IsMovingUp)
+            if(IsMovingUp)
                 Direction.Y -= 1;
 
-            if (Direction != new Vector2f(0, 0))
+            if(Direction != new Vector2f(0, 0))
             {
                 Translate();
                 spriteSheet.SetDirection(Direction);
@@ -69,6 +76,7 @@ namespace sfml.net.src
         {
             window.Draw(spriteSheet.Sprite);
             window.Draw(collisionBound);
+            window.Draw(origin);
         }
 
         #endregion
@@ -87,7 +95,8 @@ namespace sfml.net.src
         {
             Direction *= speed;
             spriteSheet.Sprite.Position += Direction;
-            collisionBound.Position += Direction;            
+            collisionBound.Position += Direction;
+            origin.Position += Direction;
         }
 
         #endregion

@@ -180,7 +180,9 @@ namespace sfml.net.src
             //Console.WriteLine("Collision state: " + Collision.CheckCollisionRectangleAxisAligned(this.player1.BoundingBox, this.player2.BoundingBox));
             //Console.WriteLine("Collision circle state: " + Collision.CheckCollisionSphere(this.player1.BoundingBox, this.player2.BoundingBox));
             //Console.WriteLine("Collision circle state: " + Collision.CheckCollisionExtentsRectangleAxisAligned(this.player1.BoundingBox, this.player2.BoundingBox));
-            Console.WriteLine("Collision axis separating state: " + Collision.CheckCollistionSeparatingAxisTheorem(this.player1.BoundingBox, this.player2.BoundingBox));
+            Console.WriteLine("Is Colliding: " + Collision.CheckCollistionSeparatingAxisTheorem(this.player1.BoundingBox, this.player2.BoundingBox));
+
+            //Collision.SAT(this.player1.BoundingBox, this.player2.BoundingBox);
 
         }
 
@@ -192,6 +194,11 @@ namespace sfml.net.src
             player2.Display(window);
 
             Collision.collisionShapes.ForEach(s => window.Draw(s));
+            //if(Collision.gap.Length > 0)
+             //   window.Draw(Collision.gap, PrimitiveType.Lines);
+
+            if(Collision.perpendicular.Length > 0)
+                window.Draw(Collision.perpendicular, PrimitiveType.Lines);
 
             window.Display();
         }
