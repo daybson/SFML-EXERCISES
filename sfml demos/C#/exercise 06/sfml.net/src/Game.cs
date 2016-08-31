@@ -21,13 +21,19 @@ namespace sfml.net.src
         private readonly uint maxFPS = 60;
 
         private Player player1;
-        private Player player2;
 
         public static Clock DeltaTime = new Clock();
 
         private Music music;
         private string musicFilePath = "98_Lost_Mine.wav";
-        private float volume = 100;
+
+        private Sound bells;
+        private SoundBuffer bellsBuffer;
+        private string bellsFilePath = "bells004.wav";
+        private CircleShape gizmo;
+
+        ListenerAgent listenerAgent;
+
         #endregion
 
 
@@ -35,12 +41,27 @@ namespace sfml.net.src
 
         public Game(string title)
         {
+            this.listenerAgent = new ListenerAgent(new Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2));
+
+            bellsBuffer = new SoundBuffer(bellsFilePath);
+            bells = new Sound(bellsBuffer);
+            bells.MinDistance = 50;
+            bells.Attenuation = 2;
+            bells.Loop = true;
+            bells.Position = new Vector3f(WINDOW_WIDTH / 3, 0, WINDOW_HEIGHT / 3);
+            bells.Volume = 100;           
+            gizmo = new CircleShape(3);
+            gizmo.Position = new Vector2f(bells.Position.X, bells.Position.Z);
+            gizmo.OutlineColor = Color.Red;
+            gizmo.OutlineThickness = 2;
+            gizmo.FillColor = Color.Transparent;
+            bells.Play();
+
             this.windowTitle = title;
             this.window = new RenderWindow(new VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), windowTitle);
             this.window.SetFramerateLimit(maxFPS);
 
             this.player1 = new Player();
-            this.player2 = new Player();
 
             this.window.KeyPressed += ProcessKeyboardPressed;
             this.window.KeyReleased += ProcessKeyboardReleased;
@@ -118,17 +139,6 @@ namespace sfml.net.src
 
             if (key == Keyboard.Key.Subtract && isPressed)
                 music.Volume--;
-
-            Console.WriteLine("Volume: " + music.Volume);
-
-            if (key == Keyboard.Key.Left)
-                this.player2.IsMovingLeft = isPressed;
-            if (key == Keyboard.Key.Down)
-                this.player2.IsMovingDown = isPressed;
-            if (key == Keyboard.Key.Right)
-                this.player2.IsMovingRight = isPressed;
-            if (key == Keyboard.Key.Up)
-                this.player2.IsMovingUp = isPressed;
         }
 
         #endregion
@@ -201,15 +211,8 @@ namespace sfml.net.src
         private void Update()
         {
             this.player1.Update();
-            this.player2.Update();
 
-            //Console.WriteLine("Collision state: " + Collision.CheckCollisionRectangleAxisAligned(this.player1.BoundingBox, this.player2.BoundingBox));
-            //Console.WriteLine("Collision circle state: " + Collision.CheckCollisionSphere(this.player1.BoundingBox, this.player2.BoundingBox));
-            //Console.WriteLine("Collision circle state: " + Collision.CheckCollisionExtentsRectangleAxisAligned(this.player1.BoundingBox, this.player2.BoundingBox));
-            //Console.WriteLine("Is Colliding: " + Collision.CheckCollistionSeparatingAxisTheorem(this.player1.BoundingBox, this.player2.BoundingBox));
-
-            //Collision.SAT(this.player1.BoundingBox, this.player2.BoundingBox);
-
+            this.listenerAgent.Update(player1);
         }
 
         private void Render()
@@ -217,14 +220,11 @@ namespace sfml.net.src
             window.Clear();
 
             player1.Display(window);
-            player2.Display(window);
 
             Collision.collisionShapes.ForEach(s => window.Draw(s));
-            //if(Collision.gap.Length > 0)
-            //   window.Draw(Collision.gap, PrimitiveType.Lines);
 
-            //if (Collision.perpendicular.Length > 0)
-              //  window.Draw(Collision.perpendicular, PrimitiveType.Lines);
+            window.Draw(this.listenerAgent.Gizmo);
+            window.Draw(gizmo);
 
             window.Display();
         }

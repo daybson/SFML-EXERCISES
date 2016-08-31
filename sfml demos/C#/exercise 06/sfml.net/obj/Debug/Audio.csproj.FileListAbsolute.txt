@@ -14,6 +14,7 @@ D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 06\sfml.net\bin\Debug\opena
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 06\sfml.net\bin\Debug\OpenTK.Compatibility.dll
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 06\sfml.net\bin\Debug\OpenTK.dll
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 06\sfml.net\bin\Debug\tilemap.png
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 06\sfml.net\bin\Debug\bells004.wav
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 06\sfml.net\bin\Debug\sfml.net.exe.config
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 06\sfml.net\bin\Debug\sfml.net.exe
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 06\sfml.net\bin\Debug\sfml.net.pdb
@@ -21,6 +22,5 @@ D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 06\sfml.net\bin\Debug\sfmln
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 06\sfml.net\bin\Debug\sfmlnet-graphics-2.dll
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 06\sfml.net\bin\Debug\sfmlnet-system-2.dll
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 06\sfml.net\bin\Debug\sfmlnet-window-2.dll
-D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 06\sfml.net\obj\Debug\Audio.csprojResolveAssemblyReference.cache
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 06\sfml.net\obj\Debug\sfml.net.exe
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 06\sfml.net\obj\Debug\sfml.net.pdb
