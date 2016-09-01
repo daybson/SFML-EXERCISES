@@ -1,0 +1,10 @@
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 07\sfml.net\bin\Debug\sfml.net.exe.config
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 07\sfml.net\bin\Debug\sfml.net.exe
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 07\sfml.net\bin\Debug\sfml.net.pdb
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 07\sfml.net\bin\Debug\sfmlnet-audio-2.dll
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 07\sfml.net\bin\Debug\sfmlnet-graphics-2.dll
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 07\sfml.net\bin\Debug\sfmlnet-system-2.dll
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 07\sfml.net\bin\Debug\sfmlnet-window-2.dll
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 07\sfml.net\obj\Debug\sfml.net.exe
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 07\sfml.net\obj\Debug\sfml.net.pdb
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 07\sfml.net\obj\Debug\Network.csprojResolveAssemblyReference.cache
