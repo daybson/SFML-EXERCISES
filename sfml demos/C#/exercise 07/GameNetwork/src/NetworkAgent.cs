@@ -4,8 +4,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Xml;
 
-namespace sfml.net.src
+namespace GameNetwork
 {
     public abstract class NetworkAgent
     {
@@ -15,6 +16,7 @@ namespace sfml.net.src
         protected IPAddress ipAddress;
         protected IPEndPoint endPoint;
         protected Socket socket;
-        protected int port = 11000;
+        protected int port;
+        protected XmlDocument xmlConfig;
     }
 }

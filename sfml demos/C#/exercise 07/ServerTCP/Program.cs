@@ -1,11 +1,11 @@
-﻿using GameNetwork;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GameNetwork;
 
-namespace GameNetwork.net
+namespace ServerTCP
 {
     class Program
     {
@@ -13,7 +13,7 @@ namespace GameNetwork.net
 
         static void Main(string[] args)
         {
-            networkAgent = new GameClientTCP();
+            networkAgent = new GameServerTCP();
 
             networkAgent.Start();
         }
