@@ -21,8 +21,22 @@ namespace GameNetwork
 
                 try
                 {
+
+                    /*
+                    var proxy = new WebProxy("www.pmiserver51.pmi.mg.gov.br", 8080);                    
+                    proxy.Credentials = new NetworkCredential("m127391", "Kazyamof29");
+                    proxy.UseDefaultCredentials = false;
+                    proxy.BypassProxyOnLocal = false;
+                    */
+
+                    WebClient webClient = new WebClient();
+                    webClient.UseDefaultCredentials = true;
+                    webClient.Proxy = WebRequest.GetSystemWebProxy();
+                    webClient.Proxy.Credentials = new NetworkCredential("m127391", "Kazyamof29");
+                    var doc = webClient.DownloadString("https://drive.google.com/file/d/0B1uOORmPqLlvbW95TEV6SjFGdnM/view?usp=sharing");//"https://1drv.ms/u/s!AiNRL4yfSd_UgpV9aHzfY5Lkr9f98Q");
+
                     xmlConfig = new XmlDocument();
-                    xmlConfig.Load("config.xml");
+                    xmlConfig.Load(doc);
 
                     var myip = xmlConfig.DocumentElement.SelectSingleNode("/gamenetwork/myip");
                     var ipserver = xmlConfig.DocumentElement.SelectSingleNode("/gamenetwork/ipserver");

@@ -7,3 +7,12 @@ D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 07\ServerTCP\bin\Debug\GameN
 D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 07\ServerTCP\obj\Debug\ServerTCP.csprojResolveAssemblyReference.cache
 D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 07\ServerTCP\obj\Debug\ServerTCP.exe
 D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 07\ServerTCP\obj\Debug\ServerTCP.pdb
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\ServerTCP\bin\Debug\ServerTCP.exe.config
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\ServerTCP\obj\Debug\ServerTCP.pdb
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\ServerTCP\bin\Debug\config.xml
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\ServerTCP\bin\Debug\ServerTCP.exe
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\ServerTCP\bin\Debug\ServerTCP.pdb
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\ServerTCP\bin\Debug\GameNetwork.dll
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\ServerTCP\bin\Debug\GameNetwork.pdb
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\ServerTCP\obj\Debug\ServerTCP.csprojResolveAssemblyReference.cache
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\ServerTCP\obj\Debug\ServerTCP.exe

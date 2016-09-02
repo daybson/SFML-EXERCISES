@@ -1,0 +1,9 @@
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\TCPGameClient\bin\Debug\config.xml
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\TCPGameClient\bin\Debug\TCPGameClient.exe.config
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\TCPGameClient\bin\Debug\TCPGameClient.exe
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\TCPGameClient\bin\Debug\TCPGameClient.pdb
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\TCPGameClient\bin\Debug\GameNetwork.dll
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\TCPGameClient\bin\Debug\GameNetwork.pdb
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\TCPGameClient\obj\Debug\TCPGameClient.csprojResolveAssemblyReference.cache
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\TCPGameClient\obj\Debug\TCPGameClient.exe
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\TCPGameClient\obj\Debug\TCPGameClient.pdb

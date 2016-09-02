@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GameNetwork
 {
-    [Serializable()]
+    [Serializable]
     public class Vector3
     {
         public float x;

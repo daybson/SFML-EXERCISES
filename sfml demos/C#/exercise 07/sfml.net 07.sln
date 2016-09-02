@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientTCP", "sfml.net\ClientTCP.csproj", "{9A5AFE4A-44F9-416E-9DE2-F58C1C13E8DC}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerTCP", "ServerTCP\ServerTCP.csproj", "{0F7F6A45-A7F0-40A8-9994-D3C2091B4E81}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameNetwork", "GameNetwork\GameNetwork.csproj", "{7C2E9F91-0033-4699-A20F-E1CC7799812A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPGameClient", "TCPGameClient\TCPGameClient.csproj", "{9B02D87B-AEB4-4FCD-BCB5-EE5D8061B683}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9A5AFE4A-44F9-416E-9DE2-F58C1C13E8DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9A5AFE4A-44F9-416E-9DE2-F58C1C13E8DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9A5AFE4A-44F9-416E-9DE2-F58C1C13E8DC}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{9A5AFE4A-44F9-416E-9DE2-F58C1C13E8DC}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{0F7F6A45-A7F0-40A8-9994-D3C2091B4E81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0F7F6A45-A7F0-40A8-9994-D3C2091B4E81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F7F6A45-A7F0-40A8-9994-D3C2091B4E81}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,6 +23,10 @@ Global
 		{7C2E9F91-0033-4699-A20F-E1CC7799812A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C2E9F91-0033-4699-A20F-E1CC7799812A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C2E9F91-0033-4699-A20F-E1CC7799812A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B02D87B-AEB4-4FCD-BCB5-EE5D8061B683}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B02D87B-AEB4-4FCD-BCB5-EE5D8061B683}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B02D87B-AEB4-4FCD-BCB5-EE5D8061B683}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B02D87B-AEB4-4FCD-BCB5-EE5D8061B683}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
