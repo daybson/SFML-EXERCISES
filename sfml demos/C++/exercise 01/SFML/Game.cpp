@@ -60,10 +60,10 @@ void Game::processEvents()
 		switch (event.type)
 		{
 			case Event::KeyPressed:
-				handlePlayerInput(event.key.code, false);
+				handlePlayerInput(event.key.code, true);
 				break;
 			case Event::KeyReleased:
-				handlePlayerInput(event.key.code, true);
+				handlePlayerInput(event.key.code, false);
 				break;
 			case Event::Closed:
 				mWindow.close();
@@ -79,13 +79,13 @@ void Game::update()
 	Vector2f movement(0.f, 0.f);
 
 	if (mIsMovingUp)
-		movement.y += 0.1f;
-	if (mIsMovingDown)
 		movement.y -= 0.1f;
+	if (mIsMovingDown)
+		movement.y += 0.1f;
 	if (mIsMovingLeft)
-		movement.x += 0.1f;
-	if (mIsMovingRight)
 		movement.x -= 0.1f;
+	if (mIsMovingRight)
+		movement.x += 0.1f;
 
 	if (movement != Vector2f(0.f, 0.f))
 		player.Move(movement);
