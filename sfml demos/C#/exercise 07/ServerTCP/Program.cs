@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GameNetwork;
 
-namespace ServerTCP
+namespace TCPGameServer
 {
     class Program
     {

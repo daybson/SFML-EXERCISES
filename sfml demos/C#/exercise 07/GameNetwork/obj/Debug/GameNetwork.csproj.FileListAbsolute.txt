@@ -5,6 +5,6 @@ D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 07\GameNetwork\obj\Debug\Gam
 D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 07\GameNetwork\obj\Debug\GameNetwork.pdb
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\GameNetwork\bin\Debug\GameNetwork.dll
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\GameNetwork\bin\Debug\GameNetwork.pdb
-D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\GameNetwork\obj\Debug\GameNetwork.csprojResolveAssemblyReference.cache
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\GameNetwork\obj\Debug\GameNetwork.dll
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\GameNetwork\obj\Debug\GameNetwork.pdb
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\GameNetwork\obj\Debug\GameNetwork.csprojResolveAssemblyReference.cache

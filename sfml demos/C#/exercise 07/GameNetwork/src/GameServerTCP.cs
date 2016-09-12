@@ -5,77 +5,90 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Xml;
 
 namespace GameNetwork
 {
     public class GameServerTCP : NetworkAgent, INetworkAgent
     {
-        public void Start()
+        private List<Thread> clientsOnline;
+        TcpListener tcpListener;
+
+        public GameServerTCP()
         {
-            using(StreamWriter file = new StreamWriter(@"log.txt"))
+            xmlConfig = new XmlDocument();
+            xmlConfig.Load("config.xml");
+
+            var ipserver = xmlConfig.DocumentElement.SelectSingleNode("/gamenetwork/ipserver");
+            var nodePort = xmlConfig.DocumentElement.SelectSingleNode("/gamenetwork/port");
+
+            ipAddress = IPAddress.Parse(ipserver.InnerText);
+
+            tcpListener = new TcpListener(ipAddress, int.Parse(nodePort.InnerText));
+            tcpListener.Start();
+
+            Console.WriteLine("Waiting for clients...");
+        }
+
+        private void AcceptNewClient()
+        {
+            try
             {
-                xmlConfig = new XmlDocument();
-                xmlConfig.Load("config.xml");
+                var socket = tcpListener.AcceptSocket();
+                var t = new Thread(new ThreadStart(AcceptNewClient));
+                t.Start();
 
-                var myip = xmlConfig.DocumentElement.SelectSingleNode("/gamenetwork/myip");
-                var ipserver = xmlConfig.DocumentElement.SelectSingleNode("/gamenetwork/ipserver");
-                var hasRouter = xmlConfig.DocumentElement.SelectSingleNode("/gamenetwork/hasrouter");
-                var nodePort = xmlConfig.DocumentElement.SelectSingleNode("/gamenetwork/port");
-
-                file.WriteLine("Connecting from " + myip.InnerText + " to " + ipserver.InnerText + " at port " + nodePort.InnerText + " with router: " + hasRouter.InnerText);
-
-                ipHostInfo = Dns.Resolve(Dns.GetHostName());
-
-                if(hasRouter.InnerText == "false")
-                    ipAddress = IPAddress.Parse(ipserver.InnerText); //ipHostInfo.AddressList[0];
-                else
-                    ipAddress = ipHostInfo.AddressList[0];
-
-                endPoint = new IPEndPoint(ipAddress, int.Parse(nodePort.InnerText));
-                socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-                try
+                if (socket.Connected)
                 {
-                    socket.Bind(endPoint);
-                    socket.Listen(10);
+                    Console.WriteLine("Client " + socket.RemoteEndPoint.ToString() + " connected");
 
-                    Console.WriteLine("Waiting for a player...");
-                    var handler = socket.Accept();
-                    while(true)
+                    var netStream = new NetworkStream(socket);
+                    var writer = new StreamWriter(netStream);
+                    var reader = new StreamReader(netStream);
+
+                    while (true)
                     {
-                        string data = null;
-
-                        while(true)
+                        if (netStream.CanRead)
                         {
-                            bytes = new byte[BUFFER_SIZE];
-                            var bytesReceived = handler.Receive(bytes);
-                            data += Encoding.ASCII.GetString(bytes, 0, bytesReceived);
-                            if(data.IndexOf(Environment.NewLine) > -1)
+                            var line = reader.ReadLine();
+                            Console.WriteLine(socket.RemoteEndPoint.ToString() + ">" + line);
+
+                            if (line == "exit")
                                 break;
                         }
-
-                        Console.WriteLine("Client says: {0}", data);
-                        Console.Write(">");
-                        var msg = Encoding.ASCII.GetBytes(Console.ReadLine() + Environment.NewLine);
-                        handler.Send(msg);
-                        //handler.Shutdown(SocketShutdown.Both);
-                        //handler.Close();
                     }
+
+                    netStream.Close();
+                    reader.Close();
+                    writer.Close();
                 }
-                catch(Exception e)
-                {
-                    Console.WriteLine(e.ToString());
-                }
-                Console.WriteLine("ENTER to exit");
-                Console.Read();
+                socket.Close();
+                Console.ReadKey();
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        public void Start()
+        {
+            //kill remaining threads and start a new set 
+            if (clientsOnline != null)
+                clientsOnline.ForEach(c => c.Abort());
+            clientsOnline = new List<Thread>();
+
+            var t = new Thread(new ThreadStart(AcceptNewClient));
+            t.Start();
         }
 
         public void Stop()
         {
-            socket.Shutdown(SocketShutdown.Both);
-            socket.Close();
+            if (clientsOnline != null)
+                clientsOnline.ForEach(c => c.Abort());
+
+            clientsOnline.Clear();
         }
     }
 }

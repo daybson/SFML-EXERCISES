@@ -14,11 +14,15 @@ D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 04\sfml.net\bin\Debug\opena
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 04\sfml.net\bin\Debug\OpenTK.Compatibility.dll
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 04\sfml.net\bin\Debug\OpenTK.dll
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 04\sfml.net\bin\Debug\tilemap.png
-D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 04\sfml.net\bin\Debug\buttonClicked.png
-D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 04\sfml.net\bin\Debug\buttonNormal.png
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 04\sfml.net\bin\Debug\sfml.net.exe
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 04\sfml.net\bin\Debug\sfml.net.pdb
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 04\sfml.net\bin\Debug\sfmlnet-audio-2.dll
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 04\sfml.net\bin\Debug\sfmlnet-graphics-2.dll
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 04\sfml.net\bin\Debug\sfmlnet-system-2.dll
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 04\sfml.net\bin\Debug\sfmlnet-window-2.dll
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 04\sfml.net\bin\Debug\buttonCloseClicked.png
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 04\sfml.net\bin\Debug\buttonCloseNormal.png
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 04\sfml.net\bin\Debug\buttonLoadClicked.png
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 04\sfml.net\bin\Debug\buttonLoadNormal.png
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 04\sfml.net\bin\Debug\buttonRestartClicked.png
+D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 04\sfml.net\bin\Debug\buttonRestartNormal.png

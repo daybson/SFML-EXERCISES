@@ -15,101 +15,42 @@ namespace GameNetwork
     {
         public void Start()
         {
-            //using(StreamWriter file = new StreamWriter(@"log.txt", true))
+            try
             {
-                bytes = new byte[BUFFER_SIZE];
+                xmlConfig = new XmlDocument();
+                xmlConfig.Load("config.xml");
 
-                try
+                var ipserver = xmlConfig.DocumentElement.SelectSingleNode("/gamenetwork/ipserver");
+                var nodePort = xmlConfig.DocumentElement.SelectSingleNode("/gamenetwork/port");
+
+                TcpClient tcpClient = new TcpClient(ipserver.InnerText, int.Parse(nodePort.InnerText));
+                var netStream = tcpClient.GetStream();
+                var reader = new StreamReader(netStream);
+                var writer = new StreamWriter(netStream);
+
+                while (true)
                 {
+                    Console.Write(">");
+                    var line = Console.ReadLine();
 
-                    /*
-                    var proxy = new WebProxy("www.pmiserver51.pmi.mg.gov.br", 8080);                    
-                    proxy.Credentials = new NetworkCredential("m127391", "Kazyamof29");
-                    proxy.UseDefaultCredentials = false;
-                    proxy.BypassProxyOnLocal = false;
-                    */
-
-                    WebClient webClient = new WebClient();
-                    webClient.UseDefaultCredentials = true;
-                    webClient.Proxy = WebRequest.GetSystemWebProxy();
-                    webClient.Proxy.Credentials = new NetworkCredential("m127391", "Kazyamof29");
-                    var doc = webClient.DownloadString("https://drive.google.com/file/d/0B1uOORmPqLlvbW95TEV6SjFGdnM/view?usp=sharing");//"https://1drv.ms/u/s!AiNRL4yfSd_UgpV9aHzfY5Lkr9f98Q");
-
-                    xmlConfig = new XmlDocument();
-                    xmlConfig.Load(doc);
-
-                    var myip = xmlConfig.DocumentElement.SelectSingleNode("/gamenetwork/myip");
-                    var ipserver = xmlConfig.DocumentElement.SelectSingleNode("/gamenetwork/ipserver");
-                    var hasRouter = xmlConfig.DocumentElement.SelectSingleNode("/gamenetwork/hasrouter");
-                    var nodePort = xmlConfig.DocumentElement.SelectSingleNode("/gamenetwork/port");
-
-                    //file.Write("Connecting from " + myip.InnerText + " to " + ipserver.InnerText + " at port " + nodePort.InnerText + " with router: " + hasRouter.InnerText);
-
-                    ipHostInfo = Dns.Resolve(Dns.GetHostName());
-
-                    if(hasRouter.InnerText == "false")
-                        ipAddress = IPAddress.Parse(ipserver.InnerText); //ipHostInfo.AddressList[0];
-                    else
-                        ipAddress = ipHostInfo.AddressList[0];
-
-                    endPoint = new IPEndPoint(ipAddress, int.Parse(nodePort.InnerText));
-                    socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-                    try
+                    if (line.Length > 0)
                     {
-                        socket.Connect(endPoint);
-                        Console.WriteLine("Connected to {0}", socket.RemoteEndPoint.ToString());
-
-                        while(true)
-                        {
-                            //var msg = Encoding.ASCII.GetBytes("Hello server " + socket.RemoteEndPoint.ToString() + Environment.NewLine);
-                            var msg = Encoding.ASCII.GetBytes(Console.ReadLine() + Environment.NewLine);
-                            string data = null;
-                            var bytesSent = socket.Send(msg);
-
-                            var v = new Vector3(1f, 2f, 3f);
-
-                            IFormatter formatter = new BinaryFormatter();
-                            var netStream = new NetworkStream(socket, true);
-                            Stream stream = new MemoryStream();
-                            formatter.Serialize(stream, v);
-                            byte[] buffer = ((MemoryStream)stream).ToArray();
-
-                            var writer = new BinaryWriter(netStream);
-
-                            while(true)
-                            {
-                                bytes = new byte[BUFFER_SIZE];
-                                var bytesReceived = socket.Receive(bytes);
-                                data += Encoding.ASCII.GetString(bytes, 0, bytesReceived);
-                                if(data.IndexOf(Environment.NewLine) > -1)
-                                    break;
-                            }
-                            //var bytesReceived = socket.Receive(bytes);
-
-                            Console.WriteLine("Serevr says: {0}", data);
-                            Console.Write(">");
-                            //Stop();
-                        }
+                        writer.WriteLine(line);
+                        writer.Flush();
                     }
 
-                    catch(ArgumentNullException ane)
-                    {
-                        Console.WriteLine("ArgumentNullException : {0}", ane.ToString());
-                    }
-                    catch(SocketException se)
-                    {
-                        Console.WriteLine("SocketException : {0}", se.ToString());
-                    }
-                    catch(Exception e)
-                    {
-                        Console.WriteLine("Unexpected exception : {0}", e.ToString());
-                    }
+                    if (line == "exit")
+                        break;
                 }
-                catch(Exception e)
-                {
-                    Console.WriteLine(e.ToString());
-                }
+
+                netStream.Close();
+                reader.Close();
+                writer.Close();
+                Console.ReadKey();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
             }
         }
 
@@ -120,7 +61,7 @@ namespace GameNetwork
                 socket.Shutdown(SocketShutdown.Both);
                 socket.Close();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine("Exception on closing connection: " + e.ToString());
             }
