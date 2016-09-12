@@ -24,11 +24,14 @@ namespace sfml.net.src
         private Gamepad gamepad0;
 
         public static Clock DeltaTime = new Clock();
-        Tile map;
-        Tile background;
-        int[] level;
+        private Tile map;
+        private Tile background;
+        private int[] level;
 
-        UIButton button;
+        private UIButton buttonClose;
+        private UIButton buttonRestartClock;
+        private UIButton buttonLoadTileMap;
+        private List<UIButton> buttons;
 
         #endregion
 
@@ -70,16 +73,28 @@ namespace sfml.net.src
                 0, 0, 1, 0, 3, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1
             };
 
-            map = new Tile();
-            background = new Tile();
+            this.buttonClose = new UIButton("buttonCloseNormal.png", "buttonCloseClicked.png", new Vector2f(WINDOW_WIDTH - 96, 0));
+            this.buttonClose.OnClickEvent += () =>
+            {
+                this.window.Close();
+            };
 
-            if (!map.Load("tilemap.png", new Vector2u(32, 32), level, 16, 8))
-                throw new Exception("Error loading texture");
+            this.buttonLoadTileMap = new UIButton("buttonLoadNormal.png", "buttonLoadClicked.png", new Vector2f(WINDOW_WIDTH - 96, 32));
+            this.buttonLoadTileMap.OnClickEvent += () =>
+            {
+                this.map = new Tile();
+                if (!this.map.Load("tilemap.png", new Vector2u(32, 32), level, 16, 8))
+                    throw new Exception("Error loading texture");
+                this.buttonLoadTileMap.IsInteractable = false;
+            };
 
-            if (!background.Load("background.png", 512, 256))
-                throw new Exception("Error loading texture");
+            this.buttonRestartClock = new UIButton("buttonRestartNormal.png", "buttonRestartClicked.png", new Vector2f(WINDOW_WIDTH - 96, 64));
+            this.buttonRestartClock.OnClickEvent += () =>
+            {
+                Console.WriteLine("Timer restarted manually:" + DeltaTime.Restart().AsSeconds() + "s");
+            };
 
-            button = new UIButton("buttonNormal.png", "buttonClicked.png", new Vector2f(10, 10));
+            this.buttons = new List<UIButton> { this.buttonRestartClock, this.buttonLoadTileMap, this.buttonClose };
 
             this.window.Closed += (sender, e) =>
             {
@@ -88,7 +103,7 @@ namespace sfml.net.src
             };
         }
 
-       
+
 
         public void Run()
         {
@@ -137,7 +152,11 @@ namespace sfml.net.src
         {
             Console.WriteLine("Pressed: " + e.Button.ToString());
             if (e.Button == Mouse.Button.Left)
-                button.CheckClick(new Vector2f(e.X, e.Y));
+            {
+                buttonClose.CheckClick(new Vector2f(e.X, e.Y));
+                buttonRestartClock.CheckClick(new Vector2f(e.X, e.Y));
+                buttonLoadTileMap.CheckClick(new Vector2f(e.X, e.Y));
+            }
         }
 
         private void ProcessMouseWheelMoved(object sender, MouseWheelEventArgs e)
@@ -149,6 +168,12 @@ namespace sfml.net.src
         private void ProcessMouseReleased(object sender, MouseButtonEventArgs e)
         {
             Console.WriteLine("Released: " + e.Button.ToString());
+            if (e.Button == Mouse.Button.Left)
+            {
+                buttonClose.CheckClick(new Vector2f(e.X, e.Y));
+                buttonRestartClock.CheckClick(new Vector2f(e.X, e.Y));
+                buttonLoadTileMap.CheckClick(new Vector2f(e.X, e.Y));
+            }
         }
 
         #endregion
@@ -203,10 +228,13 @@ namespace sfml.net.src
         private void Render()
         {
             window.Clear();
-            window.Draw(map);
-            //window.Draw(background);
+            if (this.map != null)
+                window.Draw(map);
+
             player.Display(window);
-            window.Draw(button.Sprite);
+
+            this.buttons.ForEach(b => window.Draw(b.Sprite));
+
             window.Display();
         }
 

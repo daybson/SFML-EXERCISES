@@ -7,6 +7,7 @@ using System.Text;
 
 namespace sfml.net.src
 {
+    public delegate void OnClickEvent();
     class UIButton
     {
         #region Fields
@@ -19,6 +20,9 @@ namespace sfml.net.src
         private Texture textureClicked;
         public Sprite Sprite { get { return spriteCurrent; } }
         public bool State { get { return currentState; } }
+        public OnClickEvent OnClickEvent;
+        public bool IsInteractable { get; set; }
+
         #endregion
 
 
@@ -32,11 +36,12 @@ namespace sfml.net.src
             if ((textureClicked = new Texture(clickedTexturePath)) == null)
                 throw new Exception("Error loading texture");
 
+            OnClickEvent += () => { };
             spriteNormal = new Sprite(textureNormal);
             spriteClicked = new Sprite(textureClicked);
             spriteNormal.Position = uiPosition;
             spriteClicked.Position = uiPosition;
-
+            IsInteractable = true;
             SetState(false);
         }
 
@@ -57,11 +62,17 @@ namespace sfml.net.src
 
         private void SetState(bool v)
         {
-            currentState = v;
-            if (currentState)
-                spriteCurrent = spriteClicked;
-            else
-                spriteCurrent = spriteNormal;
+            if (IsInteractable)
+            {
+                currentState = v;
+                if (currentState)
+                {
+                    spriteCurrent = spriteClicked;
+                    OnClickEvent();
+                }
+                else
+                    spriteCurrent = spriteNormal;
+            }
         }
 
         #endregion
