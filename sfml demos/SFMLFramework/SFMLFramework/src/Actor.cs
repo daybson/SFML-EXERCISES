@@ -24,7 +24,7 @@ public class Actor : IUpdate
 
     public Actor()
     {
-        this.components = new List<Component>();
+        this.components = new List<Component>();        
     }
 
     public Actor(string name)
@@ -33,7 +33,7 @@ public class Actor : IUpdate
         this.name = name;
     }
 
-    public T AddComponent<T>() where T: Component
+    public T AddComponent<T>() where T : Component
     {
         var c = Activator.CreateInstance<T>();
         this.components.Add(c);
@@ -44,7 +44,12 @@ public class Actor : IUpdate
     {
         var c = this.components.Find(component => component.GetType() == componentType);
         c.enabled = false;
-        this.components.Remove(c);        
+        this.components.Remove(c);
+    }
+
+    public T GetComponent<T>() where T : Component
+    {
+        return (T)this.components.Find(c => c is T);
     }
 
     public void Update(float deltaTime)

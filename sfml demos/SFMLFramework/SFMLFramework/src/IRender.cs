@@ -17,6 +17,7 @@ using System.Linq;
 using System.Text;
 using SFML.System;
 
-public interface IRender {
-	void Render(RenderTarget window);
+public interface IRender
+{
+    void Render(RenderTarget window);
 }

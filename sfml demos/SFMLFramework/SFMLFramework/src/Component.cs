@@ -21,5 +21,10 @@ public abstract class Component : IUpdate
 {
     public bool enabled;
 
+    public Component()
+    {
+        this.enabled = true;
+    }
+
     abstract public void Update(float deltaTime);
 }

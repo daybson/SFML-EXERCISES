@@ -24,25 +24,82 @@ public class Game : IUpdate
     public Clock clock;
     protected RenderWindow window;
     public List<Actor> actors;
+    private KeyboardInput keyboard;
 
     public Game(string title)
     {
         this.windowTitle = title;
         this.actors = new List<Actor>();
         this.windowSize = new Vector2u(800, 600);
-        this.clock = new Clock();        
+        this.clock = new Clock();
+        this.keyboard = new KeyboardInput(ref this.window);
     }
 
     public void Start()
     {
         this.window = new RenderWindow(new VideoMode(this.windowSize.X, this.windowSize.Y), windowTitle);
+        this.window.KeyPressed += this.keyboard.ProcessKeyboardPressed;
+        this.window.KeyReleased += this.keyboard.ProcessKeyboardReleased;
+
+        var player = new Actor("Player");
+        this.actors.Add(player);
+        var mover = player.AddComponent<Mover>();
+        mover.Speed = new Vector2f(6, 2);
+
+        var inputPlayer = player.AddComponent<PlayerKeyboardController>();
+        this.keyboard.OnKeyPressed += inputPlayer.OnKeyPressed;
+        this.keyboard.OnKeyReleased += inputPlayer.OnKeyReleased;
+
+        var r = player.AddComponent<Renderer>();
+        r.spriteSheet = new SpriteSheet("dragon.png");
+        r.spriteSheet.Sprite.Position = mover.Position;
+
+        inputPlayer.keyPressedActions.Add
+            (
+                Keyboard.Key.A, new Action(() =>
+                        {
+                            mover.Move(new Vector2f(-1, 0));
+                            r.spriteSheet.Sprite.Position = mover.Position;
+                        }
+                    )
+            );
+
+        inputPlayer.keyPressedActions.Add
+            (
+                Keyboard.Key.D, new Action(() =>
+                {
+                    mover.Move(new Vector2f(1, 0));
+                    r.spriteSheet.Sprite.Position = mover.Position;
+                }
+                    )
+            );
+
+        inputPlayer.keyPressedActions.Add
+            (
+                Keyboard.Key.W, new Action(() =>
+                {
+                    mover.Move(new Vector2f(0, -1));
+                    r.spriteSheet.Sprite.Position = mover.Position;
+                }
+                    )
+            );
+
+        inputPlayer.keyPressedActions.Add
+            (
+                Keyboard.Key.S, new Action(() =>
+                {
+                    mover.Move(new Vector2f(0, 1));
+                    r.spriteSheet.Sprite.Position = mover.Position;
+                }
+                    )
+            );
 
         Run();
     }
 
     protected void Run()
     {
-        while(this.window.IsOpen)
+        while (this.window.IsOpen)
         {
             window.DispatchEvents();
             Update(this.clock.ElapsedTime.AsSeconds());
@@ -58,8 +115,14 @@ public class Game : IUpdate
 
     protected void Render()
     {
-        window.Clear();
-        window.Display();
+        this.window.Clear();
+
+        foreach (var a in actors)
+        {
+            a.GetComponent<Renderer>().Render(this.window);
+        }
+
+        this.window.Display();
     }
 
     protected void Finish()

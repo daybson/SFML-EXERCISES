@@ -17,6 +17,7 @@ using System.Linq;
 using System.Text;
 using SFML.System;
 
-public interface IMove {
-	void Move();
+public interface IMove
+{
+    void Move(Vector2f direction);
 }

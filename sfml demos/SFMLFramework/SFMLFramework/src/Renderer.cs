@@ -19,7 +19,12 @@ using SFML.System;
 
 public class Renderer : Component, IRender
 {
-    protected SpriteSheet spriteSheet;
+    public SpriteSheet spriteSheet;
+
+    public Renderer() : base()
+    {
+
+    }
 
     public void Render(RenderTarget window)
     {
@@ -28,7 +33,9 @@ public class Renderer : Component, IRender
 
     public override void Update(float deltaTime)
     {
-        if(this.enabled)
-            Console.WriteLine("Updating component");
+        if (this.enabled)
+        {
+            this.spriteSheet.UpdateAnimation(deltaTime);
+        }
     }
 }

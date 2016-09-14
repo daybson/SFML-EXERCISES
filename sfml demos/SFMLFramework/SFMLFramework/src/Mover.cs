@@ -19,18 +19,36 @@ using SFML.System;
 
 public class Mover : Component, IMove
 {
-    protected Vector2f Direction;
-    protected Vector2f Speed;
+    public Vector2f Speed;
+    protected Vector2f position;
+    public Vector2f Position { get { return position; } }
 
-    public void Move()
+    public Mover()
     {
-        if(this.enabled)
-            Console.WriteLine("Updating component");
+        this.enabled = true;
+    }
+
+    public Mover(Vector2f position, Vector2f speed) : base()
+    {
+        this.enabled = true;
+        this.position = position;
+        this.Speed = speed;
+    }
+
+
+    public void Move(Vector2f direction)
+    {
+        if (this.enabled)
+        {
+            direction.X *= this.Speed.X;
+            direction.Y *= this.Speed.Y;
+            position += direction;
+        }
     }
 
     public override void Update(float deltaTime)
     {
-        if(this.enabled)
-            Console.WriteLine("Updating component");
+        if (this.enabled)
+        { }
     }
 }

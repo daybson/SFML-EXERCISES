@@ -8,7 +8,7 @@ using SFML.System;
 
 public class SpriteSheet
 {
-    #region
+    #region Fields
 
     private Texture texture;
     private IntRect tile;
@@ -29,7 +29,7 @@ public class SpriteSheet
     #endregion
 
 
-    #region
+    #region Public
 
     public SpriteSheet(string pathTexture)
     {
