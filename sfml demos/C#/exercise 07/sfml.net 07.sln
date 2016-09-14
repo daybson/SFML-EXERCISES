@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerTCP", "ServerTCP\ServerTCP.csproj", "{0F7F6A45-A7F0-40A8-9994-D3C2091B4E81}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPGameServer", "ServerTCP\TCPGameServer.csproj", "{0F7F6A45-A7F0-40A8-9994-D3C2091B4E81}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameNetwork", "GameNetwork\GameNetwork.csproj", "{7C2E9F91-0033-4699-A20F-E1CC7799812A}"
 EndProject

@@ -7,4 +7,3 @@ D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\GameNetwork\bin\Debug\Ga
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\GameNetwork\bin\Debug\GameNetwork.pdb
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\GameNetwork\obj\Debug\GameNetwork.dll
 D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\GameNetwork\obj\Debug\GameNetwork.pdb
-D:\Repositorio\SFML-EXERCISES\sfml demos\C#\exercise 07\GameNetwork\obj\Debug\GameNetwork.csprojResolveAssemblyReference.cache

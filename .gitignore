@@ -27,3 +27,4 @@
 *.exe
 *.out
 *.app
+/sfml demos/SFMLFramework/SFMLFramework/bin/Debug

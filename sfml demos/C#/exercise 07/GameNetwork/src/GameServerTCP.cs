@@ -12,8 +12,8 @@ namespace GameNetwork
 {
     public class GameServerTCP : NetworkAgent, INetworkAgent
     {
-        private List<Thread> clientsOnline;
-        TcpListener tcpListener;
+        private List<Socket> clients;
+        private TcpListener tcpListener;
 
         public GameServerTCP()
         {
@@ -25,6 +25,8 @@ namespace GameNetwork
 
             ipAddress = IPAddress.Parse(ipserver.InnerText);
 
+            clients = new List<Socket>();
+
             tcpListener = new TcpListener(ipAddress, int.Parse(nodePort.InnerText));
             tcpListener.Start();
 
@@ -33,19 +35,29 @@ namespace GameNetwork
 
         private void AcceptNewClient()
         {
+            var t = new Thread(new ThreadStart(AcceptNewClient));
+            NetworkStream netStream = null;
+            StreamWriter writer = null;
+            StreamReader reader = null;
+
             try
             {
-                var socket = tcpListener.AcceptSocket();
-                var t = new Thread(new ThreadStart(AcceptNewClient));
+                socket = tcpListener.AcceptSocket();
+
+                lock (clients)
+                {
+                    clients.Add(socket);
+                }
+
                 t.Start();
 
                 if (socket.Connected)
                 {
                     Console.WriteLine("Client " + socket.RemoteEndPoint.ToString() + " connected");
 
-                    var netStream = new NetworkStream(socket);
-                    var writer = new StreamWriter(netStream);
-                    var reader = new StreamReader(netStream);
+                    netStream = new NetworkStream(socket);
+                    writer = new StreamWriter(netStream);
+                    reader = new StreamReader(netStream);
 
                     while (true)
                     {
@@ -56,39 +68,57 @@ namespace GameNetwork
 
                             if (line == "exit")
                                 break;
+
+                            lock (clients)
+                            {
+                                foreach (var c in clients)
+                                {
+                                    if (c.RemoteEndPoint != socket.RemoteEndPoint)
+                                    {
+                                        using (var nstream = new NetworkStream(c))
+                                        {
+                                            using (var w = new StreamWriter(nstream))
+                                            {
+                                                w.WriteLine(socket.RemoteEndPoint.ToString() + ": " + line);
+                                                w.Flush();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
                         }
                     }
 
-                    netStream.Close();
-                    reader.Close();
-                    writer.Close();
+                    socket.Shutdown(SocketShutdown.Both);
+                    socket.Close();
+                    //t.Abort();
                 }
                 socket.Close();
                 Console.ReadKey();
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                clients.Remove(socket);
+                netStream.Close();
+                reader.Close();
+                writer.Close();
+                Console.WriteLine(socket.RemoteEndPoint.ToString() + " is out");
+                socket.Shutdown(SocketShutdown.Both);
+                socket.Close();
+                //t.Abort();
             }
         }
 
         public void Start()
         {
-            //kill remaining threads and start a new set 
-            if (clientsOnline != null)
-                clientsOnline.ForEach(c => c.Abort());
-            clientsOnline = new List<Thread>();
-
             var t = new Thread(new ThreadStart(AcceptNewClient));
             t.Start();
         }
 
         public void Stop()
         {
-            if (clientsOnline != null)
-                clientsOnline.ForEach(c => c.Abort());
 
-            clientsOnline.Clear();
         }
     }
 }
