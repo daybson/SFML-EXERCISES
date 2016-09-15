@@ -64,6 +64,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\IKeyboardInput.cs" />
     <Compile Include="src\KeyboardInput.cs" />
+    <Compile Include="src\Player.cs" />
     <Compile Include="src\PlayerKeyboardController.cs" />
     <Compile Include="src\SpriteSheet.cs" />
     <Compile Include="src\Actor.cs" />

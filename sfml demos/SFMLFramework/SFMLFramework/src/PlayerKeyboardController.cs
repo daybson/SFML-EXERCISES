@@ -32,13 +32,13 @@ public class PlayerKeyboardController : Component
 
     public void OnKeyPressed(Keyboard.Key key)
     {
-        if(this.keyPressedActions.ContainsKey(key))
+        if (this.keyPressedActions.ContainsKey(key))
             this.keyPressedActions[key].Invoke();
     }
 
     public void OnKeyReleased(Keyboard.Key key)
     {
-        if(this.keyReleasedActions.ContainsKey(key))
+        if (this.keyReleasedActions.ContainsKey(key))
             this.keyReleasedActions[key].Invoke();
     }
 

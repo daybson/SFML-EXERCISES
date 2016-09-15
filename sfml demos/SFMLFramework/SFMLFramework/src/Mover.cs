@@ -17,22 +17,32 @@ using System.Linq;
 using System.Text;
 using SFML.System;
 
+
 public class Mover : Component, IMove
 {
     public enum Direction
     {
-        Rigth,
-        Left,
         Up,
         Down,
+        Left,
+        Right,
         None
     }
 
+    public delegate void OnDirectionChange(Direction direction);
+
+    private bool moveLeft;
+    private bool moveRigth;
+    private bool moveUp;
+    private bool moveDown;
+
     public Vector2f Speed;
     protected Vector2f position;
-    protected Vector2f movement;
-    protected Direction direction;
-    public Vector2f Position { get { return position; } }
+    protected Vector2f move;
+    public Vector2f Position { get { return position; } set { } }
+
+    Direction IMove.Direction { get; set; }
+    public OnDirectionChange OnChangeDirection { get; set; }
 
     public Mover()
     {
@@ -46,48 +56,59 @@ public class Mover : Component, IMove
         this.Speed = speed;
     }
 
-
-    public void SetMoveDirection(Direction direction)
-    {
-        this.direction = direction;
-    }
-
     public override void Update(float deltaTime)
     {
-        if(this.enabled)
-        {
-            Move(deltaTime);
-        }
+        this.move = new Vector2f();
+
+        if(this.moveLeft)
+            this.move.X = -this.Speed.X * deltaTime;
+
+        if(this.moveRigth)
+            this.move.X = this.Speed.X * deltaTime;
+
+        if(this.moveUp)
+            this.move.Y = -this.Speed.Y * deltaTime;
+
+        if(this.moveDown)
+            this.move.Y = this.Speed.Y * deltaTime;
+
+        this.position += this.move;
     }
 
-    private void Move(float deltaTime)
-    {
-        this.movement = new Vector2f();
-
-        if(this.direction == Direction.None)
-            return;
-
-        switch(this.direction)
+    public void SetDirectionMove(Direction direction, bool value)
+    {        
+        switch(direction)
         {
-            case Direction.Down:
-                this.movement.Y = 1;
+            case Direction.Left:
+                this.moveLeft = value;
+                if(value)
+                    this.moveRigth = !value;
+                break;
+            case Direction.Right:
+                this.moveRigth = value;
+                if(value)
+                    this.moveLeft = !value;
                 break;
             case Direction.Up:
-                this.movement.Y = -1;
+                this.moveUp = value;
+                if(value)
+                    this.moveDown = !value;
                 break;
-            case Direction.Rigth:
-                this.movement.X = 1;
+            case Direction.Down:
+                this.moveDown = value;
+                if(value)
+                    this.moveUp = !value;
                 break;
-            case Direction.Left:
-                this.movement.X = -1;
-                break;
+
             default:
+                this.moveLeft = false;
+                this.moveRigth = false;
+                this.moveUp = false;
+                this.moveDown = false;
                 break;
         }
 
-        this.movement.X *= Speed.X * deltaTime;
-        this.movement.Y *= Speed.Y * deltaTime;
-        Console.WriteLine(this.movement.ToString());
-        position += this.movement;
+        if(value)
+            this.OnChangeDirection(direction);
     }
 }

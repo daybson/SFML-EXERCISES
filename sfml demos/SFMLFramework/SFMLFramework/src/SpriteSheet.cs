@@ -60,13 +60,13 @@ public class SpriteSheet
 
     }
 
-    public void UpdateAnimation(float deltaTime)
+    public void UpdateAnimation(float deltaTime, Mover.Direction direction)
     {
-        currentFrameTime += deltaTime * 100;
+        currentFrameTime += deltaTime;
 
-        if(currentFrameTime >= frameTime)
+        if (currentFrameTime >= frameTime)
         {
-            if(currentFrame + 1 == columns)
+            if (currentFrame + 1 == columns)
             {
                 currentFrame = 0;
                 tile.Left = 0;
@@ -82,19 +82,19 @@ public class SpriteSheet
         }
     }
 
-    public void SetDirection(Vector2f direction)
+    public void SetDirection(Mover.Direction direction)
     {
         int newTop = 0;
-        if(direction.X < 0) //left
-            newTop = tileHeight;
-        else if(direction.X > 0) //right
-            newTop = tileHeight * (rows - 2);
-        else if(direction.Y > 0) //down
-            newTop = 0;
-        else if(direction.Y < 0) //up
-            newTop = tileHeight * (rows - 1);
 
-        if(tile.Top != newTop)
+        switch (direction)
+        {
+            case Mover.Direction.Left: newTop = tileHeight; break;
+            case Mover.Direction.Right: newTop = tileHeight * (rows - 2); break;
+            case Mover.Direction.Up: newTop = tileHeight * (rows - 1); break;
+            case Mover.Direction.Down: newTop = 0; break;           
+        }
+
+        if (tile.Top != newTop)
         {
             tile.Top = newTop;
             tile.Left = 0;

@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SFML.System;
+using System.Threading;
 
 public class Game : IUpdate
 {
@@ -39,119 +40,33 @@ public class Game : IUpdate
     {
         this.window = new RenderWindow(new VideoMode(this.windowSize.X, this.windowSize.Y), windowTitle);
         this.window.SetFramerateLimit(60);
-
         this.window.KeyPressed += this.keyboard.ProcessKeyboardPressed;
         this.window.KeyReleased += this.keyboard.ProcessKeyboardReleased;
 
-        var player = new Actor("Player");
-        this.actors.Add(player);
-        var mover = player.AddComponent<Mover>();
-        mover.Speed = new Vector2f(2, 2);
-
-        var inputPlayer = player.AddComponent<PlayerKeyboardController>();
-        this.keyboard.OnKeyPressed += inputPlayer.OnKeyPressed;
-        this.keyboard.OnKeyReleased += inputPlayer.OnKeyReleased;
-
-        var r = player.AddComponent<Renderer>();
-        r.spriteSheet = new SpriteSheet("dragon.png");
-        r.spriteSheet.Sprite.Position = mover.Position;
-
-        inputPlayer.keyPressedActions.Add
-            (
-                Keyboard.Key.A, new Action(() =>
-                        {
-                            mover.SetMoveDirection(Mover.Direction.Left);
-                            r.spriteSheet.Sprite.Position = mover.Position;
-                        }
-                    )
-            );
-
-        inputPlayer.keyPressedActions.Add
-            (
-                Keyboard.Key.D, new Action(() =>
-                {
-                    mover.SetMoveDirection(Mover.Direction.Rigth);
-                    r.spriteSheet.Sprite.Position = mover.Position;
-                }
-                    )
-            );
-
-        inputPlayer.keyPressedActions.Add
-            (
-                Keyboard.Key.W, new Action(() =>
-                {
-                    mover.SetMoveDirection(Mover.Direction.Up);
-                    r.spriteSheet.Sprite.Position = mover.Position;
-                }
-                    )
-            );
-
-        inputPlayer.keyPressedActions.Add
-            (
-                Keyboard.Key.S, new Action(() =>
-                {
-                    mover.SetMoveDirection(Mover.Direction.Down);
-                    r.spriteSheet.Sprite.Position = mover.Position;
-                }
-                    )
-            );
-
-        inputPlayer.keyReleasedActions.Add
-            (
-                Keyboard.Key.A, new Action(() =>
-                {
-                    mover.SetMoveDirection(Mover.Direction.None);
-                    r.spriteSheet.Sprite.Position = mover.Position;
-                }
-                    )
-            );
-
-        inputPlayer.keyReleasedActions.Add
-            (
-                Keyboard.Key.D, new Action(() =>
-                {
-                    mover.SetMoveDirection(Mover.Direction.None);
-                    r.spriteSheet.Sprite.Position = mover.Position;
-                }
-                    )
-            );
-
-        inputPlayer.keyReleasedActions.Add
-            (
-                Keyboard.Key.W, new Action(() =>
-                {
-                    mover.SetMoveDirection(Mover.Direction.None);
-                    r.spriteSheet.Sprite.Position = mover.Position;
-                }
-                    )
-            );
-
-        inputPlayer.keyReleasedActions.Add
-            (
-                Keyboard.Key.S, new Action(() =>
-                {
-                    mover.SetMoveDirection(Mover.Direction.None);
-                    r.spriteSheet.Sprite.Position = mover.Position;
-                }
-                    )
-            );
+        var player = new Player();
+        this.actors.Add(player);               
+        
+        this.keyboard.OnKeyPressed += player.keyboardController.OnKeyPressed;
+        this.keyboard.OnKeyReleased += player.keyboardController.OnKeyReleased;                
 
         Run();
     }
 
     protected void Run()
     {
-        while(this.window.IsOpen)
+        while (this.window.IsOpen)
         {
+            var timer = this.clock.Restart();
+
             window.DispatchEvents();
-            Update(this.clock.ElapsedTime.AsMicroseconds()/10);
+            Update(timer.AsSeconds());
             Render();
-            this.clock.Restart();
         }
     }
 
     public void Update(float deltaTime)
     {
+        Console.WriteLine(deltaTime);
         this.actors.ForEach(a => a.Update(deltaTime));
     }
 
@@ -159,7 +74,7 @@ public class Game : IUpdate
     {
         this.window.Clear();
 
-        foreach(var a in actors)
+        foreach (var a in actors)
         {
             a.GetComponent<Renderer>().Render(this.window);
         }
