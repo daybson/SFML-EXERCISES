@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SFML.System;
+using System.Threading;
 
 public class Game : IUpdate
 {
@@ -38,61 +39,15 @@ public class Game : IUpdate
     public void Start()
     {
         this.window = new RenderWindow(new VideoMode(this.windowSize.X, this.windowSize.Y), windowTitle);
+        this.window.SetFramerateLimit(60);
         this.window.KeyPressed += this.keyboard.ProcessKeyboardPressed;
         this.window.KeyReleased += this.keyboard.ProcessKeyboardReleased;
 
-        var player = new Actor("Player");
-        this.actors.Add(player);
-        var mover = player.AddComponent<Mover>();
-        mover.Speed = new Vector2f(6, 2);
-
-        var inputPlayer = player.AddComponent<PlayerKeyboardController>();
-        this.keyboard.OnKeyPressed += inputPlayer.OnKeyPressed;
-        this.keyboard.OnKeyReleased += inputPlayer.OnKeyReleased;
-
-        var r = player.AddComponent<Renderer>();
-        r.spriteSheet = new SpriteSheet("dragon.png");
-        r.spriteSheet.Sprite.Position = mover.Position;
-
-        inputPlayer.keyPressedActions.Add
-            (
-                Keyboard.Key.A, new Action(() =>
-                        {
-                            mover.Move(new Vector2f(-1, 0));
-                            r.spriteSheet.Sprite.Position = mover.Position;
-                        }
-                    )
-            );
-
-        inputPlayer.keyPressedActions.Add
-            (
-                Keyboard.Key.D, new Action(() =>
-                {
-                    mover.Move(new Vector2f(1, 0));
-                    r.spriteSheet.Sprite.Position = mover.Position;
-                }
-                    )
-            );
-
-        inputPlayer.keyPressedActions.Add
-            (
-                Keyboard.Key.W, new Action(() =>
-                {
-                    mover.Move(new Vector2f(0, -1));
-                    r.spriteSheet.Sprite.Position = mover.Position;
-                }
-                    )
-            );
-
-        inputPlayer.keyPressedActions.Add
-            (
-                Keyboard.Key.S, new Action(() =>
-                {
-                    mover.Move(new Vector2f(0, 1));
-                    r.spriteSheet.Sprite.Position = mover.Position;
-                }
-                    )
-            );
+        var player = new Player();
+        this.actors.Add(player);               
+        
+        this.keyboard.OnKeyPressed += player.keyboardController.OnKeyPressed;
+        this.keyboard.OnKeyReleased += player.keyboardController.OnKeyReleased;                
 
         Run();
     }
@@ -101,15 +56,17 @@ public class Game : IUpdate
     {
         while (this.window.IsOpen)
         {
+            var timer = this.clock.Restart();
+
             window.DispatchEvents();
-            Update(this.clock.ElapsedTime.AsSeconds());
+            Update(timer.AsSeconds());
             Render();
-            this.clock.Restart();
         }
     }
 
     public void Update(float deltaTime)
     {
+        Console.WriteLine(deltaTime);
         this.actors.ForEach(a => a.Update(deltaTime));
     }
 

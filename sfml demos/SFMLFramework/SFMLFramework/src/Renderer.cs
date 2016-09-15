@@ -19,11 +19,12 @@ using SFML.System;
 
 public class Renderer : Component, IRender
 {
-    public SpriteSheet spriteSheet;
+    protected SpriteSheet spriteSheet;
+    public IMove iMove;
 
     public Renderer() : base()
     {
-
+        this.iMove.OnChangeDirection += this.spriteSheet.SetDirection;
     }
 
     public void Render(RenderTarget window)
@@ -35,7 +36,18 @@ public class Renderer : Component, IRender
     {
         if (this.enabled)
         {
-            this.spriteSheet.UpdateAnimation(deltaTime);
+            this.spriteSheet.UpdateAnimation(deltaTime, iMove.Direction);
+            if (this.iMove != null)
+            {
+                this.spriteSheet.Sprite.Position = this.iMove.Position;                
+            }
+            else
+                Console.WriteLine("Renderer component requires an IMove reference's object to update position");
         }
+    }
+
+    public void LoadSpriteSheet(string path)
+    {
+        this.spriteSheet = new SpriteSheet(path);
     }
 }

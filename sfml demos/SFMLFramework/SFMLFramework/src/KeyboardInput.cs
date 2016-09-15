@@ -39,19 +39,11 @@ public class KeyboardInput : Component, IKeyboardInput
 
     public void ProcessKeyboardPressed(object sender, KeyEventArgs e)
     {
-        if (this.enabled)
-        {
-            OnKeyPressed(e.Code);
-            Console.WriteLine(e.Code + " was pressed");
-        }
+        OnKeyPressed(e.Code);
     }
 
     public void ProcessKeyboardReleased(object sender, KeyEventArgs e)
     {
-        if (this.enabled)
-        {
-            OnKeyReleased(e.Code);
-            Console.WriteLine(e.Code + " was released");
-        }
+        OnKeyReleased(e.Code);
     }
 }

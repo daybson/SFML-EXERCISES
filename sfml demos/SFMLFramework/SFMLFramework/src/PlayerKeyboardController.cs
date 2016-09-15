@@ -32,20 +32,14 @@ public class PlayerKeyboardController : Component
 
     public void OnKeyPressed(Keyboard.Key key)
     {
-        if (this.enabled)
-        {
-            if (this.keyPressedActions.ContainsKey(key))
-                this.keyPressedActions[key].Invoke();
-        }
+        if (this.keyPressedActions.ContainsKey(key))
+            this.keyPressedActions[key].Invoke();
     }
 
     public void OnKeyReleased(Keyboard.Key key)
     {
-        if (this.enabled)
-        {
-            if (this.keyReleasedActions.ContainsKey(key))
-                this.keyReleasedActions[key].Invoke();
-        }
+        if (this.keyReleasedActions.ContainsKey(key))
+            this.keyReleasedActions[key].Invoke();
     }
 
     public override void Update(float deltaTime)
