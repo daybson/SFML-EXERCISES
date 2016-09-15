@@ -19,5 +19,5 @@ using SFML.System;
 
 public interface IMove
 {
-    void Move(Vector2f direction);
+    void SetMoveDirection(Mover.Direction direction);
 }

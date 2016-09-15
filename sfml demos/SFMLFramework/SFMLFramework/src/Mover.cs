@@ -19,8 +19,19 @@ using SFML.System;
 
 public class Mover : Component, IMove
 {
+    public enum Direction
+    {
+        Rigth,
+        Left,
+        Up,
+        Down,
+        None
+    }
+
     public Vector2f Speed;
     protected Vector2f position;
+    protected Vector2f movement;
+    protected Direction direction;
     public Vector2f Position { get { return position; } }
 
     public Mover()
@@ -36,19 +47,47 @@ public class Mover : Component, IMove
     }
 
 
-    public void Move(Vector2f direction)
+    public void SetMoveDirection(Direction direction)
     {
-        if (this.enabled)
-        {
-            direction.X *= this.Speed.X;
-            direction.Y *= this.Speed.Y;
-            position += direction;
-        }
+        this.direction = direction;
     }
 
     public override void Update(float deltaTime)
     {
-        if (this.enabled)
-        { }
+        if(this.enabled)
+        {
+            Move(deltaTime);
+        }
+    }
+
+    private void Move(float deltaTime)
+    {
+        this.movement = new Vector2f();
+
+        if(this.direction == Direction.None)
+            return;
+
+        switch(this.direction)
+        {
+            case Direction.Down:
+                this.movement.Y = 1;
+                break;
+            case Direction.Up:
+                this.movement.Y = -1;
+                break;
+            case Direction.Rigth:
+                this.movement.X = 1;
+                break;
+            case Direction.Left:
+                this.movement.X = -1;
+                break;
+            default:
+                break;
+        }
+
+        this.movement.X *= Speed.X * deltaTime;
+        this.movement.Y *= Speed.Y * deltaTime;
+        Console.WriteLine(this.movement.ToString());
+        position += this.movement;
     }
 }

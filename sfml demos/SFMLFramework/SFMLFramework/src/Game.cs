@@ -38,13 +38,15 @@ public class Game : IUpdate
     public void Start()
     {
         this.window = new RenderWindow(new VideoMode(this.windowSize.X, this.windowSize.Y), windowTitle);
+        this.window.SetFramerateLimit(60);
+
         this.window.KeyPressed += this.keyboard.ProcessKeyboardPressed;
         this.window.KeyReleased += this.keyboard.ProcessKeyboardReleased;
 
         var player = new Actor("Player");
         this.actors.Add(player);
         var mover = player.AddComponent<Mover>();
-        mover.Speed = new Vector2f(6, 2);
+        mover.Speed = new Vector2f(2, 2);
 
         var inputPlayer = player.AddComponent<PlayerKeyboardController>();
         this.keyboard.OnKeyPressed += inputPlayer.OnKeyPressed;
@@ -58,7 +60,7 @@ public class Game : IUpdate
             (
                 Keyboard.Key.A, new Action(() =>
                         {
-                            mover.Move(new Vector2f(-1, 0));
+                            mover.SetMoveDirection(Mover.Direction.Left);
                             r.spriteSheet.Sprite.Position = mover.Position;
                         }
                     )
@@ -68,7 +70,7 @@ public class Game : IUpdate
             (
                 Keyboard.Key.D, new Action(() =>
                 {
-                    mover.Move(new Vector2f(1, 0));
+                    mover.SetMoveDirection(Mover.Direction.Rigth);
                     r.spriteSheet.Sprite.Position = mover.Position;
                 }
                     )
@@ -78,7 +80,7 @@ public class Game : IUpdate
             (
                 Keyboard.Key.W, new Action(() =>
                 {
-                    mover.Move(new Vector2f(0, -1));
+                    mover.SetMoveDirection(Mover.Direction.Up);
                     r.spriteSheet.Sprite.Position = mover.Position;
                 }
                     )
@@ -88,7 +90,47 @@ public class Game : IUpdate
             (
                 Keyboard.Key.S, new Action(() =>
                 {
-                    mover.Move(new Vector2f(0, 1));
+                    mover.SetMoveDirection(Mover.Direction.Down);
+                    r.spriteSheet.Sprite.Position = mover.Position;
+                }
+                    )
+            );
+
+        inputPlayer.keyReleasedActions.Add
+            (
+                Keyboard.Key.A, new Action(() =>
+                {
+                    mover.SetMoveDirection(Mover.Direction.None);
+                    r.spriteSheet.Sprite.Position = mover.Position;
+                }
+                    )
+            );
+
+        inputPlayer.keyReleasedActions.Add
+            (
+                Keyboard.Key.D, new Action(() =>
+                {
+                    mover.SetMoveDirection(Mover.Direction.None);
+                    r.spriteSheet.Sprite.Position = mover.Position;
+                }
+                    )
+            );
+
+        inputPlayer.keyReleasedActions.Add
+            (
+                Keyboard.Key.W, new Action(() =>
+                {
+                    mover.SetMoveDirection(Mover.Direction.None);
+                    r.spriteSheet.Sprite.Position = mover.Position;
+                }
+                    )
+            );
+
+        inputPlayer.keyReleasedActions.Add
+            (
+                Keyboard.Key.S, new Action(() =>
+                {
+                    mover.SetMoveDirection(Mover.Direction.None);
                     r.spriteSheet.Sprite.Position = mover.Position;
                 }
                     )
@@ -99,10 +141,10 @@ public class Game : IUpdate
 
     protected void Run()
     {
-        while (this.window.IsOpen)
+        while(this.window.IsOpen)
         {
             window.DispatchEvents();
-            Update(this.clock.ElapsedTime.AsSeconds());
+            Update(this.clock.ElapsedTime.AsMicroseconds()/10);
             Render();
             this.clock.Restart();
         }
@@ -117,7 +159,7 @@ public class Game : IUpdate
     {
         this.window.Clear();
 
-        foreach (var a in actors)
+        foreach(var a in actors)
         {
             a.GetComponent<Renderer>().Render(this.window);
         }
