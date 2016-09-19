@@ -26,6 +26,7 @@ public class Game : IUpdate
     protected RenderWindow window;
     public List<Actor> actors;
     private KeyboardInput keyboard;
+    private Player player;
 
     public Game(string title)
     {
@@ -43,11 +44,38 @@ public class Game : IUpdate
         this.window.KeyPressed += this.keyboard.ProcessKeyboardPressed;
         this.window.KeyReleased += this.keyboard.ProcessKeyboardReleased;
 
-        var player = new Player();
-        this.actors.Add(player);               
-        
-        this.keyboard.OnKeyPressed += player.keyboardController.OnKeyPressed;
-        this.keyboard.OnKeyReleased += player.keyboardController.OnKeyReleased;                
+        this.player = new Player();
+        this.actors.Add(this.player);
+
+        var rock = new Actor("rock");
+        var mRock = rock.AddComponent<Mover>();
+        mRock.Position = new Vector2f(400, 320);
+        var rRock = rock.AddComponent<Renderer>();
+        rRock.iMove = mRock;
+        rRock.LoadSpriteSheet("rock.png");
+        var cRock = rock.AddComponent<RectCollider>();
+        cRock.SetSprite(rRock.SpriteSheet.Sprite);
+        cRock.imove = mRock;
+        var crRock = rock.AddComponent<CollisionRender>();
+        crRock.shape = cRock.GetShape();
+        this.actors.Add(rock);
+
+        var floor = new Actor("floor");
+        var mFloor = floor.AddComponent<Mover>();        
+        mFloor.Position = new Vector2f(0, 350);
+        var rFloor = floor.AddComponent<Renderer>();
+        rFloor.iMove = mFloor;
+        rFloor.LoadSpriteSheet("floor.png");
+        var cFloor = floor.AddComponent<RectCollider>();
+        cFloor.SetSprite(rFloor.SpriteSheet.Sprite);
+        cFloor.imove = mFloor;
+        var crFloor = floor.AddComponent<CollisionRender>();
+        crFloor.shape = cFloor.GetShape();
+
+        this.keyboard.OnKeyPressed += this.player.keyboardController.OnKeyPressed;
+        this.keyboard.OnKeyReleased += this.player.keyboardController.OnKeyReleased;
+
+        this.actors.Add(floor);
 
         Run();
     }
@@ -66,8 +94,14 @@ public class Game : IUpdate
 
     public void Update(float deltaTime)
     {
-        Console.WriteLine(deltaTime);
         this.actors.ForEach(a => a.Update(deltaTime));
+
+        foreach (var a in this.actors.Where(a => !a.Equals(this.player)).ToList())
+        {
+            CollisionInfo hitInfo;
+            if (this.player.GetComponent<RectCollider>().CheckCollision(a.GetComponent<RectCollider>(), out hitInfo))
+                this.player.GetComponent<RectCollider>().SolveCollision(hitInfo);
+        }
     }
 
     protected void Render()
@@ -77,6 +111,7 @@ public class Game : IUpdate
         foreach (var a in actors)
         {
             a.GetComponent<Renderer>().Render(this.window);
+            a.GetComponent<CollisionRender>().Render(this.window);
         }
 
         this.window.Display();

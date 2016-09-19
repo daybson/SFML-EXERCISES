@@ -10,6 +10,9 @@ public class Player : Actor
     public Mover mover;
     public Renderer renderer;
     public PlayerKeyboardController keyboardController;
+    public ICollision collider;
+    public CollisionRender collisionRender;
+
     private string spriteSheedPath = "dragon.png";
 
     public Player()
@@ -20,8 +23,8 @@ public class Player : Actor
         this.mover.Speed = new Vector2f(200, 200);
 
         this.renderer = AddComponent<Renderer>();
-        this.renderer.LoadSpriteSheet(spriteSheedPath);
         this.renderer.iMove = this.mover;
+        this.renderer.LoadSpriteSheet(spriteSheedPath);
 
         this.keyboardController = AddComponent<PlayerKeyboardController>();
         this.keyboardController.keyPressedActions.Add(
@@ -50,5 +53,12 @@ public class Player : Actor
         this.keyboardController.keyReleasedActions.Add(
                 Keyboard.Key.S, new Action(() =>
                     this.mover.SetDirectionMove(Mover.Direction.Down, false)));
+
+        this.collider = AddComponent<RectCollider>();
+        this.collider.SetSprite(this.renderer.SpriteSheet.Sprite);
+        this.collider.IMove = this.mover;
+
+        this.collisionRender = AddComponent<CollisionRender>();
+        this.collisionRender.shape = this.collider.GetShape();
     }    
 }

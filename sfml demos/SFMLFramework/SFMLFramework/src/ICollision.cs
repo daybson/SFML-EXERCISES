@@ -19,7 +19,9 @@ using SFML.System;
 
 public interface ICollision
 {
-    void CheckCollision(ICollision actor);
+    bool CheckCollision(ICollision obstacle, out CollisionInfo hitInfo);
     Shape GetShape();
-    void SolveCollision();
+    void SolveCollision(CollisionInfo hitInfo);
+    void SetSprite(Sprite sprite);
+    IMove IMove { get; set; }
 }

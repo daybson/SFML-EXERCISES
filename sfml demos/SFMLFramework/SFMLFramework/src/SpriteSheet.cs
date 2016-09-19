@@ -52,7 +52,6 @@ public class SpriteSheet
         texture = new Texture(pathTexture);
         tile = new IntRect(0, 0, tileWidth, tileHeight);
         sprite = new Sprite(texture, tile);
-        sprite.Position = new Vector2f(0, 0);
         sprite.Position = new Vector2f(200, 200);
 
         currentFrame = 0;
@@ -80,7 +79,6 @@ public class SpriteSheet
             currentFrameTime = 0.0f;
             sprite.TextureRect = tile;
         }
-
     }
 
     public void SetDirection(Mover.Direction direction)

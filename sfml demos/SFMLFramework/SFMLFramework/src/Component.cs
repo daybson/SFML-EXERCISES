@@ -20,6 +20,7 @@ using SFML.System;
 public abstract class Component : IUpdate
 {
     public bool enabled;
+    public Actor root;
 
     public Component()
     {

@@ -19,12 +19,12 @@ using SFML.System;
 
 public class Actor : IUpdate
 {
-    protected string name;
+    public string name;
     public List<Component> components;
 
     public Actor()
     {
-        this.components = new List<Component>();        
+        this.components = new List<Component>();
     }
 
     public Actor(string name)
@@ -36,6 +36,7 @@ public class Actor : IUpdate
     public T AddComponent<T>() where T : Component
     {
         var c = Activator.CreateInstance<T>();
+        c.root = this;
         this.components.Add(c);
         return c;
     }
@@ -50,6 +51,11 @@ public class Actor : IUpdate
     public T GetComponent<T>() where T : Component
     {
         return (T)this.components.Find(c => c is T);
+    }
+
+    public List<Component> GetComponents<T>() where T : Component
+    {
+        return components.Where(c => c is T).ToList();
     }
 
     public void Update(float deltaTime)

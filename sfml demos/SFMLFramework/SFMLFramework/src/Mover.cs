@@ -37,24 +37,15 @@ public class Mover : Component, IMove
     private bool moveDown;
 
     public Vector2f Speed;
-    protected Vector2f position;
     protected Vector2f move;
-    public Vector2f Position { get { return position; } set { } }
+    public Vector2f Position { get; set; }
 
-    Direction IMove.Direction { get; set; }
+    public Direction direction { get; set; }
     public OnDirectionChange OnChangeDirection { get; set; }
 
     public Mover()
     {
         this.enabled = true;
-        OnChangeDirection += (d) => { };
-    }
-
-    public Mover(Vector2f position, Vector2f speed) : base()
-    {
-        this.enabled = true;
-        this.position = position;
-        this.Speed = speed;
     }
 
     public override void Update(float deltaTime)
@@ -73,18 +64,45 @@ public class Mover : Component, IMove
         if (this.moveDown)
             this.move.Y = this.Speed.Y * deltaTime;
 
-        this.position += this.move;
+        this.Position += this.move;
     }
 
     public void SetDirectionMove(Direction direction, bool value)
     {
         switch (direction)
         {
-            case Direction.Left: this.moveLeft = value; break;
-            case Direction.Right: this.moveRigth = value; break;
-            case Direction.Up: this.moveUp = value; break;
-            case Direction.Down: this.moveDown = value; break;
-
+            case Direction.Left:
+                this.moveLeft = value;
+                if (value)
+                {
+                    this.direction = Direction.Left;
+                    this.moveRigth = !value;
+                }
+                break;
+            case Direction.Right:
+                this.moveRigth = value;
+                if (value)
+                {
+                    this.direction = Direction.Right;
+                    this.moveLeft = !value;
+                }
+                break;
+            case Direction.Up:
+                this.moveUp = value;
+                if (value)
+                {
+                    this.direction = Direction.Up;
+                    this.moveDown = !value;
+                }
+                break;
+            case Direction.Down:
+                this.moveDown = value;
+                if (value)
+                {
+                    this.direction = Direction.Down;
+                    this.moveUp = !value;
+                }
+                break;
             default:
                 this.moveLeft = false;
                 this.moveRigth = false;
@@ -93,7 +111,7 @@ public class Mover : Component, IMove
                 break;
         }
 
-        this.OnChangeDirection(direction);
+        if (value)
+            this.OnChangeDirection(direction);
     }
-
 }

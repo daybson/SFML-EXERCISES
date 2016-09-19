@@ -36,3 +36,7 @@ D:\Repositorio\SFML-EXERCISES\sfml demos\SFMLFramework\SFMLFramework\bin\Debug\s
 D:\Repositorio\SFML-EXERCISES\sfml demos\SFMLFramework\SFMLFramework\obj\Debug\SFMLFramework.csprojResolveAssemblyReference.cache
 D:\Repositorio\SFML-EXERCISES\sfml demos\SFMLFramework\SFMLFramework\obj\Debug\SFMLFramework.exe
 D:\Repositorio\SFML-EXERCISES\sfml demos\SFMLFramework\SFMLFramework\obj\Debug\SFMLFramework.pdb
+D:\Repositorio\SFML-EXERCISES\sfml demos\SFMLFramework\SFMLFramework\bin\Debug\floor.png
+D:\Repositorio\SFML-EXERCISES\sfml demos\SFMLFramework\SFMLFramework\bin\Debug\floor.txt
+D:\Repositorio\SFML-EXERCISES\sfml demos\SFMLFramework\SFMLFramework\bin\Debug\rock.png
+D:\Repositorio\SFML-EXERCISES\sfml demos\SFMLFramework\SFMLFramework\bin\Debug\rock.txt

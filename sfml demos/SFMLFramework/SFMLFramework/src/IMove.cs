@@ -21,6 +21,6 @@ public interface IMove
 {
     void SetDirectionMove(Mover.Direction direction, bool value);
     Vector2f Position { get; set; }
-    Mover.Direction Direction { get; set; }
+    Mover.Direction direction { get; set; }
     Mover.OnDirectionChange OnChangeDirection { get; set; }
 }

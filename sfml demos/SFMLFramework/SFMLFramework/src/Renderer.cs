@@ -20,11 +20,13 @@ using SFML.System;
 public class Renderer : Component, IRender
 {
     protected SpriteSheet spriteSheet;
+    public SpriteSheet SpriteSheet { get { return spriteSheet; } }
+
     public IMove iMove;
 
     public Renderer() : base()
     {
-        this.iMove.OnChangeDirection += this.spriteSheet.SetDirection;
+        
     }
 
     public void Render(RenderTarget window)
@@ -36,7 +38,7 @@ public class Renderer : Component, IRender
     {
         if (this.enabled)
         {
-            this.spriteSheet.UpdateAnimation(deltaTime, iMove.Direction);
+            this.spriteSheet.UpdateAnimation(deltaTime, iMove.direction);
             if (this.iMove != null)
             {
                 this.spriteSheet.Sprite.Position = this.iMove.Position;                
@@ -49,5 +51,6 @@ public class Renderer : Component, IRender
     public void LoadSpriteSheet(string path)
     {
         this.spriteSheet = new SpriteSheet(path);
+        this.iMove.OnChangeDirection += this.spriteSheet.SetDirection;
     }
 }
