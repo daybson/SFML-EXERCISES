@@ -20,7 +20,7 @@ using SFML.System;
 
 public class Mover : Component, IMove
 {
-    public enum Direction
+    public enum EDirection
     {
         Up,
         Down,
@@ -29,7 +29,9 @@ public class Mover : Component, IMove
         None
     }
 
-    public delegate void OnDirectionChange(Direction direction);
+    #region Fields
+
+    public delegate void OnDirectionChange(EDirection direction);
 
     private bool moveLeft;
     private bool moveRigth;
@@ -39,9 +41,13 @@ public class Mover : Component, IMove
     public Vector2f Speed;
     protected Vector2f move;
     public Vector2f Position { get; set; }
-
-    public Direction direction { get; set; }
+    public EDirection Direction { get; set; }
     public OnDirectionChange OnChangeDirection { get; set; }
+
+    #endregion
+
+
+    #region Public
 
     public Mover()
     {
@@ -67,43 +73,52 @@ public class Mover : Component, IMove
         this.Position += this.move;
     }
 
-    public void SetDirectionMove(Direction direction, bool value)
+    /// <summary>
+    /// Se não estiver movendo em nenhuma outra direção, atribui o novo sentido de movimento ou cancela o movimento atual
+    /// </summary>
+    /// <param name="direction">Direção do movimento</param>
+    /// <param name="value">Valor habilita/desabilita movimento</param>
+    public void SetDirectionMove(EDirection direction, bool value)
     {
+        if (value && (this.moveDown || this.moveLeft || this.moveRigth || this.moveUp))
+            return;
+
         switch (direction)
         {
-            case Direction.Left:
+            case EDirection.Left:
                 this.moveLeft = value;
                 if (value)
                 {
-                    this.direction = Direction.Left;
+                    this.Direction = EDirection.Left;
                     this.moveRigth = !value;
                 }
                 break;
-            case Direction.Right:
+            case EDirection.Right:
                 this.moveRigth = value;
                 if (value)
                 {
-                    this.direction = Direction.Right;
+                    this.Direction = EDirection.Right;
                     this.moveLeft = !value;
                 }
                 break;
-            case Direction.Up:
+            case EDirection.Up:
                 this.moveUp = value;
                 if (value)
                 {
-                    this.direction = Direction.Up;
+                    this.Direction = EDirection.Up;
                     this.moveDown = !value;
                 }
                 break;
-            case Direction.Down:
+            case EDirection.Down:
                 this.moveDown = value;
                 if (value)
                 {
-                    this.direction = Direction.Down;
+                    this.Direction = EDirection.Down;
                     this.moveUp = !value;
                 }
                 break;
             default:
+                this.Direction = EDirection.None;
                 this.moveLeft = false;
                 this.moveRigth = false;
                 this.moveUp = false;
@@ -114,4 +129,13 @@ public class Mover : Component, IMove
         if (value)
             this.OnChangeDirection(direction);
     }
+
+    public void ApplyMovement(Vector2f movement, EDirection direction)
+    {
+        this.move += movement;
+        this.Position += this.move;
+        this.Direction = direction;
+    }
+
+    #endregion
 }

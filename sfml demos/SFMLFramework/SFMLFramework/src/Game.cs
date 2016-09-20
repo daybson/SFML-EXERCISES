@@ -20,6 +20,8 @@ using System.Threading;
 
 public class Game : IUpdate
 {
+    #region Fields
+
     public Vector2u windowSize;
     public string windowTitle;
     public Clock clock;
@@ -27,6 +29,11 @@ public class Game : IUpdate
     public List<Actor> actors;
     private KeyboardInput keyboard;
     private Player player;
+
+    #endregion
+
+
+    #region Public
 
     public Game(string title)
     {
@@ -80,18 +87,6 @@ public class Game : IUpdate
         Run();
     }
 
-    protected void Run()
-    {
-        while (this.window.IsOpen)
-        {
-            var timer = this.clock.Restart();
-
-            window.DispatchEvents();
-            Update(timer.AsSeconds());
-            Render();
-        }
-    }
-
     public void Update(float deltaTime)
     {
         this.actors.ForEach(a => a.Update(deltaTime));
@@ -101,6 +96,23 @@ public class Game : IUpdate
             CollisionInfo hitInfo;
             if (this.player.GetComponent<RectCollider>().CheckCollision(a.GetComponent<RectCollider>(), out hitInfo))
                 this.player.GetComponent<RectCollider>().SolveCollision(hitInfo);
+        }
+    }
+
+    #endregion
+
+
+    #region Protected
+
+    protected void Run()
+    {
+        while (this.window.IsOpen)
+        {
+            var timer = this.clock.Restart();
+
+            window.DispatchEvents();
+            Update(timer.AsSeconds());
+            Render();
         }
     }
 
@@ -120,4 +132,6 @@ public class Game : IUpdate
     protected void Finish()
     {
     }
+
+    #endregion
 }

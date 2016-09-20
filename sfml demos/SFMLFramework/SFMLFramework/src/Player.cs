@@ -12,6 +12,7 @@ public class Player : Actor
     public PlayerKeyboardController keyboardController;
     public ICollision collider;
     public CollisionRender collisionRender;
+    public Rigidbody rigidbody;
 
     private string spriteSheedPath = "dragon.png";
 
@@ -29,30 +30,33 @@ public class Player : Actor
         this.keyboardController = AddComponent<PlayerKeyboardController>();
         this.keyboardController.keyPressedActions.Add(
                 Keyboard.Key.A, new Action(() =>
-                    this.mover.SetDirectionMove(Mover.Direction.Left, true)));
+                    this.mover.SetDirectionMove(Mover.EDirection.Left, true)));
         this.keyboardController.keyPressedActions.Add(
                 Keyboard.Key.D, new Action(() =>
-                   this.mover.SetDirectionMove(Mover.Direction.Right, true)));
+                   this.mover.SetDirectionMove(Mover.EDirection.Right, true)));
+        /*
         this.keyboardController.keyPressedActions.Add(
                 Keyboard.Key.W, new Action(() =>
-                   this.mover.SetDirectionMove(Mover.Direction.Up, true)));
+                   this.mover.SetDirectionMove(Mover.EDirection.Up, true)));
         this.keyboardController.keyPressedActions.Add(
                 Keyboard.Key.S, new Action(() =>
-                   this.mover.SetDirectionMove(Mover.Direction.Down, true)));
-
+                   this.mover.SetDirectionMove(Mover.EDirection.Down, true)));
+        */
 
         this.keyboardController.keyReleasedActions.Add(
                 Keyboard.Key.A, new Action(() =>
-                   this.mover.SetDirectionMove(Mover.Direction.Left, false)));
+                   this.mover.SetDirectionMove(Mover.EDirection.Left, false)));
         this.keyboardController.keyReleasedActions.Add(
                 Keyboard.Key.D, new Action(() =>
-                   this.mover.SetDirectionMove(Mover.Direction.Right, false)));
+                   this.mover.SetDirectionMove(Mover.EDirection.Right, false)));
+        /*
         this.keyboardController.keyReleasedActions.Add(
                 Keyboard.Key.W, new Action(() =>
-                    this.mover.SetDirectionMove(Mover.Direction.Up, false)));
+                    this.mover.SetDirectionMove(Mover.EDirection.Up, false)));
         this.keyboardController.keyReleasedActions.Add(
                 Keyboard.Key.S, new Action(() =>
-                    this.mover.SetDirectionMove(Mover.Direction.Down, false)));
+                    this.mover.SetDirectionMove(Mover.EDirection.Down, false)));
+        */
 
         this.collider = AddComponent<RectCollider>();
         this.collider.SetSprite(this.renderer.SpriteSheet.Sprite);
@@ -60,5 +64,9 @@ public class Player : Actor
 
         this.collisionRender = AddComponent<CollisionRender>();
         this.collisionRender.shape = this.collider.GetShape();
+
+        this.rigidbody = AddComponent<Rigidbody>();
+        this.rigidbody.mover = mover;
+        this.rigidbody.mass = 2;
     }    
 }

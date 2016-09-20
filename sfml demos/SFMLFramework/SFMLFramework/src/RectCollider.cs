@@ -61,18 +61,18 @@ public class RectCollider : Component, ICollision
             float dy = 0;
 
             //indentifica a direção do movimento atual e calcula a devida profundidade da colisão naquele sentido
-            switch (this.imove.direction)
+            switch (this.imove.Direction)
             {
-                case Mover.Direction.Down:
+                case Mover.EDirection.Down:
                     dy = myBottom - oUpper;
                     break;
-                case Mover.Direction.Up:
+                case Mover.EDirection.Up:
                     dy = myUpper - oBottom;
                     break;
-                case Mover.Direction.Left:
+                case Mover.EDirection.Left:
                     dx = myLeft - oRight;
                     break;
-                case Mover.Direction.Right:
+                case Mover.EDirection.Right:
                     dx = myRight - oLeft;
                     break;
                 default:
@@ -81,7 +81,7 @@ public class RectCollider : Component, ICollision
                     break;
             }
 
-            hitInfo = new CollisionInfo(new Vector2f(dx, dy), this.imove.direction);
+            hitInfo = new CollisionInfo(new Vector2f(dx, dy), this.imove.Direction);
             this.collider.OutlineColor = Color.Red;
             return true;
         }
@@ -118,24 +118,22 @@ public class RectCollider : Component, ICollision
         var mover = this.root.GetComponent<Mover>();
         if (mover != null)
         {
-            Console.WriteLine("Depth collision:" + hitInfo.ToString());
-
             //determina a direção da colisão e atualiza a posição de acordo com o plano cartesiano
-            switch (mover.direction)
+            switch (mover.Direction)
             {
-                case Mover.Direction.Left:
+                case Mover.EDirection.Left:
                     //se move para direita (-), soma na posição a profundidade da colisão em X
                     mover.Position += new Vector2f(hitInfo.Depth.X, 0);
                     break;
-                case Mover.Direction.Right:
+                case Mover.EDirection.Right:
                     //se move para direita (+), reduz na posição a profundidade da colisão em X
                     mover.Position -= new Vector2f(hitInfo.Depth.X, 0);
                     break;
-                case Mover.Direction.Up:
+                case Mover.EDirection.Up:
                     //se move para cima (-), soma na posição a profundidade da colisão em Y
                     mover.Position += new Vector2f(0, hitInfo.Depth.Y);
                     break;
-                case Mover.Direction.Down:
+                case Mover.EDirection.Down:
                     //se move para baixo (+), reduz na posição a profundidade da colisão em Y
                     mover.Position -= new Vector2f(0, hitInfo.Depth.Y);
                     break;
@@ -150,7 +148,7 @@ public class RectCollider : Component, ICollision
         if (this.IMove != null)
             this.collider.Position = this.IMove.Position;
         else
-            Console.WriteLine("Renderer component requires an IMove reference's object to update position");
+            Console.WriteLine("Uma referência de componente IMover é necessário para resolver a colsião");
     }
 
     #endregion

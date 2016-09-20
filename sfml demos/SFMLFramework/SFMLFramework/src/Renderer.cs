@@ -38,7 +38,7 @@ public class Renderer : Component, IRender
     {
         if (this.enabled)
         {
-            this.spriteSheet.UpdateAnimation(deltaTime, iMove.direction);
+            this.spriteSheet.UpdateAnimation(deltaTime, iMove.Direction);
             if (this.iMove != null)
             {
                 this.spriteSheet.Sprite.Position = this.iMove.Position;                

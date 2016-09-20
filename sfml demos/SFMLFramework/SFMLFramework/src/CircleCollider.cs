@@ -34,7 +34,7 @@ public class CircleCollider : Component, ICollision
             var distanceY = Math.Abs((obstacle.GetShape().Position.Y - this.collider.Position.Y));
             distanceY -= radius + this.collider.Radius;
 
-            hitInfo = new CollisionInfo(new Vector2f(distanceX, distanceY), imove.direction);
+            hitInfo = new CollisionInfo(new Vector2f(distanceX, distanceY), imove.Direction);
         }
 
         this.collider.OutlineColor = c ? Color.Red : Color.Magenta;
@@ -62,18 +62,18 @@ public class CircleCollider : Component, ICollision
         if (mover != null)
         {
             Console.WriteLine("Depth collision:" + depth.ToString());
-            switch (mover.direction)
+            switch (mover.Direction)
             {
-                case Mover.Direction.Left:
+                case Mover.EDirection.Left:
                     mover.Position += depth.Depth;
                     break;
-                case Mover.Direction.Right:
+                case Mover.EDirection.Right:
                     mover.Position -= depth.Depth;
                     break;
-                case Mover.Direction.Up:
+                case Mover.EDirection.Up:
                     //mover.Position -= depth.Depth;
                     break;
-                case Mover.Direction.Down:
+                case Mover.EDirection.Down:
                     //mover.Position += depth.Depth;
                     break;
             }
