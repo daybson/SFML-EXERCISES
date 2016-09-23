@@ -59,7 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Collider.cs" />
+    <Compile Include="src\Collider.cs" />
     <Compile Include="src\Player.cs" />
     <Compile Include="src\CollisionInfo.cs" />
     <Compile Include="src\CollisionRender.cs" />

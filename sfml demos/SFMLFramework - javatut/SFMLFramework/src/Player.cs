@@ -46,40 +46,6 @@ public class Player : Entity
         SetPosition(new Vector2f());
     }
 
-    /*public bool IsColliding(Entity obstacle)
-    {
-        
-        FloatRect overlap;
-        //top
-        if (this.colTop.Intersects(obstacle.ColBottom, out overlap))
-        {
-            Console.WriteLine("TOP");
-        }
-
-        //bottom
-        if (this.colBottom.Intersects(obstacle.ColTop, out overlap))
-        {
-            SetPosition(new Vector2f(this.spriteSheet.Sprite.Position.X, this.spriteSheet.Sprite.Position.Y - overlap.Height));
-            Console.WriteLine("BOTTOM");
-        }
-
-        //right
-        if (this.colRight.Intersects(obstacle.ColLeft, out overlap))
-        {
-            SetPosition(new Vector2f(this.spriteSheet.Sprite.Position.X - overlap.Width, this.spriteSheet.Sprite.Position.Y));
-            Console.WriteLine("RIGHT");
-        }
-
-        //left
-        if (this.colLeft.Intersects(obstacle.ColRight, out overlap))
-        {
-            Console.WriteLine("LEFT");
-        }
-        
-
-        return false;
-    }*/
-
     [Obsolete]
     public bool IsColliding(RectangleShape obstacle, out CollisionInfo hitInfo)
     {

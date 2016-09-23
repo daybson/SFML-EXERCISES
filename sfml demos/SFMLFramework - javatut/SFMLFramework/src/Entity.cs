@@ -29,10 +29,6 @@ public class Entity
 
     private List<Collider> colliders;
     protected List<Collider> Colliders { get { return colliders; } }
-    protected Collider ct;
-    protected Collider cb;
-    protected Collider cl;
-    protected Collider cr;
     protected int colliderThickness = 2;
 
     #endregion
