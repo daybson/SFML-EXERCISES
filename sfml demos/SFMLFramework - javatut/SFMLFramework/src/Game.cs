@@ -27,14 +27,15 @@ public class Game : IUpdate
     public Clock clock;
     protected RenderWindow window;
     private KeyboardInput keyboard;
+
     private Player player;
     private Entity floor;
     private Entity brick;
+    private Entity brick2;
+
+    private List<Entity> entities;
 
     #endregion
-
-
-    #region Public
 
     public Game(string title)
     {
@@ -42,6 +43,7 @@ public class Game : IUpdate
         this.windowSize = new Vector2u(800, 600);
         this.clock = new Clock();
         this.keyboard = new KeyboardInput(ref this.window);
+        this.entities = new List<Entity>();
     }
 
     public void Start()
@@ -51,36 +53,38 @@ public class Game : IUpdate
         this.window.KeyPressed += this.keyboard.ProcessKeyboardPressed;
         this.window.KeyReleased += this.keyboard.ProcessKeyboardReleased;
 
-        this.floor = new Entity("floor.png");
+        this.floor = new Entity("floor.png", ECollisionType.None);
         this.floor.SetPosition(new Vector2f(0, 450));
 
-        this.brick = new Entity("brick.png");
-        this.brick.SetPosition(new Vector2f(250, 280));
+        this.brick = new Entity("brick.png", ECollisionType.None);
+        this.brick.SetPosition(new Vector2f(50, 280));
+
+        this.brick2 = new Entity("brick2.png", ECollisionType.Inelastic);
+        this.brick2.SetPosition(new Vector2f(400, 280));
 
         this.player = new Player();
         this.keyboard.OnKeyPressed += this.player.keyboardController.OnKeyPressed;
         this.keyboard.OnKeyReleased += this.player.keyboardController.OnKeyReleased;
+
+        this.entities.AddRange(new List<Entity> { this.floor, this.brick, this.brick2, this.player });
 
         Run();
     }
 
     public void Update(float deltaTime)
     {
+        this.entities.ForEach(e => e.Update(deltaTime));
         this.player.Update(deltaTime);
-        this.floor.Update(deltaTime);
-
-        this.player.IsColliding(this.floor);
-        this.player.IsColliding(this.brick);
+        CollisionDispatcher.CollisionCheck(this.player, this.floor);
+        CollisionDispatcher.CollisionCheck(this.player, this.brick);
+        CollisionDispatcher.CollisionCheck(this.player, this.brick2);
+        CollisionDispatcher.CollisionCheck(this.brick2, this.brick);
     }
 
-    #endregion
-
-
-    #region Protected
 
     protected void Run()
     {
-        while (this.window.IsOpen)
+        while(this.window.IsOpen)
         {
             var timer = this.clock.Restart();
 
@@ -94,16 +98,9 @@ public class Game : IUpdate
     {
         this.window.Clear();
 
-        this.player.Render(this.window);
-        this.floor.Render(this.window);
-        this.brick.Render(this.window);
+        this.entities.ForEach(e => e.Render(this.window));
 
         this.window.Display();
     }
 
-    protected void Finish()
-    {
-    }
-
-    #endregion
 }

@@ -7,125 +7,146 @@ using System.Linq;
 using System.Text;
 
 
-public class Entity
+public class Entity : ICollisionable
 {
     #region Fields
 
     protected string name;
+
     protected SpriteSheet spriteSheet;
     protected string spritePath;
-    protected bool moveLeft;
-    protected bool moveRigth;
+
     protected Vector2f speed;
     protected Vector2f currSpeed;
     protected Vector2f move;
-    protected EDirection direction;
 
-    protected RectangleShape fullCollider;
-
-    protected float mass;
-    public RectangleShape Collider { get { return fullCollider; } }
+    protected bool isFalling;
+    protected bool isJumping;
+    protected bool moveLeft;
+    protected bool moveRigth;
+    protected EDirection spriteDirection;
     public OnDirectionChange OnChangeDirection { get; set; }
 
-    private List<Collider> colliders;
-    protected List<Collider> Colliders { get { return colliders; } }
-    protected int colliderThickness = 2;
+    protected RectangleShape fullCollider;
+    public RectangleShape FullCollider { get { return fullCollider; } }
+    public ECollisionType CollisionType { get; protected set; }
+    public Collider Top { get; protected set; }
+    public Collider Botton { get; protected set; }
+    public Collider Right { get; protected set; }
+    public Collider Left { get; protected set; }
+
+    protected int colliderThickness = 5;
 
     #endregion
 
-    public Entity(string spritePath)
+
+
+    public Entity(string spritePath, ECollisionType collisionType)
     {
+        this.isFalling = true;
+        this.isJumping = true;
         this.spritePath = spritePath;
         this.name = "Dragon";
         this.spriteSheet = new SpriteSheet(spritePath);
         this.OnChangeDirection += this.spriteSheet.SetDirection;
-        this.mass = 1;
         this.fullCollider = new RectangleShape(new Vector2f(this.spriteSheet.Sprite.GetGlobalBounds().Width, this.spriteSheet.Sprite.GetGlobalBounds().Height));
+
+        this.CollisionType = collisionType;
+        this.Top = new Collider(spriteSheet, EDirection.Top, colliderThickness);
+        this.Botton = new Collider(spriteSheet, EDirection.Botton, colliderThickness);
+        this.Left = new Collider(spriteSheet, EDirection.Left, colliderThickness);
+        this.Right = new Collider(spriteSheet, EDirection.Right, colliderThickness);
 
         this.fullCollider.OutlineColor = Color.Magenta;
         this.fullCollider.OutlineThickness = 1;
         this.fullCollider.FillColor = Color.Transparent;
-        this.colliders = new List<Collider>
-        {
-            new Collider(spriteSheet, EDirection.Top, colliderThickness),
-            new Collider(spriteSheet, EDirection.Botton, colliderThickness),
-            new Collider(spriteSheet, EDirection.Left, colliderThickness),
-            new Collider(spriteSheet, EDirection.Right, colliderThickness)
-        };
+
     }
 
     #region GameLoop
 
     public void Update(float deltaTime)
     {
-        this.spriteSheet.UpdateAnimation(deltaTime, this.direction);
-        this.colliders.ForEach(c => c.UpdatePosition());
+        this.isFalling = true;
+        this.spriteSheet.UpdateAnimation(deltaTime, this.spriteDirection);
+
+        Top.UpdatePosition();
+        Botton.UpdatePosition();
+        Right.UpdatePosition();
+        Left.UpdatePosition();
     }
 
     public void Render(RenderTarget window)
     {
         window.Draw(this.spriteSheet.Sprite);
-        this.colliders.ForEach(c => window.Draw(c.Shape));
 
         //window.Draw(this.fullCollider);
     }
 
     #endregion
 
-
-    public bool IsColliding(Entity obstacle)
-    {
-        FloatRect overlap;
-
-        //top
-        if (this.colliders.Find(c => c.Direction == EDirection.Top).Bound.Intersects(obstacle.Colliders.Find(o => o.Direction == EDirection.Botton).Bound, out overlap))
-        {
-            Console.WriteLine("TOP");
-        }
-
-        //bottom
-        if (this.colliders.Find(c => c.Direction == EDirection.Botton).Bound.Intersects(obstacle.Colliders.Find(o => o.Direction == EDirection.Top).Bound, out overlap))
-        {
-            SetPosition(new Vector2f(this.spriteSheet.Sprite.Position.X, this.spriteSheet.Sprite.Position.Y - overlap.Height));
-            Console.WriteLine("BOTTOM");
-        }
-
-        //right
-        if (this.colliders.Find(c => c.Direction == EDirection.Right).Bound.Intersects(obstacle.Colliders.Find(o => o.Direction == EDirection.Left).Bound, out overlap))
-        {
-            SetPosition(new Vector2f(this.spriteSheet.Sprite.Position.X - overlap.Width, this.spriteSheet.Sprite.Position.Y));
-            Console.WriteLine("RIGHT");
-        }
-
-        //left
-        if (this.colliders.Find(c => c.Direction == EDirection.Left).Bound.Intersects(obstacle.Colliders.Find(o => o.Direction == EDirection.Right).Bound, out overlap))
-        {
-            Console.WriteLine("LEFT");
-        }
-
-        return false;
-    }
-
     #region Movement
+
+    public void SolveCollision(CollisionInfo hitInfo)
+    {
+        //TODO: muito repetitivo...
+
+        if(this.CollisionType == ECollisionType.None)
+            return;
+
+        switch(CollisionType)
+        {
+            case ECollisionType.Elastic:
+                break;
+
+            case ECollisionType.Inelastic:
+                switch(hitInfo.Direction)
+                {
+                    case EDirection.Botton:
+                        SetPosition(new Vector2f(this.spriteSheet.Sprite.Position.X, this.spriteSheet.Sprite.Position.Y - hitInfo.Overlap.Height));
+                        this.isFalling = false;
+                        this.isJumping = false;
+                        this.currSpeed.Y = 0;
+                        break;
+                    case EDirection.Top:
+                        SetPosition(new Vector2f(this.spriteSheet.Sprite.Position.X, spriteSheet.Sprite.Position.Y + hitInfo.Overlap.Height));
+                        currSpeed.Y = 0;
+                        break;
+                    case EDirection.Right:
+                        SetPosition(new Vector2f(this.spriteSheet.Sprite.Position.X - hitInfo.Overlap.Width, this.spriteSheet.Sprite.Position.Y));
+                        break;
+                    case EDirection.Left:
+                        SetPosition(new Vector2f(this.spriteSheet.Sprite.Position.X + hitInfo.Overlap.Width, this.spriteSheet.Sprite.Position.Y));
+                        break;
+                }
+                break;
+
+            case ECollisionType.PartialInelastic:
+                break;
+
+            case ECollisionType.Trigger:
+                break;
+        }
+    }
 
     private void SetDirectionMove(EDirection direction, bool value)
     {
-        this.direction = direction;
-        switch (direction)
+        this.spriteDirection = direction;
+        switch(direction)
         {
             case EDirection.Left:
                 this.moveLeft = value;
-                if (value)
+                if(value)
                     this.moveRigth = !value;
                 break;
             case EDirection.Right:
                 this.moveRigth = value;
-                if (value)
+                if(value)
                     this.moveLeft = !value;
                 break;
         }
 
-        if (value)
+        if(value)
             this.OnChangeDirection(direction);
     }
 
@@ -133,7 +154,11 @@ public class Entity
     {
         this.spriteSheet.Sprite.Position = position;
         this.fullCollider.Position = position;
-        this.colliders.ForEach(c => c.UpdatePosition());
+
+        this.Top = new Collider(spriteSheet, EDirection.Top, colliderThickness);
+        this.Botton = new Collider(spriteSheet, EDirection.Botton, colliderThickness);
+        this.Left = new Collider(spriteSheet, EDirection.Left, colliderThickness);
+        this.Right = new Collider(spriteSheet, EDirection.Right, colliderThickness);
     }
 
     #endregion

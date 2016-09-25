@@ -5,6 +5,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+
+public enum ECollisionType
+{
+    Elastic,
+    PartialInelastic,
+    Inelastic,
+    Trigger,
+    None
+}
+
 public class Collider
 {
     private RectangleShape shape;
@@ -12,7 +22,7 @@ public class Collider
     private EDirection direction;
     private int colliderThickness;
     private SpriteSheet spriteSheet;
-
+    
     public RectangleShape Shape { get { return shape; } }
     public FloatRect Bound { get { return bound; } }
     public EDirection Direction { get { return direction; } }
@@ -23,7 +33,7 @@ public class Collider
         this.colliderThickness = colliderThickness;
         this.spriteSheet = spriteSheet;
 
-        switch (this.direction)
+        switch(this.direction)
         {
             case EDirection.Botton:
                 shape = new RectangleShape(new Vector2f(this.spriteSheet.TileWidth, this.colliderThickness));
@@ -43,14 +53,14 @@ public class Collider
                 break;
         }
 
-        shape.OutlineColor = Color.Cyan;
+        shape.OutlineColor = Color.Magenta;
         shape.OutlineThickness = 0.6f;
         shape.FillColor = Color.Transparent;
     }
 
     public void UpdatePosition()
     {
-        switch (this.direction)
+        switch(this.direction)
         {
             case EDirection.Botton:
                 this.bound.Left = this.spriteSheet.Sprite.Position.X;

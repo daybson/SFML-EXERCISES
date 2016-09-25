@@ -60,6 +60,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\Collider.cs" />
+    <Compile Include="src\CollisionDispatcher.cs" />
+    <Compile Include="src\ICollisionable.cs" />
     <Compile Include="src\Player.cs" />
     <Compile Include="src\CollisionInfo.cs" />
     <Compile Include="src\CollisionRender.cs" />
@@ -87,6 +89,12 @@
     </Content>
     <Content Include="brick.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="brick2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="brick2.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="csfml-audio-2.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

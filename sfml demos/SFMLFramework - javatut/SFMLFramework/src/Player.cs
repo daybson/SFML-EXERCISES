@@ -18,22 +18,24 @@ public enum EDirection
 public class Player : Entity
 {
     public PlayerKeyboardController keyboardController;
-    protected bool isFalling;
-    protected bool isJumping;
 
-    public Player() : base("dragon.png")
+
+
+    public Player() : base("dragon.png", ECollisionType.Inelastic)
     {
         this.isFalling = true;
         this.isJumping = true;
         this.speed = new Vector2f(3, -20);
-        this.mass = 2;
+
+        this.CollisionType = ECollisionType.Inelastic;
+
 
         this.keyboardController = new PlayerKeyboardController();
         this.keyboardController.keyPressedActions.Add(Keyboard.Key.A, new Action(() => SetDirectionMove(EDirection.Left, true)));
         this.keyboardController.keyPressedActions.Add(Keyboard.Key.D, new Action(() => SetDirectionMove(EDirection.Right, true)));
         this.keyboardController.keyPressedActions.Add(Keyboard.Key.Space, new Action(() =>
         {
-            if (!this.isJumping)
+            if(!this.isJumping)
             {
                 currSpeed.Y = speed.Y;
                 this.isJumping = true;
@@ -42,7 +44,7 @@ public class Player : Entity
 
         this.keyboardController.keyReleasedActions.Add(Keyboard.Key.A, new Action(() => SetDirectionMove(EDirection.Left, false)));
         this.keyboardController.keyReleasedActions.Add(Keyboard.Key.D, new Action(() => SetDirectionMove(EDirection.Right, false)));
-        
+
         SetPosition(new Vector2f());
     }
 
@@ -62,14 +64,14 @@ public class Player : Entity
         var oBottom = obstacle.Position.Y + obstacle.Size.Y;
 
         //colisao na direita
-        if (((myBottom < oTop || myTop < oTop) && (myBottom > oBottom || myTop > oBottom)) && myRight > oLeft && myLeft < oRight)
+        if(((myBottom < oTop || myTop < oTop) && (myBottom > oBottom || myTop > oBottom)) && myRight > oLeft && myLeft < oRight)
         {
             SetPosition(new Vector2f(obstacle.Position.X - this.fullCollider.Size.X, this.fullCollider.Position.Y));
             return true;
         }
 
         //colisao no topo
-        if (myTop > oTop && myTop < oBottom && ((myLeft < oRight || myRight < oRight) && (myLeft > oLeft || myRight > oLeft)))
+        if(myTop > oTop && myTop < oBottom && ((myLeft < oRight || myRight < oRight) && (myLeft > oLeft || myRight > oLeft)))
         {
             SetPosition(new Vector2f(this.fullCollider.Position.X, obstacle.Position.Y + obstacle.Size.Y));
             currSpeed.Y = 0;
@@ -77,14 +79,14 @@ public class Player : Entity
         }
 
         //colisao na esquerda
-        if (((myBottom < oTop || myTop < oTop) && (myBottom > oBottom || myTop > oBottom)) && myLeft < oRight && myLeft > oLeft)
+        if(((myBottom < oTop || myTop < oTop) && (myBottom > oBottom || myTop > oBottom)) && myLeft < oRight && myLeft > oLeft)
         {
             SetPosition(new Vector2f(obstacle.Position.X + obstacle.Size.X, this.fullCollider.Position.Y));
             return true;
         }
 
         //colisao na base
-        if (((myLeft < oRight || myRight < oRight) && (myLeft > oLeft || myRight > oLeft)) &&
+        if(((myLeft < oRight || myRight < oRight) && (myLeft > oLeft || myRight > oLeft)) &&
           myBottom > oTop && myBottom < oBottom)
         {
             SetPosition(new Vector2f(this.fullCollider.Position.X, obstacle.Position.Y - this.fullCollider.Size.Y));
@@ -109,11 +111,18 @@ public class Player : Entity
 
         this.spriteSheet.Sprite.Position += currSpeed;
         this.fullCollider.Position += currSpeed;
+
+
         base.Update(deltaTime);
     }
 
     new public void Render(RenderTarget window)
     {
+        window.Draw(Top.Shape);
+        window.Draw(Botton.Shape);
+        window.Draw(Right.Shape);
+        window.Draw(Left.Shape);
+
         base.Render(window);
     }
 
@@ -124,27 +133,27 @@ public class Player : Entity
 
     private void ProccessGravity()
     {
-        if (this.isFalling || this.isJumping)
+        if(this.isFalling || this.isJumping)
         {
             currSpeed += new Vector2f(0, Physx.G);
             currSpeed += new Vector2f(0, Physx.G);
-            if (currSpeed.Y > 3.5f)
+            if(currSpeed.Y > 3.5f)
                 currSpeed.Y = 3.5f;
         }
     }
 
     private void ProccessInput()
     {
-        if (this.moveLeft)
+        if(this.moveLeft)
         {
             currSpeed.X += -this.speed.X;
-            if (currSpeed.X < -speed.X)
+            if(currSpeed.X < -speed.X)
                 currSpeed.X = -speed.X;
         }
-        else if (this.moveRigth)
+        else if(this.moveRigth)
         {
             currSpeed.X += this.speed.X;
-            if (currSpeed.X > speed.X)
+            if(currSpeed.X > speed.X)
                 currSpeed.X = speed.X;
         }
         else
@@ -153,25 +162,32 @@ public class Player : Entity
 
     private void SetDirectionMove(EDirection direction, bool value)
     {
-        this.direction = direction;
+        this.spriteDirection = direction;
 
-        switch (direction)
+        switch(direction)
         {
             case EDirection.Left:
                 this.moveLeft = value;
-                if (value)
+                if(value)
                     this.moveRigth = !value;
                 break;
             case EDirection.Right:
                 this.moveRigth = value;
-                if (value)
+                if(value)
                     this.moveLeft = !value;
                 break;
         }
 
-        if (value)
+        if(value)
             this.OnChangeDirection(direction);
     }
 
-    #endregion   
+    new public void SetPosition(Vector2f position)
+    {
+        base.SetPosition(position);
+    }
+
+
+
+    #endregion
 }
