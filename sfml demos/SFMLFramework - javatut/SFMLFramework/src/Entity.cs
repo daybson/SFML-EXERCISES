@@ -16,9 +16,14 @@ public class Entity : ICollisionable
     protected SpriteSheet spriteSheet;
     protected string spritePath;
 
-    protected Vector2f speed;
+    protected Vector2f velocity;
     protected Vector2f currSpeed;
-    protected Vector2f move;
+    protected Vector2f movement;
+    private float mass;
+    private float friction = 10f;
+    private float epslonThereshold = 0.01f;
+
+    public Vector2f ImpactForce { get { return currSpeed * mass; } }
 
     protected bool isFalling;
     protected bool isJumping;
@@ -46,11 +51,11 @@ public class Entity : ICollisionable
         this.isFalling = true;
         this.isJumping = true;
         this.spritePath = spritePath;
-        this.name = "Dragon";
+        this.name = spritePath.Replace(".png", "");
         this.spriteSheet = new SpriteSheet(spritePath);
         this.OnChangeDirection += this.spriteSheet.SetDirection;
         this.fullCollider = new RectangleShape(new Vector2f(this.spriteSheet.Sprite.GetGlobalBounds().Width, this.spriteSheet.Sprite.GetGlobalBounds().Height));
-
+        this.mass = 2.0f;
         this.CollisionType = collisionType;
         this.Top = new Collider(spriteSheet, EDirection.Top, colliderThickness);
         this.Botton = new Collider(spriteSheet, EDirection.Botton, colliderThickness);
@@ -63,12 +68,49 @@ public class Entity : ICollisionable
 
     }
 
-    #region GameLoop
-
     public void Update(float deltaTime)
     {
         this.isFalling = true;
         this.spriteSheet.UpdateAnimation(deltaTime, this.spriteDirection);
+
+        if (name == "brick2")
+            Console.WriteLine(name + ": " + velocity.ToString());
+
+        if (name == "brick3")
+            Console.WriteLine(name + ": " + velocity.ToString());
+
+        if (CollisionType == ECollisionType.Elastic && this.velocity != new Vector2f())
+        {
+            if (this.velocity.X > 0)
+            {
+                velocity.X = velocity.X - friction * deltaTime;
+                if (velocity.X < epslonThereshold)
+                    velocity.X = 0;
+            }
+            else
+            {
+                velocity.X = velocity.X + friction * deltaTime;
+                if (velocity.X > epslonThereshold)
+                    velocity.X = 0;
+            }
+
+            if (this.velocity.Y > 0)
+            {
+                velocity.Y = velocity.Y - friction * deltaTime;
+                if (velocity.Y < epslonThereshold)
+                    velocity.Y = 0;
+            }
+            else
+            {
+                velocity.Y = velocity.Y + friction * deltaTime;
+                if (velocity.Y > epslonThereshold)
+                    velocity.Y = 0;
+            }
+
+            this.spriteSheet.Sprite.Position += this.velocity;
+            this.fullCollider.Position += this.velocity;
+            currSpeed = velocity;
+        }
 
         Top.UpdatePosition();
         Botton.UpdatePosition();
@@ -83,24 +125,23 @@ public class Entity : ICollisionable
         //window.Draw(this.fullCollider);
     }
 
-    #endregion
-
-    #region Movement
-
     public void SolveCollision(CollisionInfo hitInfo)
     {
-        //TODO: muito repetitivo...
-
-        if(this.CollisionType == ECollisionType.None)
+        if (this.CollisionType == ECollisionType.None)
             return;
 
-        switch(CollisionType)
+        switch (CollisionType)
         {
             case ECollisionType.Elastic:
+                #region
+
+                AddMovement(hitInfo.Force - this.currSpeed);
                 break;
+            #endregion
 
             case ECollisionType.Inelastic:
-                switch(hitInfo.Direction)
+                #region
+                switch (hitInfo.Direction)
                 {
                     case EDirection.Botton:
                         SetPosition(new Vector2f(this.spriteSheet.Sprite.Position.X, this.spriteSheet.Sprite.Position.Y - hitInfo.Overlap.Height));
@@ -120,33 +161,38 @@ public class Entity : ICollisionable
                         break;
                 }
                 break;
+            #endregion
 
             case ECollisionType.PartialInelastic:
+                #region
                 break;
+            #endregion
 
             case ECollisionType.Trigger:
+                #region
                 break;
+                #endregion
         }
     }
 
     private void SetDirectionMove(EDirection direction, bool value)
     {
         this.spriteDirection = direction;
-        switch(direction)
+        switch (direction)
         {
             case EDirection.Left:
                 this.moveLeft = value;
-                if(value)
+                if (value)
                     this.moveRigth = !value;
                 break;
             case EDirection.Right:
                 this.moveRigth = value;
-                if(value)
+                if (value)
                     this.moveLeft = !value;
                 break;
         }
 
-        if(value)
+        if (value)
             this.OnChangeDirection(direction);
     }
 
@@ -161,5 +207,8 @@ public class Entity : ICollisionable
         this.Right = new Collider(spriteSheet, EDirection.Right, colliderThickness);
     }
 
-    #endregion
+    public void AddMovement(Vector2f velocity)
+    {
+        this.velocity = velocity;
+    }
 }

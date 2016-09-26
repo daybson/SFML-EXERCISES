@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SFML.System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +11,6 @@ public interface ICollisionable
     Collider Botton { get; }
     Collider Right { get; }
     Collider Left { get; }
+    Vector2f ImpactForce { get; }
     void SolveCollision(CollisionInfo hitInfo);
 }

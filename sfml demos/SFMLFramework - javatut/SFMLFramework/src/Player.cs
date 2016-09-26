@@ -19,13 +19,11 @@ public class Player : Entity
 {
     public PlayerKeyboardController keyboardController;
 
-
-
     public Player() : base("dragon.png", ECollisionType.Inelastic)
     {
         this.isFalling = true;
         this.isJumping = true;
-        this.speed = new Vector2f(3, -20);
+        this.velocity = new Vector2f(3, -20);
 
         this.CollisionType = ECollisionType.Inelastic;
 
@@ -37,7 +35,7 @@ public class Player : Entity
         {
             if(!this.isJumping)
             {
-                currSpeed.Y = speed.Y;
+                currSpeed.Y = velocity.Y;
                 this.isJumping = true;
             }
         }));
@@ -47,61 +45,7 @@ public class Player : Entity
 
         SetPosition(new Vector2f());
     }
-
-    [Obsolete]
-    public bool IsColliding(RectangleShape obstacle, out CollisionInfo hitInfo)
-    {
-        hitInfo = null;
-
-        var myLeft = this.fullCollider.Position.X;
-        var myRight = this.fullCollider.Position.X + this.fullCollider.Size.X;
-        var myTop = this.fullCollider.Position.Y;
-        var myBottom = this.fullCollider.Position.Y + this.fullCollider.Size.Y;
-
-        var oLeft = obstacle.Position.X;
-        var oRight = obstacle.Position.X + obstacle.Size.X;
-        var oTop = obstacle.Position.Y;
-        var oBottom = obstacle.Position.Y + obstacle.Size.Y;
-
-        //colisao na direita
-        if(((myBottom < oTop || myTop < oTop) && (myBottom > oBottom || myTop > oBottom)) && myRight > oLeft && myLeft < oRight)
-        {
-            SetPosition(new Vector2f(obstacle.Position.X - this.fullCollider.Size.X, this.fullCollider.Position.Y));
-            return true;
-        }
-
-        //colisao no topo
-        if(myTop > oTop && myTop < oBottom && ((myLeft < oRight || myRight < oRight) && (myLeft > oLeft || myRight > oLeft)))
-        {
-            SetPosition(new Vector2f(this.fullCollider.Position.X, obstacle.Position.Y + obstacle.Size.Y));
-            currSpeed.Y = 0;
-            return true;
-        }
-
-        //colisao na esquerda
-        if(((myBottom < oTop || myTop < oTop) && (myBottom > oBottom || myTop > oBottom)) && myLeft < oRight && myLeft > oLeft)
-        {
-            SetPosition(new Vector2f(obstacle.Position.X + obstacle.Size.X, this.fullCollider.Position.Y));
-            return true;
-        }
-
-        //colisao na base
-        if(((myLeft < oRight || myRight < oRight) && (myLeft > oLeft || myRight > oLeft)) &&
-          myBottom > oTop && myBottom < oBottom)
-        {
-            SetPosition(new Vector2f(this.fullCollider.Position.X, obstacle.Position.Y - this.fullCollider.Size.Y));
-            this.isFalling = false;
-            this.isJumping = false;
-            currSpeed.Y = 0;
-            return true;
-        }
-        else
-        {
-            this.isFalling = true;
-            return false;
-        }
-    }
-
+    
     #region GameLoop
 
     new public void Update(float deltaTime)
@@ -128,7 +72,6 @@ public class Player : Entity
 
     #endregion
 
-
     #region Movement
 
     private void ProccessGravity()
@@ -146,15 +89,15 @@ public class Player : Entity
     {
         if(this.moveLeft)
         {
-            currSpeed.X += -this.speed.X;
-            if(currSpeed.X < -speed.X)
-                currSpeed.X = -speed.X;
+            currSpeed.X += -this.velocity.X;
+            if(currSpeed.X < -velocity.X)
+                currSpeed.X = -velocity.X;
         }
         else if(this.moveRigth)
         {
-            currSpeed.X += this.speed.X;
-            if(currSpeed.X > speed.X)
-                currSpeed.X = speed.X;
+            currSpeed.X += this.velocity.X;
+            if(currSpeed.X > velocity.X)
+                currSpeed.X = velocity.X;
         }
         else
             currSpeed.X = 0;
@@ -186,8 +129,6 @@ public class Player : Entity
     {
         base.SetPosition(position);
     }
-
-
 
     #endregion
 }

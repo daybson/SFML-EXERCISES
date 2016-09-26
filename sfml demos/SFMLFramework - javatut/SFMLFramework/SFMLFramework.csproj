@@ -59,6 +59,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class1.cs" />
+    <Compile Include="Class2.cs" />
     <Compile Include="src\Collider.cs" />
     <Compile Include="src\CollisionDispatcher.cs" />
     <Compile Include="src\ICollisionable.cs" />
@@ -72,6 +74,7 @@
     <Compile Include="src\KeyboardInput.cs" />
     <Compile Include="src\Physx.cs" />
     <Compile Include="src\PlayerKeyboardController.cs" />
+    <Compile Include="src\Rigidbody.cs" />
     <Compile Include="src\SpriteSheet.cs" />
     <Compile Include="src\Game.cs" />
     <Compile Include="src\ICollision.cs" />
@@ -95,6 +98,12 @@
     </Content>
     <Content Include="brick2.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="brick3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="brick3.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="csfml-audio-2.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

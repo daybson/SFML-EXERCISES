@@ -19,28 +19,28 @@ public class CollisionDispatcher
 
         if(active.Top.Bound.Intersects(passive.Botton.Bound, out overlap))
         {
-            var hitInfo = new CollisionInfo(overlap, EDirection.Top);
+            var hitInfo = new CollisionInfo(overlap, EDirection.Top, active.ImpactForce);
             active.SolveCollision(hitInfo);
             passive.SolveCollision(hitInfo.Inverse());
         }
 
         if(active.Botton.Bound.Intersects(passive.Top.Bound, out overlap))
         {
-            var hitInfo = new CollisionInfo(overlap, EDirection.Botton);
+            var hitInfo = new CollisionInfo(overlap, EDirection.Botton, active.ImpactForce);
             active.SolveCollision(hitInfo);
             passive.SolveCollision(hitInfo.Inverse());
         }
 
         if(active.Right.Bound.Intersects(passive.Left.Bound, out overlap))
         {
-            var hitInfo = new CollisionInfo(overlap, EDirection.Right);
+            var hitInfo = new CollisionInfo(overlap, EDirection.Right, active.ImpactForce);
             active.SolveCollision(hitInfo);
             passive.SolveCollision(hitInfo.Inverse());
         }
 
         if(active.Left.Bound.Intersects(passive.Right.Bound, out overlap))
         {
-            var hitInfo = new CollisionInfo(overlap, EDirection.Left);
+            var hitInfo = new CollisionInfo(overlap, EDirection.Left, active.ImpactForce);
             active.SolveCollision(hitInfo);
             passive.SolveCollision(hitInfo.Inverse());
         }

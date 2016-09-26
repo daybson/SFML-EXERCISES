@@ -32,6 +32,7 @@ public class Game : IUpdate
     private Entity floor;
     private Entity brick;
     private Entity brick2;
+    private Entity brick3;
 
     private List<Entity> entities;
 
@@ -59,14 +60,17 @@ public class Game : IUpdate
         this.brick = new Entity("brick.png", ECollisionType.None);
         this.brick.SetPosition(new Vector2f(50, 280));
 
-        this.brick2 = new Entity("brick2.png", ECollisionType.Inelastic);
-        this.brick2.SetPosition(new Vector2f(400, 280));
+        this.brick2 = new Entity("brick2.png", ECollisionType.Elastic);
+        this.brick2.SetPosition(new Vector2f(350, 300));
+
+        this.brick3 = new Entity("brick3.png", ECollisionType.Elastic);
+        this.brick3.SetPosition(new Vector2f(480, 300));
 
         this.player = new Player();
         this.keyboard.OnKeyPressed += this.player.keyboardController.OnKeyPressed;
         this.keyboard.OnKeyReleased += this.player.keyboardController.OnKeyReleased;
 
-        this.entities.AddRange(new List<Entity> { this.floor, this.brick, this.brick2, this.player });
+        this.entities.AddRange(new List<Entity> { this.floor, this.brick, this.brick2, this.brick3, this.player });
 
         Run();
     }
@@ -75,10 +79,14 @@ public class Game : IUpdate
     {
         this.entities.ForEach(e => e.Update(deltaTime));
         this.player.Update(deltaTime);
+
         CollisionDispatcher.CollisionCheck(this.player, this.floor);
         CollisionDispatcher.CollisionCheck(this.player, this.brick);
         CollisionDispatcher.CollisionCheck(this.player, this.brick2);
+        CollisionDispatcher.CollisionCheck(this.player, this.brick3);
+        CollisionDispatcher.CollisionCheck(this.brick2, this.floor);
         CollisionDispatcher.CollisionCheck(this.brick2, this.brick);
+        CollisionDispatcher.CollisionCheck(this.brick2, this.brick3);
     }
 
 
