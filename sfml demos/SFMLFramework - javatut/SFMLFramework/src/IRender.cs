@@ -20,5 +20,4 @@ using SFML.System;
 public interface IRender
 {
     void Render(RenderTarget window);
-    void LoadSpriteSheet(string path);
 }

@@ -30,9 +30,9 @@ public class Game : IUpdate
 
     private Player player;
     private Entity floor;
-    private Entity brick;
-    private Entity brick2;
-    private Entity brick3;
+    private Entity brick_1;
+    private Entity brick_2;
+    private Entity brick_3;
 
     private List<Entity> entities;
 
@@ -54,23 +54,23 @@ public class Game : IUpdate
         this.window.KeyPressed += this.keyboard.ProcessKeyboardPressed;
         this.window.KeyReleased += this.keyboard.ProcessKeyboardReleased;
 
-        this.floor = new Entity("floor.png", ECollisionType.None);
+        this.floor = new Entity("resources/floor.png", ECollisionType.None);
         this.floor.SetPosition(new Vector2f(0, 450));
 
-        this.brick = new Entity("brick.png", ECollisionType.None);
-        this.brick.SetPosition(new Vector2f(50, 280));
+        this.brick_1 = new Entity("resources/brick.png", ECollisionType.Inelastic);
+        this.brick_1.SetPosition(new Vector2f(50, 280));
 
-        this.brick2 = new Entity("brick2.png", ECollisionType.Elastic);
-        this.brick2.SetPosition(new Vector2f(350, 300));
+        this.brick_2 = new Entity("resources/brick2.png", ECollisionType.PartialInelastic);
+        this.brick_2.SetPosition(new Vector2f(350, 300));
 
-        this.brick3 = new Entity("brick3.png", ECollisionType.Elastic);
-        this.brick3.SetPosition(new Vector2f(480, 300));
+        this.brick_3 = new Entity("resources/brick3.png", ECollisionType.Elastic);
+        this.brick_3.SetPosition(new Vector2f(480, 300));
 
         this.player = new Player();
         this.keyboard.OnKeyPressed += this.player.keyboardController.OnKeyPressed;
         this.keyboard.OnKeyReleased += this.player.keyboardController.OnKeyReleased;
 
-        this.entities.AddRange(new List<Entity> { this.floor, this.brick, this.brick2, this.brick3, this.player });
+        this.entities.AddRange(new List<Entity> { this.floor, this.brick_1, this.brick_2, this.brick_3, this.player });
 
         Run();
     }
@@ -81,12 +81,17 @@ public class Game : IUpdate
         this.player.Update(deltaTime);
 
         CollisionDispatcher.CollisionCheck(this.player, this.floor);
-        CollisionDispatcher.CollisionCheck(this.player, this.brick);
-        CollisionDispatcher.CollisionCheck(this.player, this.brick2);
-        CollisionDispatcher.CollisionCheck(this.player, this.brick3);
-        CollisionDispatcher.CollisionCheck(this.brick2, this.floor);
-        CollisionDispatcher.CollisionCheck(this.brick2, this.brick);
-        CollisionDispatcher.CollisionCheck(this.brick2, this.brick3);
+        CollisionDispatcher.CollisionCheck(this.player, this.brick_1);
+        CollisionDispatcher.CollisionCheck(this.player, this.brick_2);
+        CollisionDispatcher.CollisionCheck(this.player, this.brick_3);
+
+        CollisionDispatcher.CollisionCheck(this.brick_2, this.floor);
+        CollisionDispatcher.CollisionCheck(this.brick_2, this.brick_1);
+        CollisionDispatcher.CollisionCheck(this.brick_2, this.brick_3);
+
+        CollisionDispatcher.CollisionCheck(this.brick_3, this.floor);
+        CollisionDispatcher.CollisionCheck(this.brick_3, this.brick_1);
+        CollisionDispatcher.CollisionCheck(this.brick_3, this.brick_2);
     }
 
 

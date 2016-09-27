@@ -20,33 +20,26 @@ using SFML.System;
 public class Renderer : IRender
 {
     protected SpriteSheet spriteSheet;
-    public SpriteSheet SpriteSheet { get { return spriteSheet; } }
 
-    public IMove iMove;
-
-    public Renderer() : base()
+    public Renderer(SpriteSheet spriteSheet)
     {
+        throw new System.NotImplementedException();
+    }
 
+    public SFML.Graphics.Drawable Renderable
+    {
+        get
+        {
+            throw new System.NotImplementedException();
+        }
+
+        set
+        {
+        }
     }
 
     public void Render(RenderTarget window)
     {
         window.Draw(this.spriteSheet.Sprite);
-    }
-
-    public void Update(float deltaTime)
-    {
-        if (this.iMove != null)
-        {
-            this.spriteSheet.Sprite.Position = this.iMove.Position;
-        }
-        else
-            Console.WriteLine("Renderer component requires an IMove reference's object to update position");
-    }
-
-    public void LoadSpriteSheet(string path)
-    {
-        this.spriteSheet = new SpriteSheet(path);
-        this.iMove.OnChangeDirection += this.spriteSheet.SetDirection;
     }
 }

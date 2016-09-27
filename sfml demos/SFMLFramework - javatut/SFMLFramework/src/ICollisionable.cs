@@ -7,10 +7,9 @@ using System.Text;
 public interface ICollisionable
 {
     ECollisionType CollisionType { get; }
-    Collider Top { get; }
-    Collider Botton { get; }
-    Collider Right { get; }
-    Collider Left { get; }
-    Vector2f ImpactForce { get; }
+    Collider ColliderTop { get; }
+    Collider ColliderBottom { get; }
+    Collider ColliderRight { get; }
+    Collider ColliderLeft { get; }
     void SolveCollision(CollisionInfo hitInfo);
 }

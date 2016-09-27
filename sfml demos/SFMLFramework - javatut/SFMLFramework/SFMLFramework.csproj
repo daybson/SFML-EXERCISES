@@ -59,8 +59,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="Class2.cs" />
+    <Compile Include="GameObject.cs" />
+    <Compile Include="Mterial.cs" />
+    <Compile Include="PlatformPlayerController.cs" />
+    <Compile Include="Resources.cs" />
     <Compile Include="src\Collider.cs" />
     <Compile Include="src\CollisionDispatcher.cs" />
     <Compile Include="src\ICollisionable.cs" />
@@ -82,27 +84,29 @@
     <Compile Include="src\IRender.cs" />
     <Compile Include="src\IUpdate.cs" />
     <Compile Include="src\Renderer.cs" />
+    <Compile Include="Stick.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="brick.png">
+    <Content Include="resources\brick.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="brick.txt">
+    <Content Include="resources\brick.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="brick2.png">
+    <Content Include="resources\brick2.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="brick2.txt">
+    <Content Include="resources\brick2.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="brick3.png">
+    <Content Include="resources\brick3.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="brick3.txt">
+    <Content Include="resources\brick3.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="csfml-audio-2.dll">
@@ -117,16 +121,16 @@
     <Content Include="csfml-window-2.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="dragon.png">
+    <Content Include="resources\dragon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="dragon.txt">
+    <Content Include="resources\dragon.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="floor.png">
+    <Content Include="resources\floor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="floor.txt">
+    <Content Include="resources\floor.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="libsndfile-1.dll">
@@ -141,10 +145,10 @@
     <Content Include="OpenTK.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="rock.png">
+    <Content Include="resources\rock.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="rock.txt">
+    <Content Include="resources\rock.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

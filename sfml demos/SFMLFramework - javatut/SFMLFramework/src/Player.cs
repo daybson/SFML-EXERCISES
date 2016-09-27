@@ -19,7 +19,7 @@ public class Player : Entity
 {
     public PlayerKeyboardController keyboardController;
 
-    public Player() : base("dragon.png", ECollisionType.Inelastic)
+    public Player() : base("resources/dragon.png", ECollisionType.Inelastic)
     {
         this.isFalling = true;
         this.isJumping = true;
@@ -45,10 +45,10 @@ public class Player : Entity
 
         SetPosition(new Vector2f());
     }
-    
+
     #region GameLoop
 
-    new public void Update(float deltaTime)
+    public override void Update(float deltaTime)
     {
         ProccessGravity();
         ProccessInput();
@@ -73,62 +73,6 @@ public class Player : Entity
     #endregion
 
     #region Movement
-
-    private void ProccessGravity()
-    {
-        if(this.isFalling || this.isJumping)
-        {
-            currSpeed += new Vector2f(0, Physx.G);
-            currSpeed += new Vector2f(0, Physx.G);
-            if(currSpeed.Y > 3.5f)
-                currSpeed.Y = 3.5f;
-        }
-    }
-
-    private void ProccessInput()
-    {
-        if(this.moveLeft)
-        {
-            currSpeed.X += -this.velocity.X;
-            if(currSpeed.X < -velocity.X)
-                currSpeed.X = -velocity.X;
-        }
-        else if(this.moveRigth)
-        {
-            currSpeed.X += this.velocity.X;
-            if(currSpeed.X > velocity.X)
-                currSpeed.X = velocity.X;
-        }
-        else
-            currSpeed.X = 0;
-    }
-
-    private void SetDirectionMove(EDirection direction, bool value)
-    {
-        this.spriteDirection = direction;
-
-        switch(direction)
-        {
-            case EDirection.Left:
-                this.moveLeft = value;
-                if(value)
-                    this.moveRigth = !value;
-                break;
-            case EDirection.Right:
-                this.moveRigth = value;
-                if(value)
-                    this.moveLeft = !value;
-                break;
-        }
-
-        if(value)
-            this.OnChangeDirection(direction);
-    }
-
-    new public void SetPosition(Vector2f position)
-    {
-        base.SetPosition(position);
-    }
 
     #endregion
 }

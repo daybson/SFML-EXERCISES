@@ -6,6 +6,9 @@ using System.Linq;
 using System.Text;
 
 
+/// <summary>
+/// Determina os tipos de colisão possíveis
+/// </summary>
 public enum ECollisionType
 {
     Elastic,
@@ -17,23 +20,35 @@ public enum ECollisionType
 
 public class Collider
 {
+    /// <summary>
+    /// Shape de visualização do collider
+    /// </summary>
     private RectangleShape shape;
     private FloatRect bound;
+    /// <summary>
+    /// Direção onde o collider será posicionado em relação ao sprite
+    /// </summary>
     private EDirection direction;
+    /// <summary>
+    /// Espessura do collider quando renderizado
+    /// </summary>
     private int colliderThickness;
-    private SpriteSheet spriteSheet;
-    
+    /// <summary>
+    /// Dimensão do sprite (wifth, height)
+    /// </summary>
+    private SFML.System.Vector2f spriteDimension;
+
     public RectangleShape Shape { get { return shape; } }
     public FloatRect Bound { get { return bound; } }
     public EDirection Direction { get { return direction; } }
 
-    public Collider(SpriteSheet spriteSheet, EDirection direction, int colliderThickness)
+    public Collider(SFML.System.Vector2f spriteDimension, EDirection direction, int colliderThickness)
     {
         this.direction = direction;
         this.colliderThickness = colliderThickness;
-        this.spriteSheet = spriteSheet;
+        this.spriteSheet = spriteDimension;
 
-        switch(this.direction)
+        switch (this.direction)
         {
             case EDirection.Botton:
                 shape = new RectangleShape(new Vector2f(this.spriteSheet.TileWidth, this.colliderThickness));
@@ -58,9 +73,9 @@ public class Collider
         shape.FillColor = Color.Transparent;
     }
 
-    public void UpdatePosition()
+    public void UpdatePosition(SFML.System.Vector2f displacement)
     {
-        switch(this.direction)
+        switch (this.direction)
         {
             case EDirection.Botton:
                 this.bound.Left = this.spriteSheet.Sprite.Position.X;
@@ -81,5 +96,10 @@ public class Collider
         }
 
         this.shape.Position = new Vector2f(this.bound.Left, this.bound.Top);
+    }
+
+    override public string ToString()
+    {
+        return this.overlap.ToString() + " " + this.direction.ToString();
     }
 }
