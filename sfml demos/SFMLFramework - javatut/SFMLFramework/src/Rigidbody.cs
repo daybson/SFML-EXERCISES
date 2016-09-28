@@ -3,8 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SFMLFramework;
 
-public sealed class Rigidbody : ICollisionable
+/// <summary>
+/// Define um objeto rígido que ocupa um lugar no espaço, passível a movimentação
+/// </summary>
+public sealed class Rigidbody : Component, ICollisionable, IKineticController
 {
     /// <summary>
     /// Aceleração atuante no corpo
@@ -26,11 +30,18 @@ public sealed class Rigidbody : ICollisionable
     /// Tamanho do sprite (width, height)
     /// </summary>
     private Vector2f spriteDimension;
-
-    public Rigidbody(Vector2f acceleration, Vector2f displacement, float mass, Vector2f velocity, Vector2f dimension)
-    {
-        throw new System.NotImplementedException();
-    }
+    /// <summary>
+    /// Objeto estático
+    /// </summary>
+    private bool isKinematic;
+    /// <summary>
+    /// Somatório de todas as forças sendo aplicadas ao corpo
+    /// </summary>
+    private Vector2f finalForce;
+    /// <summary>
+    /// Força gravitacional atuante sobre o corpo
+    /// </summary>
+    private Vector2f gravityForce;
 
     /// <summary>
     /// Material de que é composto o corpo rígido
@@ -100,7 +111,7 @@ public sealed class Rigidbody : ICollisionable
         get
         {
             throw new System.NotImplementedException();
-        }        
+        }
     }
 
     public SFML.System.Vector2f Displacement
@@ -133,7 +144,6 @@ public sealed class Rigidbody : ICollisionable
         {
             throw new System.NotImplementedException();
         }
-        set { }
     }
 
     public ECollisionType CollisionType
@@ -144,7 +154,20 @@ public sealed class Rigidbody : ICollisionable
         }
     }
 
-    public bool Kinematic
+    public PlatformPlayerController PlatformPlayerController
+    {
+        get
+        {
+            throw new NotImplementedException();
+        }
+
+        set
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public Player Player
     {
         get
         {
@@ -156,9 +179,19 @@ public sealed class Rigidbody : ICollisionable
         }
     }
 
-    public void Update(float deltaTime)
+    public Rigidbody(Vector2f acceleration, Vector2f displacement, float mass, Vector2f velocity, Vector2f dimension)
     {
-        throw new System.NotImplementedException();
+        this.mass = mass;
+
+        //...
+
+        this.gravityForce = new Vector2f(0, this.mass * Physx.GAcc);
+    }
+
+    public override void Update(float deltaTime)
+    {
+        this.finalForce += this.gravityForce;
+        this.finalForce *= deltaTime;
     }
 
     /// <summary>
@@ -166,6 +199,7 @@ public sealed class Rigidbody : ICollisionable
     /// </summary>
     public void SolveCollision(CollisionInfo hitInfo)
     {
+
         if (this.CollisionType == ECollisionType.None)
             return;
 
@@ -214,23 +248,9 @@ public sealed class Rigidbody : ICollisionable
         }
     }
 
-    override public string ToString()
-    {
-        return this.overlap.ToString() + " " + this.direction.ToString();
-    }
-
-    private void ProccessGravity()
-    {
-        if (this.isFalling || this.isJumping)
-        {
-            currSpeed += new Vector2f(0, Physx.G);
-            if (currSpeed.Y > 3.5f)
-                currSpeed.Y = 3.5f;
-        }
-    }
-
     public void SetPosition(Vector2f position)
     {
+        /*
         this.spriteSheet.Sprite.Position = position;
         this.fullCollider.Position = position;
 
@@ -238,5 +258,11 @@ public sealed class Rigidbody : ICollisionable
         this.Botton = new Collider(spriteSheet, EDirection.Botton, colliderThickness);
         this.Left = new Collider(spriteSheet, EDirection.Left, colliderThickness);
         this.Right = new Collider(spriteSheet, EDirection.Right, colliderThickness);
+        */
+    }
+
+    public void AddForce(Vector2f force)
+    {
+        this.finalForce += force;
     }
 }

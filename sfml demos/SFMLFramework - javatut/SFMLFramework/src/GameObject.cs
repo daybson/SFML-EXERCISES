@@ -2,25 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SFML.Graphics;
 
 namespace SFMLFramework
 {
-    public class GameObject
+    public class GameObject : Transformable
     {
         protected bool isEnabled;
         protected string name;
         protected int id;
 
-        public List<Stick> Stick
+        public GameObject()
         {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-
-            set
-            {
-            }
+            throw new System.NotImplementedException();
         }
 
         public virtual void Update()
@@ -33,7 +27,7 @@ namespace SFMLFramework
             throw new System.NotImplementedException();
         }
 
-        public virtual void Reset()
+        public void Destroy()
         {
             throw new System.NotImplementedException();
         }

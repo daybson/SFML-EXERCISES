@@ -59,10 +59,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GameObject.cs" />
-    <Compile Include="Mterial.cs" />
-    <Compile Include="PlatformPlayerController.cs" />
-    <Compile Include="Resources.cs" />
+    <Compile Include="src\GameObject.cs" />
+    <Compile Include="src\IKineticController.cs" />
+    <Compile Include="src\Material.cs" />
+    <Compile Include="src\PlatformPlayerController.cs" />
+    <Compile Include="src\Resources.cs" />
     <Compile Include="src\Collider.cs" />
     <Compile Include="src\CollisionDispatcher.cs" />
     <Compile Include="src\ICollisionable.cs" />
@@ -84,7 +85,7 @@
     <Compile Include="src\IRender.cs" />
     <Compile Include="src\IUpdate.cs" />
     <Compile Include="src\Renderer.cs" />
-    <Compile Include="Stick.cs" />
+    <Compile Include="src\Component.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

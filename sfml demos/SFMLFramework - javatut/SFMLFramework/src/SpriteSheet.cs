@@ -6,12 +6,24 @@ using System.Text;
 using SFML.Graphics;
 using SFML.System;
 
+/// <summary>
+/// Define um objeto que armazena uma Texture com sequencias de animações quadro a quadro baseadas em Tiles, e que é capaz de gerenciá-los para se comportarem como uma animação
+/// </summary>
 public class SpriteSheet
 {
     #region Fields
 
+    /// <summary>
+    /// Textura carregada
+    /// </summary>
     private Texture texture;
+    /// <summary>
+    /// tile do sprite
+    /// </summary>
     private IntRect tile;
+    /// <summary>
+    /// Sprite em exibição no moment
+    /// </summary>
     private Sprite sprite;
     public Sprite Sprite { get { return sprite; } }
 
@@ -20,14 +32,41 @@ public class SpriteSheet
 
     private string pathTexture;
 
+    /// <summary>
+    /// Altura dos tiles da spritesheet
+    /// </summary>
     private int tileHeight;
+    /// <summary>
+    /// Largura dos tiles da spritesheet
+    /// </summary>
     private int tileWidth;
+    /// <summary>
+    /// Quantidade de colunas da spritesheet
+    /// </summary>
     private int rows;
+    /// <summary>
+    /// Quantidade de colunas do spritesheet
+    /// </summary>
     private int columns;
+    /// <summary>
+    /// Total de frames do spritesheet
+    /// </summary>
     private int frameCount;
+    /// <summary>
+    /// Tempo total de duração da animação
+    /// </summary>
     private float animationTime;
+    /// <summary>
+    /// Tempo de exibição de cada frame
+    /// </summary>
     private float frameTime;
+    /// <summary>
+    /// Contador do tempo de exibição do frame atual
+    /// </summary>
     private float currentFrameTime;
+    /// <summary>
+    /// Frame atual da animação
+    /// </summary>
     private float currentFrame;
 
     #endregion
@@ -35,6 +74,10 @@ public class SpriteSheet
 
     #region Public
 
+    /// <summary>
+    /// Construtor
+    /// </summary>
+    /// <param name="pathTexture">Caminho da textura a ser carregada</param>
     public SpriteSheet(string pathTexture)
     {
         this.pathTexture = pathTexture;
@@ -63,7 +106,10 @@ public class SpriteSheet
 
     }
 
-    public void UpdateAnimation(float deltaTime, EDirection direction)
+    /// <summary>
+    /// Atualiza o frame da animação da spritesheet
+    /// </summary>
+    public void UpdateAnimation(float deltaTime)
     {
         currentFrameTime += deltaTime;
 
@@ -85,6 +131,10 @@ public class SpriteSheet
         }
     }
 
+    /// <summary>
+    /// Orienta o sprite de acordo com a direção de movimento
+    /// </summary>
+    /// <param name="direction">Orientação de movimento</param>
     public void SetDirection(EDirection direction)
     {
         int newTop = 0;

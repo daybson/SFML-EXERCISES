@@ -17,16 +17,14 @@ using System.Linq;
 using System.Text;
 using SFML.System;
 
-public class Renderer : IRender
+/// <summary>
+/// Define um componente capaz de desenhar um frame de animação ou um Drawable em determinado RenderTarget
+/// </summary>
+public class Renderer : SFMLFramework.Component, IRender
 {
-    protected SpriteSheet spriteSheet;
+    public SpriteSheet SpriteSheet { get; set; }
 
-    public Renderer(SpriteSheet spriteSheet)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public SFML.Graphics.Drawable Renderable
+    public Player Player
     {
         get
         {
@@ -38,8 +36,25 @@ public class Renderer : IRender
         }
     }
 
-    public void Render(RenderTarget window)
+    /// <summary>
+    /// Recebe uma instância da SpriteSheet que o componente deve renderizar
+    /// </summary>
+    public Renderer(SpriteSheet spriteSheet)
     {
-        window.Draw(this.spriteSheet.Sprite);
+        SpriteSheet = spriteSheet;
+    }
+
+    /// <summary>
+    /// Renderiza o Sprite da SpriteSheet na janela informada
+    /// </summary>
+    public void Render(ref RenderTarget window)
+    {
+        window.Draw(this.SpriteSheet.Sprite);
+    }
+
+    public override void Update(float deltaTime)
+    {
+        SpriteSheet.UpdateAnimation(deltaTime);
+
     }
 }

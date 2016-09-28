@@ -14,9 +14,9 @@ public class CollisionRender : IRender
         throw new NotImplementedException();
     }
 
-    public void Render(RenderTarget window)
+    public void Render(ref RenderTarget window)
     {
-        window.Draw(this.shape);
+         window.Draw(this.shape);
     }
 
     public void Update(float deltaTime)

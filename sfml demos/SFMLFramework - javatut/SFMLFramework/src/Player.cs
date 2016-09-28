@@ -15,10 +15,9 @@ public enum EDirection
     None
 }
 
-public class Player : Entity
+public class Player : SFMLFramework.GameObject
 {
-    public PlayerKeyboardController keyboardController;
-
+    /*
     public Player() : base("resources/dragon.png", ECollisionType.Inelastic)
     {
         this.isFalling = true;
@@ -33,7 +32,7 @@ public class Player : Entity
         this.keyboardController.keyPressedActions.Add(Keyboard.Key.D, new Action(() => SetDirectionMove(EDirection.Right, true)));
         this.keyboardController.keyPressedActions.Add(Keyboard.Key.Space, new Action(() =>
         {
-            if(!this.isJumping)
+            if (!this.isJumping)
             {
                 currSpeed.Y = velocity.Y;
                 this.isJumping = true;
@@ -46,33 +45,16 @@ public class Player : Entity
         SetPosition(new Vector2f());
     }
 
-    #region GameLoop
-
-    public override void Update(float deltaTime)
+    public SFMLFramework.PlatformPlayerController PlatformPlayerController
     {
-        ProccessGravity();
-        ProccessInput();
+        get
+        {
+            throw new System.NotImplementedException();
+        }
 
-        this.spriteSheet.Sprite.Position += currSpeed;
-        this.fullCollider.Position += currSpeed;
-
-
-        base.Update(deltaTime);
+        set
+        {
+        }
     }
-
-    new public void Render(RenderTarget window)
-    {
-        window.Draw(Top.Shape);
-        window.Draw(Botton.Shape);
-        window.Draw(Right.Shape);
-        window.Draw(Left.Shape);
-
-        base.Render(window);
-    }
-
-    #endregion
-
-    #region Movement
-
-    #endregion
+    */
 }
