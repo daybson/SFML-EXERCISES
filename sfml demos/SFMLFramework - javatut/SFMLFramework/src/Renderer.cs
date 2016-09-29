@@ -24,18 +24,6 @@ public class Renderer : SFMLFramework.Component, IRender
 {
     public SpriteSheet SpriteSheet { get; set; }
 
-    public Player Player
-    {
-        get
-        {
-            throw new System.NotImplementedException();
-        }
-
-        set
-        {
-        }
-    }
-
     /// <summary>
     /// Recebe uma instância da SpriteSheet que o componente deve renderizar
     /// </summary>
@@ -47,7 +35,7 @@ public class Renderer : SFMLFramework.Component, IRender
     /// <summary>
     /// Renderiza o Sprite da SpriteSheet na janela informada
     /// </summary>
-    public void Render(ref RenderTarget window)
+    public void Render(ref RenderWindow window)
     {
         window.Draw(this.SpriteSheet.Sprite);
     }
@@ -55,6 +43,5 @@ public class Renderer : SFMLFramework.Component, IRender
     public override void Update(float deltaTime)
     {
         SpriteSheet.UpdateAnimation(deltaTime);
-
     }
 }

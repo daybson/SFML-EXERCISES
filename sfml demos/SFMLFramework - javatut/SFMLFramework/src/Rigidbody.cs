@@ -1,4 +1,4 @@
-﻿using SFML.System;
+﻿using SFML.System; 
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +17,11 @@ public sealed class Rigidbody : Component, ICollisionable, IKineticController
     /// <summary>
     /// Velocidade de movimento do corpo
     /// </summary>
-    private SFML.System.Vector2f velocity;
+    private Vector2f velocity;
     /// <summary>
     /// Deslocamento do corpo em movimento
     /// </summary>
-    private SFML.System.Vector2f displacement;
+    private Vector2f displacement;
     /// <summary>
     /// Massa do corpo
     /// </summary>
@@ -42,6 +42,10 @@ public sealed class Rigidbody : Component, ICollisionable, IKineticController
     /// Força gravitacional atuante sobre o corpo
     /// </summary>
     private Vector2f gravityForce;
+    /// <summary>
+    /// Espessura do collider
+    /// </summary>
+    private int colliderThickness;
 
     /// <summary>
     /// Material de que é composto o corpo rígido
@@ -106,7 +110,7 @@ public sealed class Rigidbody : Component, ICollisionable, IKineticController
         }
     }
 
-    public SFML.System.Vector2f Acceleration
+    public Vector2f Acceleration
     {
         get
         {
@@ -114,7 +118,7 @@ public sealed class Rigidbody : Component, ICollisionable, IKineticController
         }
     }
 
-    public SFML.System.Vector2f Displacement
+    public Vector2f Displacement
     {
         get
         {
@@ -122,7 +126,7 @@ public sealed class Rigidbody : Component, ICollisionable, IKineticController
         }
     }
 
-    public SFML.System.Vector2f SpriteDimension
+    public Vector2f SpriteDimension
     {
         get
         {
@@ -138,7 +142,7 @@ public sealed class Rigidbody : Component, ICollisionable, IKineticController
         }
     }
 
-    public SFML.System.Vector2f Velocity
+    public Vector2f Velocity
     {
         get
         {
@@ -167,23 +171,15 @@ public sealed class Rigidbody : Component, ICollisionable, IKineticController
         }
     }
 
-    public Player Player
-    {
-        get
-        {
-            throw new System.NotImplementedException();
-        }
-
-        set
-        {
-        }
-    }
-
-    public Rigidbody(Vector2f acceleration, Vector2f displacement, float mass, Vector2f velocity, Vector2f dimension)
+    public Rigidbody(Vector2f acceleration, Vector2f displacement, float mass, Vector2f velocity, Vector2f dimension, GameObject root)
     {
         this.mass = mass;
+        this.Root = root;
 
-        //...
+        this.ColliderTop = new Collider(dimension, EDirection.Top, this.colliderThickness, this.Root);
+        this.ColliderBottom = new Collider(dimension, EDirection.Botton, this.colliderThickness, this.Root);
+        this.ColliderLeft = new Collider(dimension, EDirection.Left, this.colliderThickness, this.Root);
+        this.ColliderRight = new Collider(dimension, EDirection.Right, this.colliderThickness, this.Root);
 
         this.gravityForce = new Vector2f(0, this.mass * Physx.GAcc);
     }
@@ -216,20 +212,20 @@ public sealed class Rigidbody : Component, ICollisionable, IKineticController
                 switch (hitInfo.Direction)
                 {
                     case EDirection.Botton:
-                        SetPosition(new Vector2f(this.spriteSheet.Sprite.Position.X, this.spriteSheet.Sprite.Position.Y - hitInfo.Overlap.Height));
-                        this.isFalling = false;
-                        this.isJumping = false;
-                        this.currSpeed.Y = 0;
+                        SetPosition(new Vector2f(this.Root.Position.X, this.Root.Position.Y - hitInfo.Overlap.Height));
+                        //this.isFalling = false;
+                        //this.isJumping = false;
+                        //this.currSpeed.Y = 0;
                         break;
                     case EDirection.Top:
-                        SetPosition(new Vector2f(this.spriteSheet.Sprite.Position.X, spriteSheet.Sprite.Position.Y + hitInfo.Overlap.Height));
-                        currSpeed.Y = 0;
+                        SetPosition(new Vector2f(this.Root.Position.X, Root.Position.Y + hitInfo.Overlap.Height));
+                        velocity.Y = 0;
                         break;
                     case EDirection.Right:
-                        SetPosition(new Vector2f(this.spriteSheet.Sprite.Position.X - hitInfo.Overlap.Width, this.spriteSheet.Sprite.Position.Y));
+                        SetPosition(new Vector2f(this.Root.Position.X - hitInfo.Overlap.Width, this.Root.Position.Y));
                         break;
                     case EDirection.Left:
-                        SetPosition(new Vector2f(this.spriteSheet.Sprite.Position.X + hitInfo.Overlap.Width, this.spriteSheet.Sprite.Position.Y));
+                        SetPosition(new Vector2f(this.Root.Position.X + hitInfo.Overlap.Width, this.Root.Position.Y));
                         break;
                 }
                 break;
@@ -237,7 +233,7 @@ public sealed class Rigidbody : Component, ICollisionable, IKineticController
 
             case ECollisionType.PartialInelastic:
                 #region
-                AddMovement(hitInfo.Force - this.currSpeed);
+                AddMovement(hitInfo.Force - this.velocity);
                 break;
             #endregion
 
@@ -248,17 +244,14 @@ public sealed class Rigidbody : Component, ICollisionable, IKineticController
         }
     }
 
+    private void AddMovement(Vector2f vector2f)
+    {
+        
+    }
+
     public void SetPosition(Vector2f position)
     {
-        /*
-        this.spriteSheet.Sprite.Position = position;
-        this.fullCollider.Position = position;
-
-        this.Top = new Collider(spriteSheet, EDirection.Top, colliderThickness);
-        this.Botton = new Collider(spriteSheet, EDirection.Botton, colliderThickness);
-        this.Left = new Collider(spriteSheet, EDirection.Left, colliderThickness);
-        this.Right = new Collider(spriteSheet, EDirection.Right, colliderThickness);
-        */
+        this.Root.Position = position;
     }
 
     public void AddForce(Vector2f force)

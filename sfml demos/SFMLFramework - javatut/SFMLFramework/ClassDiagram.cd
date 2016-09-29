@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
-  <Class Name="Collider" Collapsed="true">
-    <Position X="6.5" Y="7.75" Width="1.5" />
+  <Class Name="Collider">
+    <Position X="3.5" Y="7.25" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAAEAQAAAAAQICAEACAAAAAAAAAAAAAAAAACAAAABgA=</HashCode>
+      <HashCode>AAAEAQAAAAAQICAAACAAAAAAAAAAAAAAAAACAAAABgA=</HashCode>
       <FileName>src\Collider.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Rigidbody" Collapsed="true">
-    <Position X="7" Y="6.25" Width="2.25" />
+  <Class Name="Rigidbody">
+    <Position X="8.25" Y="7.5" Width="3.75" />
     <TypeIdentifier>
-      <HashCode>AMSAgABAACAQQAAgABAAAAAAAAgxAgRAAAQEBQCEAAE=</HashCode>
+      <HashCode>AMSAgQBAACAQQAAgABAAAAAAAAgxAgRAAAwEBACEAAE=</HashCode>
       <FileName>src\Rigidbody.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -19,12 +19,11 @@
       <Property Name="ColliderRight" />
       <Property Name="ColliderLeft" />
       <Property Name="ColliderBottom" />
-      <Property Name="Player" />
     </ShowAsAssociation>
     <Lollipop Position="0.1" />
   </Class>
   <Class Name="SFMLFramework.Material" Collapsed="true">
-    <Position X="8.25" Y="7.75" Width="1.5" />
+    <Position X="13.25" Y="8.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAQgAAAAAAAAAAAAAAQAEAQAAAAAAAAAAAAA=</HashCode>
       <FileName>src\Material.cs</FileName>
@@ -33,92 +32,102 @@
       <Property Name="ECollisionType" />
     </ShowAsAssociation>
   </Class>
-  <Class Name="Player">
-    <Position X="5.5" Y="2.5" Width="1.5" />
+  <Class Name="Player" Collapsed="true">
+    <Position X="9.25" Y="4.75" Width="1.5" />
+    <AssociationLine Name="PlatformPlayerController" Type="SFMLFramework.PlatformPlayerController">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.037" Y="0.362" />
+      </MemberNameLabel>
+    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAQAAAAAAAAAAAAAABAAAAAAAAAAAAAAAACAAAAACAA=</HashCode>
       <FileName>src\Player.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Rigidbody" />
+      <Property Name="Renderer" />
+      <Property Name="PlatformPlayerController" />
+    </ShowAsAssociation>
   </Class>
-  <Class Name="PlayerKeyboardController" Collapsed="true">
-    <Position X="13.5" Y="7.5" Width="3.25" />
+  <Class Name="PlayerKeyboardController">
+    <Position X="19.75" Y="9.75" Width="3.25" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAEAAAQAAAAgAAAAAAAAAAAAAAAAAAAAAQA=</HashCode>
       <FileName>src\PlayerKeyboardController.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="SFMLFramework.PlatformPlayerController" Collapsed="true">
-    <Position X="14" Y="6.25" Width="2" />
-    <InheritanceLine Type="SFMLFramework.Component" FixedToPoint="true">
-      <Path>
-        <Point X="11.125" Y="2.247" />
-        <Point X="11.125" Y="5.875" />
-        <Point X="14.448" Y="5.875" Type="JumpStart" />
-        <Point X="14.615" Y="5.875" Type="JumpEnd" />
-        <Point X="15.125" Y="5.875" />
-        <Point X="15.125" Y="6.25" />
-      </Path>
-    </InheritanceLine>
+  <Class Name="SFMLFramework.PlatformPlayerController">
+    <Position X="19.5" Y="5.75" Width="3.75" />
     <TypeIdentifier>
-      <HashCode>BAQCAgAAAAAEAAEAAAAAAEABAAAAAAAAMA0gCQhAAAE=</HashCode>
+      <HashCode>AAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAEAEgCAhAAAE=</HashCode>
       <FileName>src\PlatformPlayerController.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="PlayerKeyboardController" />
-      <Property Name="IKineticController" />
-      <Property Name="Player" />
     </ShowAsAssociation>
+    <Lollipop Position="0.2" />
   </Class>
-  <Class Name="Renderer" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="16.5" Y="3" Width="1.5" />
-    <AssociationLine Name="SpriteSheet" Type="SpriteSheet">
+  <Class Name="Renderer" BaseTypeListCollapsed="true">
+    <Position X="15" Y="1.5" Width="2.25" />
+    <InheritanceLine Type="SFMLFramework.Component" ManuallyRouted="true">
+      <Path>
+        <Point X="12.875" Y="2.257" />
+        <Point X="12.875" Y="2.56" />
+        <Point X="16.125" Y="2.56" />
+        <Point X="16.125" Y="1.5" />
+      </Path>
+    </InheritanceLine>
+    <AssociationLine Name="SpriteSheet" Type="SpriteSheet" FixedFromPoint="true">
+      <Path>
+        <Point X="17.25" Y="2.25" />
+        <Point X="18.5" Y="2.25" />
+      </Path>
       <MemberNameLabel ManuallyPlaced="true">
-        <Position X="0.1" Y="0.07" />
+        <Position X="0.07" Y="0.1" />
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAAAAAAAAAAAEAAAAAAAAAAABAAAQAAAAA=</HashCode>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAEAAAAAAAAAAABAAAAAAAAA=</HashCode>
       <FileName>src\Renderer.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="SpriteSheet" />
-      <Property Name="Player" />
     </ShowAsAssociation>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="SpriteSheet" Collapsed="true">
-    <Position X="16.5" Y="4" Width="1.5" />
+    <Position X="18.5" Y="2" Width="1.5" />
     <TypeIdentifier>
       <HashCode>EAABAAAAgAAIAAgAAAFAACQAABIgAgAQCACAAQAAAAE=</HashCode>
       <FileName>src\SpriteSheet.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="SFMLFramework.GameObject" Collapsed="true">
-    <Position X="5.5" Y="0.5" Width="1.5" />
+  <Class Name="SFMLFramework.GameObject">
+    <Position X="9.25" Y="1.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAACAAAQAAAAAAAAAAAABEAAAAAAAAAAAAAgA=</HashCode>
+      <HashCode>AAQAAAAAACAAAQAAAAAAAAAAAABEAAAAAABAAAAAAgA=</HashCode>
       <FileName>src\GameObject.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SFMLFramework.Component">
-    <Position X="10" Y="0.5" Width="2.25" />
+    <Position X="11.75" Y="0.5" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAAAQAAAAAAAAAAAAAAAAAAIAAAAAIAAAA=</HashCode>
+      <HashCode>AAQAAAAAAAAAASAAAAAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
       <FileName>src\Component.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Property Name="GameObject" />
+      <Property Name="Root" />
     </ShowAsAssociation>
   </Class>
-  <Interface Name="SFMLFramework.IKineticController" Collapsed="true">
-    <Position X="11" Y="6.25" Width="1.5" />
+  <Interface Name="SFMLFramework.IKineticController">
+    <Position X="16.75" Y="9.75" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE=</HashCode>
       <FileName>src\IKineticController.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Enum Name="ECollisionType" Collapsed="true">
-    <Position X="8.25" Y="8.75" Width="1.5" />
+    <Position X="13.25" Y="9.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>CAAAABAAAAAAABAAAAAAgAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
       <FileName>src\Collider.cs</FileName>

@@ -12,24 +12,23 @@ namespace SFMLFramework
         protected string name;
         protected int id;
 
+
         public GameObject()
         {
-            throw new System.NotImplementedException();
         }
 
-        public virtual void Update()
+        public List<Component> Component = new List<Component>();
+
+        public virtual void Update(float deltaTime)
         {
-            throw new System.NotImplementedException();
         }
 
         public virtual void Start()
         {
-            throw new System.NotImplementedException();
         }
 
         public void Destroy()
         {
-            throw new System.NotImplementedException();
         }
     }
 }

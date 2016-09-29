@@ -9,16 +9,10 @@ namespace SFMLFramework
     {
         private int isEnabled;
 
-        public GameObject GameObject
+        public GameObject Root
         {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-
-            set
-            {
-            }
+            get;
+            set;
         }
 
         public virtual void Update(float deltaTime)

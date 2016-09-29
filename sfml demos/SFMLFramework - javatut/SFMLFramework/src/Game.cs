@@ -17,26 +17,16 @@ using System.Linq;
 using System.Text;
 using SFML.System;
 using System.Threading;
+using SFMLFramework;
 
 public class Game : IUpdate
 {
-    #region Fields
-
     public Vector2u windowSize;
     public string windowTitle;
     public Clock clock;
     protected RenderWindow window;
     private KeyboardInput keyboard;
-
     private Player player;
-    private Entity floor;
-    private Entity brick_1;
-    private Entity brick_2;
-    private Entity brick_3;
-
-    private List<Entity> entities;
-
-    #endregion
 
     public Game(string title)
     {
@@ -44,7 +34,7 @@ public class Game : IUpdate
         this.windowSize = new Vector2u(800, 600);
         this.clock = new Clock();
         this.keyboard = new KeyboardInput(ref this.window);
-        this.entities = new List<Entity>();
+        this.player = new Player();
     }
 
     public void Start()
@@ -54,6 +44,7 @@ public class Game : IUpdate
         this.window.KeyPressed += this.keyboard.ProcessKeyboardPressed;
         this.window.KeyReleased += this.keyboard.ProcessKeyboardReleased;
 
+        /*
         this.floor = new Entity("resources/floor.png", ECollisionType.None);
         this.floor.SetPosition(new Vector2f(0, 450));
 
@@ -65,21 +56,21 @@ public class Game : IUpdate
 
         this.brick_3 = new Entity("resources/brick3.png", ECollisionType.Elastic);
         this.brick_3.SetPosition(new Vector2f(480, 300));
+        */
 
-        this.player = new Player();
-        this.keyboard.OnKeyPressed += this.player.keyboardController.OnKeyPressed;
-        this.keyboard.OnKeyReleased += this.player.keyboardController.OnKeyReleased;
+        this.keyboard.OnKeyPressed += this.player.PlatformPlayerController.PlayerKeyboardController.OnKeyPressed;
+        this.keyboard.OnKeyReleased += this.player.PlatformPlayerController.PlayerKeyboardController.OnKeyReleased;
 
-        this.entities.AddRange(new List<Entity> { this.floor, this.brick_1, this.brick_2, this.brick_3, this.player });
+        //this.entities.AddRange(new List<Entity> { this.floor, this.brick_1, this.brick_2, this.brick_3, this.player });
 
         Run();
     }
 
     public void Update(float deltaTime)
     {
-        this.entities.ForEach(e => e.Update(deltaTime));
         this.player.Update(deltaTime);
 
+        /*
         CollisionDispatcher.CollisionCheck(this.player, this.floor);
         CollisionDispatcher.CollisionCheck(this.player, this.brick_1);
         CollisionDispatcher.CollisionCheck(this.player, this.brick_2);
@@ -92,12 +83,12 @@ public class Game : IUpdate
         CollisionDispatcher.CollisionCheck(this.brick_3, this.floor);
         CollisionDispatcher.CollisionCheck(this.brick_3, this.brick_1);
         CollisionDispatcher.CollisionCheck(this.brick_3, this.brick_2);
+        */
     }
-
 
     protected void Run()
     {
-        while(this.window.IsOpen)
+        while (this.window.IsOpen)
         {
             var timer = this.clock.Restart();
 
@@ -109,11 +100,10 @@ public class Game : IUpdate
 
     protected void Render()
     {
-        this.window.Clear();
+        this.window.Clear(Color.White);
 
-        this.entities.ForEach(e => e.Render(this.window));
+        this.player.Renderer.Render(ref this.window);
 
         this.window.Display();
     }
-
 }

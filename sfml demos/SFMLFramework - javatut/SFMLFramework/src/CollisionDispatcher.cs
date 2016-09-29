@@ -17,30 +17,30 @@ public class CollisionDispatcher
     {
         FloatRect overlap;
 
-        if(active.ColliderTop.Bound.Intersects(passive.ColliderBottom.Bound, out overlap))
+        if (active.ColliderTop.Bound.Intersects(passive.ColliderBottom.Bound, out overlap))
         {
-            var hitInfo = new CollisionInfo(overlap, EDirection.Top, active.ImpactForce);
+            var hitInfo = new CollisionInfo(overlap, EDirection.Top, new SFML.System.Vector2f());//active.ImpactForce);
             active.SolveCollision(hitInfo);
             passive.SolveCollision(hitInfo.Inverse());
         }
 
-        if(active.ColliderBottom.Bound.Intersects(passive.ColliderTop.Bound, out overlap))
+        if (active.ColliderBottom.Bound.Intersects(passive.ColliderTop.Bound, out overlap))
         {
-            var hitInfo = new CollisionInfo(overlap, EDirection.Botton, active.ImpactForce);
+            var hitInfo = new CollisionInfo(overlap, EDirection.Botton, new SFML.System.Vector2f());// active.ImpactForce);
             active.SolveCollision(hitInfo);
             passive.SolveCollision(hitInfo.Inverse());
         }
 
-        if(active.ColliderRight.Bound.Intersects(passive.ColliderLeft.Bound, out overlap))
+        if (active.ColliderRight.Bound.Intersects(passive.ColliderLeft.Bound, out overlap))
         {
-            var hitInfo = new CollisionInfo(overlap, EDirection.Right, active.ImpactForce);
+            var hitInfo = new CollisionInfo(overlap, EDirection.Right, new SFML.System.Vector2f());//active.ImpactForce);
             active.SolveCollision(hitInfo);
             passive.SolveCollision(hitInfo.Inverse());
         }
 
-        if(active.ColliderLeft.Bound.Intersects(passive.ColliderRight.Bound, out overlap))
+        if (active.ColliderLeft.Bound.Intersects(passive.ColliderRight.Bound, out overlap))
         {
-            var hitInfo = new CollisionInfo(overlap, EDirection.Left, active.ImpactForce);
+            var hitInfo = new CollisionInfo(overlap, EDirection.Left, new SFML.System.Vector2f());// active.ImpactForce);
             active.SolveCollision(hitInfo);
             passive.SolveCollision(hitInfo.Inverse());
         }

@@ -19,5 +19,5 @@ using SFML.System;
 
 public interface IRender
 {
-    void Render(ref RenderTarget window);
+    void Render(ref RenderWindow window);
 }

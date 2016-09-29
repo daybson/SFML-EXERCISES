@@ -12,8 +12,8 @@ namespace SFMLFramework
     {
         public static SpriteSheet Load(string path)
         {
-            this.spriteSheet = new SpriteSheet(path);
-            this.iMove.OnChangeDirection += this.spriteSheet.SetDirection;
+            return new SpriteSheet(path);
+            //this.iMove.OnChangeDirection += this.spriteSheet.SetDirection;            
         }
     }
 }

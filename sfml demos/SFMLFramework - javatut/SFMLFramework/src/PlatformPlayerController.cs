@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,18 +34,24 @@ namespace SFMLFramework
         {
             if (this.moveLeft)
             {
+                /*
                 currSpeed.X += -this.velocity.X;
                 if (currSpeed.X < -velocity.X)
                     currSpeed.X = -velocity.X;
+                    */
             }
             else if (this.moveRigth)
             {
+                /*
                 currSpeed.X += this.velocity.X;
                 if (currSpeed.X > velocity.X)
                     currSpeed.X = velocity.X;
+                    */
             }
+            /*
             else
                 currSpeed.X = 0;
+                */
         }
 
         private void SetDirectionMove(EDirection direction, bool value)

@@ -14,7 +14,7 @@ public class CollisionRender : IRender
         throw new NotImplementedException();
     }
 
-    public void Render(ref RenderTarget window)
+    public void Render(ref RenderWindow window)
     {
          window.Draw(this.shape);
     }
