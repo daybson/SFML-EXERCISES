@@ -36,13 +36,14 @@ public class Player : GameObject
 
         PlatformPlayerController = new PlatformPlayerController(Rigidbody, Renderer);
         PlatformPlayerController.OnSpriteSheetOrientationChange += Renderer.OrientateSpriteSheetTo;
+
+        this.Components.AddRange(new List<Component> { PlatformPlayerController, Rigidbody, Renderer });
     }
 
     public override void Update(float deltaTime)
     {
         base.Update(deltaTime);
-        Rigidbody.Update(deltaTime);
-        Renderer.Update(deltaTime);
+        this.Components.ForEach(c => c.Update(deltaTime));
     }
 
     public void SetKeyboardInput(ref KeyboardInput keyboardInput)

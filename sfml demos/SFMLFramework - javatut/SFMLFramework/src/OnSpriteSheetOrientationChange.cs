@@ -5,5 +5,8 @@ using System.Text;
 
 namespace SFMLFramework
 {
+    /// <summary>
+    /// Delega o controle de orientação do spritesheet
+    /// </summary>
     public delegate void OnSpriteSheetOrientationChange(EDirection direction);
 }

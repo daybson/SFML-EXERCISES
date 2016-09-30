@@ -14,6 +14,7 @@ namespace SFMLFramework
         /// <summary>
         /// Adiciona uma força de atuação ao corpo
         /// </summary>
+        /// <param name="force">vetor da força sendo aplicada</param>
         void AddForce(SFML.System.Vector2f force);
     }
 }

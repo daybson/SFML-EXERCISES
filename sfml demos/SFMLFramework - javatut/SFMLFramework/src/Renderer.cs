@@ -22,9 +22,6 @@ using SFML.System;
 /// </summary>
 public class Renderer : SFMLFramework.Component, IRender, SFMLFramework.ISpritesheetOrientable
 {
-    /// <summary>
-    /// SpriteSheet a ser renderizada pelo componente
-    /// </summary>
     public SpriteSheet SpriteSheet { get; set; }
 
     /// <summary>

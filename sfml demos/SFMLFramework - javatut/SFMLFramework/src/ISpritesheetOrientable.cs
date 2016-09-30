@@ -10,6 +10,9 @@ namespace SFMLFramework
     /// </summary>
     public interface ISpritesheetOrientable
     {
+        /// <summary>
+        /// SpriteSheet a ser renderizada pelo componente
+        /// </summary>
         SpriteSheet SpriteSheet { get; set; }
 
         /// <summary>

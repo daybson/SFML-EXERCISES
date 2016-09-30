@@ -19,7 +19,10 @@ using SFML.System;
 using SFML.Window;
 
 
-public class KeyboardEventDispatcher 
+/// <summary>
+/// Expede os eventos de teclado para os controladores registrados para recebê-los
+/// </summary>
+public class KeyboardEventDispatcher
 {
     public Dictionary<Keyboard.Key, Action> keyPressedActions;
     public Dictionary<Keyboard.Key, Action> keyReleasedActions;
