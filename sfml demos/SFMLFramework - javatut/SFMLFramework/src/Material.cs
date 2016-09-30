@@ -17,26 +17,26 @@ namespace SFMLFramework
         /// <summary>
         /// Fricção do material (resistência a movimento)
         /// </summary>
-        private int friction;
+        private float friction;
         /// <summary>
         /// Permite uma variação da elasticidade do material.
         /// </summary>
-        private int bounciness;
+        private float bounciness;
         /// <summary>
         /// Densidade do material
         /// </summary>
         private float density;
 
-        public ECollisionType ECollisionType
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
+        public ECollisionType CollisionType { get; set; }
 
-            set
-            {
-            }
+
+        public Material(string name, float friction, float bounciness, float density, ECollisionType collisionType)
+        {
+            this.name = name;
+            this.friction = friction;
+            this.bounciness = bounciness;
+            this.density = density;
+            this.CollisionType = collisionType;
         }
     }
 }

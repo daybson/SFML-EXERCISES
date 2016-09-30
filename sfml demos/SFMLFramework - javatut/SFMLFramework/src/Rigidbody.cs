@@ -1,4 +1,4 @@
-﻿using SFML.System; 
+﻿using SFML.System;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,126 +50,27 @@ public sealed class Rigidbody : Component, ICollisionable, IKineticController
     /// <summary>
     /// Material de que é composto o corpo rígido
     /// </summary>
-    public SFMLFramework.Material Material
-    {
-        get
-        {
-            throw new System.NotImplementedException();
-        }
+    public SFMLFramework.Material Material { get; set; }
 
-        set
-        {
-        }
-    }
+    public Collider ColliderTop { get; set; }
 
-    public Collider ColliderTop
-    {
-        get
-        {
-            throw new System.NotImplementedException();
-        }
+    public Collider ColliderRight { get; set; }
 
-        set
-        {
-        }
-    }
+    public Collider ColliderLeft { get; set; }
 
-    public Collider ColliderRight
-    {
-        get
-        {
-            throw new System.NotImplementedException();
-        }
+    public Collider ColliderBottom { get; set; }
 
-        set
-        {
-        }
-    }
+    public Vector2f Acceleration { get { return acceleration; } }
 
-    public Collider ColliderLeft
-    {
-        get
-        {
-            throw new System.NotImplementedException();
-        }
+    public Vector2f Displacement { get { return displacement; } }
 
-        set
-        {
-        }
-    }
+    public Vector2f SpriteDimension { get { return spriteDimension; } }
 
-    public Collider ColliderBottom
-    {
-        get
-        {
-            throw new System.NotImplementedException();
-        }
+    public float Mass { get { return mass; } }
 
-        set
-        {
-        }
-    }
+    public Vector2f Velocity { get { return velocity; } }
 
-    public Vector2f Acceleration
-    {
-        get
-        {
-            throw new System.NotImplementedException();
-        }
-    }
-
-    public Vector2f Displacement
-    {
-        get
-        {
-            throw new System.NotImplementedException();
-        }
-    }
-
-    public Vector2f SpriteDimension
-    {
-        get
-        {
-            throw new System.NotImplementedException();
-        }
-    }
-
-    public float Mass
-    {
-        get
-        {
-            throw new System.NotImplementedException();
-        }
-    }
-
-    public Vector2f Velocity
-    {
-        get
-        {
-            throw new System.NotImplementedException();
-        }
-    }
-
-    public ECollisionType CollisionType
-    {
-        get
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public PlatformPlayerController PlatformPlayerController
-    {
-        get
-        {
-            throw new NotImplementedException();
-        }
-
-        set
-        {
-            throw new NotImplementedException();
-        }
-    }
+    public PlatformPlayerController PlatformPlayerController { get; set; }
 
     public Rigidbody(Vector2f acceleration, Vector2f displacement, float mass, Vector2f velocity, Vector2f dimension, GameObject root)
     {
@@ -196,10 +97,10 @@ public sealed class Rigidbody : Component, ICollisionable, IKineticController
     public void SolveCollision(CollisionInfo hitInfo)
     {
 
-        if (this.CollisionType == ECollisionType.None)
+        if (Material.CollisionType == ECollisionType.None)
             return;
 
-        switch (CollisionType)
+        switch (Material.CollisionType)
         {
             case ECollisionType.Elastic:
                 #region
@@ -246,7 +147,7 @@ public sealed class Rigidbody : Component, ICollisionable, IKineticController
 
     private void AddMovement(Vector2f vector2f)
     {
-        
+
     }
 
     public void SetPosition(Vector2f position)
