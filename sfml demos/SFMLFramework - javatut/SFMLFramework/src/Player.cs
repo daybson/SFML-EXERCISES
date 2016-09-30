@@ -5,12 +5,13 @@ using SFMLFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SFMLFramework.src.Helper;
 
 public delegate void OnDirectionChange(EDirection direction);
 public enum EDirection
 {
-    Top,
-    Botton,
+    Up,
+    Down,
     Left,
     Right,
     None
@@ -18,29 +19,14 @@ public enum EDirection
 
 public class Player : GameObject
 {
-    public Rigidbody Rigidbody
-    {
-        get;
+    public Rigidbody Rigidbody { get; set; }
 
-        set;
-    }
+    public Renderer Renderer { get; set; }
 
-    public Renderer Renderer
-    {
-        get;
-
-        set;
-    }
-
-    public PlatformPlayerController PlatformPlayerController
-    {
-        get;
-
-        set;
-    }
+    public PlatformPlayerController PlatformPlayerController { get; set; }
 
 
-    public Player() 
+    public Player()
     {
         Renderer = new Renderer(Resources.Load("resources/dragon.png"));
         Renderer.Root = this;
@@ -48,9 +34,8 @@ public class Player : GameObject
         Rigidbody = new Rigidbody(new Vector2f(), new Vector2f(), 2, new Vector2f(), new Vector2f(Renderer.SpriteSheet.TileWidth, Renderer.SpriteSheet.TileHeight), this);
         Rigidbody.Root = this;
 
-        PlatformPlayerController = new PlatformPlayerController();
-        //PlatformPlayerController.PlayerKeyboardController.keyPressedActions.Add(Keyboard.Key.A, new Action(() => PlatformPlayerController.AddForce(new Vector2f(-1, 0))));
-        //PlatformPlayerController.PlayerKeyboardController.keyPressedActions.Add(Keyboard.Key.D, new Action(() => PlatformPlayerController.AddForce(new Vector2f( 1, 0))));
+        PlatformPlayerController = new PlatformPlayerController(Rigidbody, Renderer);
+        PlatformPlayerController.OnSpriteSheetOrientationChange += Renderer.OrientateSpriteSheetTo;
     }
 
     public override void Update(float deltaTime)
@@ -60,44 +45,9 @@ public class Player : GameObject
         Renderer.Update(deltaTime);
     }
 
-    /*
-public Player() : base("resources/dragon.png", ECollisionType.Inelastic)
-{
-this.isFalling = true;
-this.isJumping = true;
-this.velocity = new Vector2f(3, -20);
-
-this.CollisionType = ECollisionType.Inelastic;
-
-
-this.keyboardController = new PlayerKeyboardController();
-this.keyboardController.keyPressedActions.Add(Keyboard.Key.A, new Action(() => SetDirectionMove(EDirection.Left, true)));
-this.keyboardController.keyPressedActions.Add(Keyboard.Key.D, new Action(() => SetDirectionMove(EDirection.Right, true)));
-this.keyboardController.keyPressedActions.Add(Keyboard.Key.Space, new Action(() =>
-{
-if (!this.isJumping)
-{
- currSpeed.Y = velocity.Y;
- this.isJumping = true;
-}
-}));
-
-this.keyboardController.keyReleasedActions.Add(Keyboard.Key.A, new Action(() => SetDirectionMove(EDirection.Left, false)));
-this.keyboardController.keyReleasedActions.Add(Keyboard.Key.D, new Action(() => SetDirectionMove(EDirection.Right, false)));
-
-SetPosition(new Vector2f());
-}
-
-public SFMLFramework.PlatformPlayerController PlatformPlayerController
-{
-get
-{
-throw new System.NotImplementedException();
-}
-
-set
-{
-}
-}
-*/
+    public void SetKeyboardInput(ref KeyboardInput keyboardInput)
+    {
+        keyboardInput.OnKeyPressed += PlatformPlayerController.PlayerKeyboardController.OnKeyPressed;
+        keyboardInput.OnKeyReleased += PlatformPlayerController.PlayerKeyboardController.OnKeyReleased;
+    }    
 }

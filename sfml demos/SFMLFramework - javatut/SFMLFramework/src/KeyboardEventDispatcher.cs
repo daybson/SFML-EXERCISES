@@ -19,12 +19,12 @@ using SFML.System;
 using SFML.Window;
 
 
-public class PlayerKeyboardController 
+public class KeyboardEventDispatcher 
 {
     public Dictionary<Keyboard.Key, Action> keyPressedActions;
     public Dictionary<Keyboard.Key, Action> keyReleasedActions;
 
-    public PlayerKeyboardController()
+    public KeyboardEventDispatcher()
     {
         this.keyPressedActions = new Dictionary<Keyboard.Key, Action>();
         this.keyReleasedActions = new Dictionary<Keyboard.Key, Action>();

@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
-  <Class Name="Collider">
+  <Class Name="Collider" Collapsed="true">
     <Position X="3.5" Y="7.25" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAEAQAAAAAQICAAACAAAAAAAAAAAAAAAAACAAAABgA=</HashCode>
       <FileName>src\Collider.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Rigidbody">
+  <Class Name="Rigidbody" Collapsed="true">
     <Position X="8.25" Y="7.5" Width="3.75" />
     <TypeIdentifier>
       <HashCode>AMSAgQBAACAQQAAgABAAAAAAAAgxAgRAAAwEBACEAAE=</HashCode>
@@ -32,15 +32,15 @@
       <Property Name="ECollisionType" />
     </ShowAsAssociation>
   </Class>
-  <Class Name="Player" Collapsed="true">
-    <Position X="9.25" Y="4.75" Width="1.5" />
+  <Class Name="Player">
+    <Position X="13.5" Y="4.75" Width="1.5" />
     <AssociationLine Name="PlatformPlayerController" Type="SFMLFramework.PlatformPlayerController">
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="0.037" Y="0.362" />
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAAAAAAABAAAAAAAAAAAAAAAACAAAAACAA=</HashCode>
+      <HashCode>AAQAAAAAAAAAAAAAABAAAAAAAAAAAAAAAACAAAAgCAA=</HashCode>
       <FileName>src\Player.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -49,45 +49,40 @@
       <Property Name="PlatformPlayerController" />
     </ShowAsAssociation>
   </Class>
-  <Class Name="PlayerKeyboardController">
-    <Position X="19.75" Y="9.75" Width="3.25" />
+  <Class Name="KeyboardEventDispatcher">
+    <Position X="19.75" Y="10.5" Width="3.25" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAEAAAQAAAAgAAAAAAAAAAAAAAAAAAAAAQA=</HashCode>
-      <FileName>src\PlayerKeyboardController.cs</FileName>
+      <FileName>src\KeyboardEventDispatcher.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SFMLFramework.PlatformPlayerController">
-    <Position X="19.5" Y="5.75" Width="3.75" />
+    <Position X="18" Y="6" Width="3.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAEAEgCAhAAAE=</HashCode>
+      <HashCode>AAAAAgAAAgAAAAAMAAAAAEAAAAAAIAAAEAUgCAEAAAA=</HashCode>
       <FileName>src\PlatformPlayerController.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="PlayerKeyboardController" />
+      <Property Name="IKineticController" />
+      <Property Name="OnSpriteSheetOrientationChange" />
     </ShowAsAssociation>
-    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Renderer" BaseTypeListCollapsed="true">
-    <Position X="15" Y="1.5" Width="2.25" />
-    <InheritanceLine Type="SFMLFramework.Component" ManuallyRouted="true">
+    <Position X="15.5" Y="1.25" Width="3.5" />
+    <AssociationLine Name="SpriteSheet" Type="SpriteSheet" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="12.875" Y="2.257" />
-        <Point X="12.875" Y="2.56" />
-        <Point X="16.125" Y="2.56" />
-        <Point X="16.125" Y="1.5" />
-      </Path>
-    </InheritanceLine>
-    <AssociationLine Name="SpriteSheet" Type="SpriteSheet" FixedFromPoint="true">
-      <Path>
-        <Point X="17.25" Y="2.25" />
-        <Point X="18.5" Y="2.25" />
+        <Point X="17.25" Y="3.06" />
+        <Point X="17.25" Y="3.435" />
+        <Point X="17.312" Y="3.435" />
+        <Point X="17.312" Y="3.75" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
-        <Position X="0.07" Y="0.1" />
+        <Position X="0.1" Y="0.07" />
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAAAAAAAAAAAEAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <HashCode>AAQAAAAAAAAABAAAAAAAAEAAAAAAAAAAABAAAAAAAAA=</HashCode>
       <FileName>src\Renderer.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -96,14 +91,14 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="SpriteSheet" Collapsed="true">
-    <Position X="18.5" Y="2" Width="1.5" />
+    <Position X="16" Y="3.75" Width="3" />
     <TypeIdentifier>
       <HashCode>EAABAAAAgAAIAAgAAAFAACQAABIgAgAQCACAAQAAAAE=</HashCode>
       <FileName>src\SpriteSheet.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SFMLFramework.GameObject">
-    <Position X="9.25" Y="1.25" Width="1.5" />
+    <Position X="9.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAACAAAQAAAAAAAAAAAABEAAAAAABAAAAAAgA=</HashCode>
       <FileName>src\GameObject.cs</FileName>
@@ -119,12 +114,22 @@
       <Property Name="Root" />
     </ShowAsAssociation>
   </Class>
-  <Interface Name="SFMLFramework.IKineticController">
-    <Position X="16.75" Y="9.75" Width="2.25" />
+  <Interface Name="SFMLFramework.IKineticController" Collapsed="true">
+    <Position X="16.25" Y="10" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE=</HashCode>
       <FileName>src\IKineticController.cs</FileName>
     </TypeIdentifier>
+  </Interface>
+  <Interface Name="SFMLFramework.ISpritesheetOrientable" Collapsed="true">
+    <Position X="17.5" Y="0.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\ISpritesheetOrientable.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="SpriteSheet" />
+    </ShowAsAssociation>
   </Interface>
   <Enum Name="ECollisionType" Collapsed="true">
     <Position X="13.25" Y="9.5" Width="1.5" />
@@ -133,5 +138,12 @@
       <FileName>src\Collider.cs</FileName>
     </TypeIdentifier>
   </Enum>
+  <Delegate Name="SFMLFramework.OnSpriteSheetOrientationChange" Collapsed="true">
+    <Position X="21" Y="4.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>src\OnSpriteSheetOrientationChange.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

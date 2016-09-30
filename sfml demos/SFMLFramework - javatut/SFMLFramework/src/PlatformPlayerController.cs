@@ -1,3 +1,5 @@
+using SFML.Window;
+using SFMLFramework.src.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,65 +17,56 @@ namespace SFMLFramework
 
         protected bool moveRigth;
 
+        protected readonly float JUMP_FORCE = 10.0f;
+
+        protected readonly float WALK_FORCE = 4.0f;
+
         protected EDirection spriteDirection;
-        public PlayerKeyboardController PlayerKeyboardController
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
 
-            set
-            {
-            }
+        public KeyboardEventDispatcher PlayerKeyboardController { get; set; }
+
+        public IKineticController IKineticController { get; set; }
+
+        public OnSpriteSheetOrientationChange OnSpriteSheetOrientationChange { get; set; }
+
+        public PlatformPlayerController(IKineticController iKineticController, ISpritesheetOrientable iSpritesheetOrientable)
+        {
+            PlayerKeyboardController = new KeyboardEventDispatcher();
+            IKineticController = iKineticController;
+
+            OnSpriteSheetOrientationChange = iSpritesheetOrientable.OrientateSpriteSheetTo;
+
+            PlayerKeyboardController.keyPressedActions.Add(Keyboard.Key.A, () => Walk(EDirection.Left));
+            PlayerKeyboardController.keyPressedActions.Add(Keyboard.Key.D, () => Walk(EDirection.Right));
+            PlayerKeyboardController.keyPressedActions.Add(Keyboard.Key.Space, () => Jump());
+
+            this.isFalling = true;
+            this.isJumping = true;
         }
 
-        public OnDirectionChange OnChangeDirection { get; set; }
-
-        private void ProccessInput()
+        public void Walk(EDirection direction)
         {
-            if (this.moveLeft)
-            {
-                /*
-                currSpeed.X += -this.velocity.X;
-                if (currSpeed.X < -velocity.X)
-                    currSpeed.X = -velocity.X;
-                    */
-            }
-            else if (this.moveRigth)
-            {
-                /*
-                currSpeed.X += this.velocity.X;
-                if (currSpeed.X > velocity.X)
-                    currSpeed.X = velocity.X;
-                    */
-            }
-            /*
-            else
-                currSpeed.X = 0;
-                */
-        }
-
-        private void SetDirectionMove(EDirection direction, bool value)
-        {
-            this.spriteDirection = direction;
-
             switch (direction)
             {
-                case EDirection.Left:
-                    this.moveLeft = value;
-                    if (value)
-                        this.moveRigth = !value;
-                    break;
                 case EDirection.Right:
-                    this.moveRigth = value;
-                    if (value)
-                        this.moveLeft = !value;
+                    IKineticController.AddForce(Extension.Right * this.WALK_FORCE);
+                    break;
+
+                case EDirection.Left:
+                    IKineticController.AddForce(Extension.Left * this.WALK_FORCE);
                     break;
             }
-
-            if (value)
-                this.OnChangeDirection(direction);
+            this.OnSpriteSheetOrientationChange(direction);
         }
+
+        public void Jump()
+        {
+            if (!this.isJumping)
+            {
+                IKineticController.AddForce(Extension.Top * this.JUMP_FORCE);
+                this.isJumping = true;
+                this.OnSpriteSheetOrientationChange(EDirection.Up);
+            }
+        }        
     }
 }

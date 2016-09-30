@@ -19,14 +19,14 @@ public class CollisionDispatcher
 
         if (active.ColliderTop.Bound.Intersects(passive.ColliderBottom.Bound, out overlap))
         {
-            var hitInfo = new CollisionInfo(overlap, EDirection.Top, new SFML.System.Vector2f());//active.ImpactForce);
+            var hitInfo = new CollisionInfo(overlap, EDirection.Up, new SFML.System.Vector2f());//active.ImpactForce);
             active.SolveCollision(hitInfo);
             passive.SolveCollision(hitInfo.Inverse());
         }
 
         if (active.ColliderBottom.Bound.Intersects(passive.ColliderTop.Bound, out overlap))
         {
-            var hitInfo = new CollisionInfo(overlap, EDirection.Botton, new SFML.System.Vector2f());// active.ImpactForce);
+            var hitInfo = new CollisionInfo(overlap, EDirection.Down, new SFML.System.Vector2f());// active.ImpactForce);
             active.SolveCollision(hitInfo);
             passive.SolveCollision(hitInfo.Inverse());
         }

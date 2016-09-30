@@ -43,7 +43,7 @@ public class Game : IUpdate
         this.window.SetFramerateLimit(60);
         this.window.KeyPressed += this.keyboard.ProcessKeyboardPressed;
         this.window.KeyReleased += this.keyboard.ProcessKeyboardReleased;
-
+        this.player.SetKeyboardInput(ref this.keyboard);
         /*
         this.floor = new Entity("resources/floor.png", ECollisionType.None);
         this.floor.SetPosition(new Vector2f(0, 450));
@@ -57,12 +57,7 @@ public class Game : IUpdate
         this.brick_3 = new Entity("resources/brick3.png", ECollisionType.Elastic);
         this.brick_3.SetPosition(new Vector2f(480, 300));
         */
-
-        this.keyboard.OnKeyPressed += this.player.PlatformPlayerController.PlayerKeyboardController.OnKeyPressed;
-        this.keyboard.OnKeyReleased += this.player.PlatformPlayerController.PlayerKeyboardController.OnKeyReleased;
-
-        //this.entities.AddRange(new List<Entity> { this.floor, this.brick_1, this.brick_2, this.brick_3, this.player });
-
+       
         Run();
     }
 

@@ -20,8 +20,11 @@ using SFML.System;
 /// <summary>
 /// Define um componente capaz de desenhar um frame de animação ou um Drawable em determinado RenderTarget
 /// </summary>
-public class Renderer : SFMLFramework.Component, IRender
+public class Renderer : SFMLFramework.Component, IRender, SFMLFramework.ISpritesheetOrientable
 {
+    /// <summary>
+    /// SpriteSheet a ser renderizada pelo componente
+    /// </summary>
     public SpriteSheet SpriteSheet { get; set; }
 
     /// <summary>
@@ -43,5 +46,13 @@ public class Renderer : SFMLFramework.Component, IRender
     public override void Update(float deltaTime)
     {
         SpriteSheet.UpdateAnimation(deltaTime);
+    }
+
+    /// <summary>
+    /// Sincroniza a renderização do spriteSheet para a direção de movimento do PlatformPlayerController
+    /// </summary>
+    public void OrientateSpriteSheetTo(EDirection direction)
+    {
+        SpriteSheet.SetDirection(direction);
     }
 }

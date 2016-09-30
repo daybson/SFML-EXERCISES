@@ -52,11 +52,11 @@ public class Collider : Component
 
         switch (this.direction)
         {
-            case EDirection.Botton:
+            case EDirection.Down:
                 shape = new RectangleShape(new Vector2f(this.spriteDimension.X, this.colliderThickness));
                 bound = new FloatRect(this.Root.Position.X, this.Root.Position.Y + this.spriteDimension.Y - this.colliderThickness, this.spriteDimension.X, this.colliderThickness);
                 break;
-            case EDirection.Top:
+            case EDirection.Up:
                 shape = new RectangleShape(new Vector2f(this.spriteDimension.X, this.colliderThickness));
                 bound = new FloatRect(this.Root.Position.X, this.Root.Position.Y, this.spriteDimension.Y, this.colliderThickness);
                 break;
@@ -79,11 +79,11 @@ public class Collider : Component
     {
         switch (this.direction)
         {
-            case EDirection.Botton:
+            case EDirection.Down:
                 this.bound.Left = this.Root.Position.X;
                 this.bound.Top = this.Root.Position.Y + this.spriteDimension.Y - this.colliderThickness;
                 break;
-            case EDirection.Top:
+            case EDirection.Up:
                 this.bound.Left = this.Root.Position.X;
                 this.bound.Top = this.Root.Position.Y;
                 break;

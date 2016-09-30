@@ -45,11 +45,11 @@ public class CollisionInfo
         var inverseCollision = this;
         switch (inverseCollision.direction)
         {
-            case EDirection.Botton:
-                inverseCollision.direction = EDirection.Top;
+            case EDirection.Down:
+                inverseCollision.direction = EDirection.Up;
                 break;
-            case EDirection.Top:
-                inverseCollision.direction = EDirection.Botton;
+            case EDirection.Up:
+                inverseCollision.direction = EDirection.Down;
                 break;
             case EDirection.Right:
                 inverseCollision.direction = EDirection.Left;

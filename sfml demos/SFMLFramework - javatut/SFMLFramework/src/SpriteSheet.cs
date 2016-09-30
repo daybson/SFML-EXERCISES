@@ -143,8 +143,8 @@ public class SpriteSheet
         {
             case EDirection.Left: newTop = tileHeight; break;
             case EDirection.Right: newTop = tileHeight * (rows - 2); break;
-            case EDirection.Top: newTop = tileHeight * (rows - 1); break;
-            case EDirection.Botton: newTop = 0; break;
+            case EDirection.Up: newTop = tileHeight * (rows - 1); break;
+            case EDirection.Down: newTop = 0; break;
         }
 
         if (tile.Top != newTop)

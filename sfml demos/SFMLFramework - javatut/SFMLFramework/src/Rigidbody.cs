@@ -176,8 +176,8 @@ public sealed class Rigidbody : Component, ICollisionable, IKineticController
         this.mass = mass;
         this.Root = root;
 
-        this.ColliderTop = new Collider(dimension, EDirection.Top, this.colliderThickness, this.Root);
-        this.ColliderBottom = new Collider(dimension, EDirection.Botton, this.colliderThickness, this.Root);
+        this.ColliderTop = new Collider(dimension, EDirection.Up, this.colliderThickness, this.Root);
+        this.ColliderBottom = new Collider(dimension, EDirection.Down, this.colliderThickness, this.Root);
         this.ColliderLeft = new Collider(dimension, EDirection.Left, this.colliderThickness, this.Root);
         this.ColliderRight = new Collider(dimension, EDirection.Right, this.colliderThickness, this.Root);
 
@@ -211,13 +211,13 @@ public sealed class Rigidbody : Component, ICollisionable, IKineticController
                 #region
                 switch (hitInfo.Direction)
                 {
-                    case EDirection.Botton:
+                    case EDirection.Down:
                         SetPosition(new Vector2f(this.Root.Position.X, this.Root.Position.Y - hitInfo.Overlap.Height));
                         //this.isFalling = false;
                         //this.isJumping = false;
                         //this.currSpeed.Y = 0;
                         break;
-                    case EDirection.Top:
+                    case EDirection.Up:
                         SetPosition(new Vector2f(this.Root.Position.X, Root.Position.Y + hitInfo.Overlap.Height));
                         velocity.Y = 0;
                         break;
@@ -256,6 +256,7 @@ public sealed class Rigidbody : Component, ICollisionable, IKineticController
 
     public void AddForce(Vector2f force)
     {
+        Console.WriteLine("F:" + force.ToString());
         this.finalForce += force;
     }
 }
