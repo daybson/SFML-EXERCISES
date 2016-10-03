@@ -63,7 +63,7 @@ public class Game
 
     public void Update(float deltaTime)
     {
-        this.player.Update(deltaTime);
+        this.player?.Update(deltaTime);
 
         /*
         CollisionDispatcher.CollisionCheck(this.player, this.floor);
