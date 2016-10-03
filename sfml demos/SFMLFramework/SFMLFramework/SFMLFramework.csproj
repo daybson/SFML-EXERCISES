@@ -59,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\Observable.cs" />
     <Compile Include="src\OnSpriteSheetOrientationChange.cs" />
     <Compile Include="src\ISpritesheetOrientable.cs" />
     <Compile Include="src\GameObject.cs" />
@@ -86,7 +87,7 @@
     <Compile Include="src\IRender.cs" />
     <Compile Include="src\IUpdate.cs" />
     <Compile Include="src\Renderer.cs" />
-    <Compile Include="src\Component.cs" />
+    <Compile Include="src\IComponent.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
