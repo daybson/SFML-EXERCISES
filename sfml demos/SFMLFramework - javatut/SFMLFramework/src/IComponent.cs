@@ -10,24 +10,22 @@ namespace SFMLFramework
     /// Um componente é um termo genérico para um objeto que executa determinada tarefa relacionada a um GameObject,
     /// porém com implementação desacoplada ao mesmo.
     /// </summary>
-    public abstract class Component
+    public interface IComponent
     {
         /// <summary>
         /// Componente está habilidado? (somente executa caso esteja)
         /// </summary>
-        private int isEnabled;
+        bool IsEnabled { get; set; }
 
         /// <summary>
         /// GameObject ao qual o componente está relacionado
         /// </summary>
-        public GameObject Root
-        {
-            get;
-            set;
-        }
+        GameObject Root        {            get;            set;        }
 
-        public virtual void Update(float deltaTime)
-        {
-        }
+        /// <summary>
+        /// Atualiza o componente a cada frame
+        /// </summary>
+        /// <param name="deltaTime">Tempo decorrido desde a última atualização</param>
+        void Update(float deltaTime);
     }
 }

@@ -10,7 +10,7 @@ namespace SFMLFramework
     /// <summary>
     /// Define o controllador do personagem para jogos de plataforma.
     /// </summary>
-    public class PlatformPlayerController : Component
+    public class PlatformPlayerController : IComponent
     {
         /// <summary>
         /// Personagem está caindo em queda livre?
@@ -40,7 +40,7 @@ namespace SFMLFramework
         /// <summary>
         /// Modificador escalar do vetor de caminhada
         /// </summary>
-        protected readonly float WALK_FORCE = 4.0f;
+        protected readonly float WALK_FORCE = 150.0f;
 
         /// <summary>
         /// Expedidor de eventos do teclado
@@ -57,6 +57,10 @@ namespace SFMLFramework
         /// </summary>
         public OnSpriteSheetOrientationChange OnSpriteSheetOrientationChange { get; set; }
 
+        public bool IsEnabled { get; set; }
+
+        public GameObject Root { get; set; }
+
         public PlatformPlayerController(IKineticController iKineticController, ISpritesheetOrientable iSpritesheetOrientable)
         {
             PlayerKeyboardController = new KeyboardEventDispatcher();
@@ -64,8 +68,10 @@ namespace SFMLFramework
 
             OnSpriteSheetOrientationChange = iSpritesheetOrientable.OrientateSpriteSheetTo;
 
-            PlayerKeyboardController.keyPressedActions.Add(Keyboard.Key.A, () => Walk(EDirection.Left));
-            PlayerKeyboardController.keyPressedActions.Add(Keyboard.Key.D, () => Walk(EDirection.Right));
+            PlayerKeyboardController.keyPressedActions.Add(Keyboard.Key.A, () => Walk(EDirection.Left, true));
+            PlayerKeyboardController.keyPressedActions.Add(Keyboard.Key.D, () => Walk(EDirection.Right, true));
+            PlayerKeyboardController.keyReleasedActions.Add(Keyboard.Key.A, () => Walk(EDirection.Left, false));
+            PlayerKeyboardController.keyReleasedActions.Add(Keyboard.Key.D, () => Walk(EDirection.Right, false));
             PlayerKeyboardController.keyPressedActions.Add(Keyboard.Key.Space, () => Jump());
 
             this.isFalling = true;
@@ -73,18 +79,18 @@ namespace SFMLFramework
         }
 
         /// <summary>
-        /// Efetura, adicionando força Left/Right ao rigidbody
+        /// Efetua caminhada, adicionando força Left/Right ao rigidbody
         /// </summary>
-        public void Walk(EDirection direction)
+        public void Walk(EDirection direction, bool value)
         {
             switch (direction)
             {
                 case EDirection.Right:
-                    IKineticController.AddForce(Extension.Right * this.WALK_FORCE);
+                    this.moveRigth = value;
                     break;
 
                 case EDirection.Left:
-                    IKineticController.AddForce(Extension.Left * this.WALK_FORCE);
+                    this.moveLeft = value;
                     break;
             }
             this.OnSpriteSheetOrientationChange(direction);
@@ -101,6 +107,22 @@ namespace SFMLFramework
                 this.isJumping = true;
                 this.OnSpriteSheetOrientationChange(EDirection.Up);
             }
+        }
+
+        public void Update(float deltaTime)
+        {
+            Move();
+        }
+
+        /// <summary>
+        /// Efetua movimentação adicionando força ao IKineticController com base no input de movimento
+        /// </summary>
+        private void Move()
+        {
+            if (this.moveRigth)
+                IKineticController.AddForce(Extension.Right * this.WALK_FORCE);
+            else if (this.moveLeft)
+                IKineticController.AddForce(Extension.Left * this.WALK_FORCE);
         }
     }
 }

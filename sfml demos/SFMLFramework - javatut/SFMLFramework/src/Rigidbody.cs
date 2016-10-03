@@ -8,40 +8,48 @@ using SFMLFramework;
 /// <summary>
 /// Define um objeto rígido que ocupa um lugar no espaço, passível a movimentação
 /// </summary>
-public sealed class Rigidbody : Component, ICollisionable, IKineticController
+public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
 {
     /// <summary>
     /// Aceleração atuante no corpo
     /// </summary>
     private Vector2f acceleration;
+    
     /// <summary>
     /// Velocidade de movimento do corpo
     /// </summary>
     private Vector2f velocity;
+    
     /// <summary>
     /// Deslocamento do corpo em movimento
     /// </summary>
     private Vector2f displacement;
+   
     /// <summary>
     /// Massa do corpo
     /// </summary>
     private float mass;
+    
     /// <summary>
     /// Tamanho do sprite (width, height)
     /// </summary>
     private Vector2f spriteDimension;
+   
     /// <summary>
     /// Objeto estático
     /// </summary>
     private bool isKinematic;
+   
     /// <summary>
     /// Somatório de todas as forças sendo aplicadas ao corpo
     /// </summary>
     private Vector2f finalForce;
+    
     /// <summary>
     /// Força gravitacional atuante sobre o corpo
     /// </summary>
     private Vector2f gravityForce;
+   
     /// <summary>
     /// Espessura do collider
     /// </summary>
@@ -72,6 +80,10 @@ public sealed class Rigidbody : Component, ICollisionable, IKineticController
 
     public PlatformPlayerController PlatformPlayerController { get; set; }
 
+    public bool IsEnabled { get; set; }
+
+    public GameObject Root { get; set; }
+
     public Rigidbody(Vector2f acceleration, Vector2f displacement, float mass, Vector2f velocity, Vector2f dimension, GameObject root)
     {
         this.mass = mass;
@@ -85,10 +97,13 @@ public sealed class Rigidbody : Component, ICollisionable, IKineticController
         this.gravityForce = new Vector2f(0, this.mass * Physx.GAcc);
     }
 
-    public override void Update(float deltaTime)
+    public void Update(float deltaTime)
     {
         this.finalForce += this.gravityForce;
         this.finalForce *= deltaTime;
+
+        Root.Position += this.finalForce;
+        Console.WriteLine("F:" + finalForce.ToString());
     }
 
     /// <summary>
@@ -156,8 +171,7 @@ public sealed class Rigidbody : Component, ICollisionable, IKineticController
     }
 
     public void AddForce(Vector2f force)
-    {
-        Console.WriteLine("F:" + force.ToString());
+    {        
         this.finalForce += force;
     }
 }

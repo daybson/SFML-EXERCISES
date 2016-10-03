@@ -16,13 +16,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SFML.System;
+using SFMLFramework;
 
 /// <summary>
 /// Define um componente capaz de desenhar um frame de animação ou um Drawable em determinado RenderTarget
 /// </summary>
-public class Renderer : SFMLFramework.Component, IRender, SFMLFramework.ISpritesheetOrientable
+public class Renderer : IComponent, IRender, ISpritesheetOrientable, IObserver<GameObject>
 {
     public SpriteSheet SpriteSheet { get; set; }
+
+    public bool IsEnabled { get; set; }
+
+    public GameObject Root { get; set; }
 
     /// <summary>
     /// Recebe uma instância da SpriteSheet que o componente deve renderizar
@@ -40,7 +45,7 @@ public class Renderer : SFMLFramework.Component, IRender, SFMLFramework.ISprites
         window.Draw(this.SpriteSheet.Sprite);
     }
 
-    public override void Update(float deltaTime)
+    public void Update(float deltaTime)
     {
         SpriteSheet.UpdateAnimation(deltaTime);
     }
@@ -51,5 +56,20 @@ public class Renderer : SFMLFramework.Component, IRender, SFMLFramework.ISprites
     public void OrientateSpriteSheetTo(EDirection direction)
     {
         SpriteSheet.SetDirection(direction);
+    }
+
+    public void OnNext(GameObject value)
+    {
+        SpriteSheet.Sprite.Position = value.Position;
+    }
+
+    public void OnError(Exception error)
+    {
+        
+    }
+
+    public void OnCompleted()
+    {
+        
     }
 }

@@ -44,9 +44,4 @@ public class KeyboardEventDispatcher
         if (this.keyReleasedActions.ContainsKey(key))
             this.keyReleasedActions[key].Invoke();
     }
-
-    public void Update(float deltaTime)
-    {
-
-    }
 }

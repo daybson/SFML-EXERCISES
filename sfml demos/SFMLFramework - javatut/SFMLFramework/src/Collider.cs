@@ -19,7 +19,7 @@ public enum ECollisionType
     None
 }
 
-public class Collider : Component
+public class Collider : IComponent
 {
     /// <summary>
     /// Shape de visualização do collider
@@ -42,6 +42,10 @@ public class Collider : Component
     public RectangleShape Shape { get { return shape; } }
     public FloatRect Bound { get { return bound; } }
     public EDirection Direction { get { return direction; } }
+
+    public bool IsEnabled { get; set; }
+
+    public GameObject Root { get; set; }
 
     public Collider(Vector2f spriteDimension, EDirection direction, int colliderThickness, GameObject root)
     {
@@ -98,5 +102,10 @@ public class Collider : Component
         }
 
         this.shape.Position = new Vector2f(this.bound.Left, this.bound.Top);
+    }
+
+    public void Update(float deltaTime)
+    {
+
     }
 }

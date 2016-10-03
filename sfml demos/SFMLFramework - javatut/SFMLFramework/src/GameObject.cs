@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SFML.Graphics;
+using SFMLFramework.src;
+using SFML.System;
 
 namespace SFMLFramework
 {
     /// <summary>
     /// Define um objeto do game, com eventos de interação com o gameloop e propriedades de controle universais
     /// </summary>
-    public class GameObject : Transformable
+    public class GameObject : Observable<GameObject>
     {
         /// <summary>
         /// GameObject está habilitado? (somente executa Update caso esteja)
@@ -24,6 +26,18 @@ namespace SFMLFramework
         /// </summary>
         protected int id;
 
+        protected Vector2f position;
+
+        public Vector2f Position
+        {
+            get { return this.position; }
+            set
+            {
+                this.position = value;
+                Notify(this);
+            }
+        }
+
 
         /// <summary>
         /// Cosntrutor padrão
@@ -35,7 +49,7 @@ namespace SFMLFramework
         /// <summary>
         /// Lista de componentes adicionados ao gameobject
         /// </summary>
-        public List<Component> Components = new List<Component>();
+        public List<IComponent> Components = new List<IComponent>();
 
         public virtual void Update(float deltaTime)
         {

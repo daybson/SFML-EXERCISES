@@ -30,14 +30,15 @@ public class Player : GameObject
     {
         Renderer = new Renderer(Resources.Load("resources/dragon.png"));
         Renderer.Root = this;
+        Subscribe(Renderer);
 
-        Rigidbody = new Rigidbody(new Vector2f(), new Vector2f(), 2, new Vector2f(), new Vector2f(Renderer.SpriteSheet.TileWidth, Renderer.SpriteSheet.TileHeight), this);
+        Rigidbody = new Rigidbody(new Vector2f(), new Vector2f(), 5, new Vector2f(), new Vector2f(Renderer.SpriteSheet.TileWidth, Renderer.SpriteSheet.TileHeight), this);
         Rigidbody.Root = this;
 
         PlatformPlayerController = new PlatformPlayerController(Rigidbody, Renderer);
         PlatformPlayerController.OnSpriteSheetOrientationChange += Renderer.OrientateSpriteSheetTo;
 
-        this.Components.AddRange(new List<Component> { PlatformPlayerController, Rigidbody, Renderer });
+        this.Components.AddRange(new List<IComponent> { PlatformPlayerController, Rigidbody, Renderer });
     }
 
     public override void Update(float deltaTime)

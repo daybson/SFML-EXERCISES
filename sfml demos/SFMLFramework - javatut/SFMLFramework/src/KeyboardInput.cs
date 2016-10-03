@@ -32,7 +32,6 @@ public class KeyboardInput : IKeyboardInput
         OnKeyReleased += (k) => { };
     }
 
-
     public void Update(float deltaTime)
     {
     }

@@ -14,21 +14,23 @@ namespace SFMLFramework
         /// Nome do tipo de material (borracha, metal, etc.)
         /// </summary>
         private string name;
+
         /// <summary>
         /// Fricção do material (resistência a movimento)
         /// </summary>
         private float friction;
+
         /// <summary>
         /// Permite uma variação da elasticidade do material.
         /// </summary>
         private float bounciness;
+
         /// <summary>
         /// Densidade do material
         /// </summary>
         private float density;
 
         public ECollisionType CollisionType { get; set; }
-
 
         public Material(string name, float friction, float bounciness, float density, ECollisionType collisionType)
         {
