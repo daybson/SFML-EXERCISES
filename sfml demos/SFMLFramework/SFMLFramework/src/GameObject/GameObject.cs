@@ -17,10 +17,12 @@ namespace SFMLFramework
         /// GameObject está habilitado? (somente executa Update caso esteja)
         /// </summary>
         protected bool isEnabled;
+
         /// <summary>
         /// Nome do objeto
         /// </summary>
         protected string name;
+
         /// <summary>
         /// Id único do objeto
         /// </summary>
@@ -37,7 +39,6 @@ namespace SFMLFramework
                 Notify(this);
             }
         }
-
 
         /// <summary>
         /// Cosntrutor padrão

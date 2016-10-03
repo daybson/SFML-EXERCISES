@@ -19,7 +19,7 @@ using SFML.System;
 using System.Threading;
 using SFMLFramework;
 
-public class Game : IUpdate
+public class Game 
 {
     public Vector2u windowSize;
     public string windowTitle;

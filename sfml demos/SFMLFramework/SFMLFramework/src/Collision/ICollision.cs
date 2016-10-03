@@ -23,5 +23,4 @@ public interface ICollision
     Shape GetShape();
     void SolveCollision(CollisionInfo hitInfo);
     void SetSprite(Sprite sprite);
-    IMove IMove { get; set; }
 }
