@@ -28,3 +28,5 @@
 *.out
 *.app
 /sfml demos/SFMLFramework/SFMLFramework/bin/Debug
+obj
+bin
