@@ -85,9 +85,8 @@
     <Compile Include="src\Collision\Collider.cs" />
     <Compile Include="src\Collision\CollisionDispatcher.cs" />
     <Compile Include="src\Collision\CollisionInfo.cs" />
-    <Compile Include="src\Collision\ICollision.cs" />
     <Compile Include="src\Collision\ICollisionable.cs" />
-    <Compile Include="src\Collision\IComponent.cs" />
+    <Compile Include="src\GameObject\IComponent.cs" />
     <Compile Include="src\Application\Game.cs" />
     <Compile Include="src\GameObject\GameObject.cs" />
     <Compile Include="src\Helper\Extension.cs" />

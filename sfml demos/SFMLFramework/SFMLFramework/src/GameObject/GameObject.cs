@@ -69,5 +69,27 @@ namespace SFMLFramework
         public void Destroy()
         {
         }
+
+        public T AddComponent<T>() where T : IComponent
+        {
+            T t = GetComponent<T>();
+            if (t == null)
+            {
+                t = (T)new object();
+                this.Components.Add(t);
+            }
+            return t;
+        }
+
+        /// <summary>
+        /// Obtém um componente do tipo especificado, caso exista.
+        /// </summary>
+        /// <typeparam name="T">Tipo do componente</typeparam>
+        /// <returns>Instância do componente</returns>
+        public T GetComponent<T>()
+        {
+            return (T)this.Components.Find(c => c.GetType().Equals(typeof(T)));
+        }
+
     }
 }

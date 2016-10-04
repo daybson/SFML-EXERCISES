@@ -18,8 +18,9 @@ using System.Text;
 using SFML.System;
 using System.Threading;
 using SFMLFramework;
+using SFMLFramework.src.Helper;
 
-public class Game 
+public class Game
 {
     public Vector2u windowSize;
     public string windowTitle;
@@ -27,6 +28,8 @@ public class Game
     protected RenderWindow window;
     private KeyboardInput keyboard;
     private Player player;
+    private GameObject platform;
+    private List<GameObject> gameObjects;
 
     public Game(string title)
     {
@@ -34,7 +37,10 @@ public class Game
         this.windowSize = new Vector2u(800, 600);
         this.clock = new Clock();
         this.keyboard = new KeyboardInput(ref this.window);
+
+        this.gameObjects = new List<GameObject>();
         this.player = new Player();
+        this.platform = new GameObject();
     }
 
     public void Start()
@@ -44,41 +50,39 @@ public class Game
         this.window.KeyPressed += this.keyboard.ProcessKeyboardPressed;
         this.window.KeyReleased += this.keyboard.ProcessKeyboardReleased;
         this.player.SetKeyboardInput(ref this.keyboard);
-        /*
-        this.floor = new Entity("resources/floor.png", ECollisionType.None);
-        this.floor.SetPosition(new Vector2f(0, 450));
 
-        this.brick_1 = new Entity("resources/brick.png", ECollisionType.Inelastic);
-        this.brick_1.SetPosition(new Vector2f(50, 280));
+        var platformRenderer = new Renderer(Resources.Load("resources/brick.png"));
+        this.platform.Components.Add(platformRenderer);
+        this.platform.Subscribe(platformRenderer);
 
-        this.brick_2 = new Entity("resources/brick2.png", ECollisionType.PartialInelastic);
-        this.brick_2.SetPosition(new Vector2f(350, 300));
+        this.platform.Components.Add(
+            new Rigidbody(
+                V2.Zero,
+                V2.Zero,
+                0,
+                V2.Zero,
+                new Vector2f(this.platform.GetComponent<Renderer>().SpriteSheet.TileWidth, this.platform.GetComponent<Renderer>().SpriteSheet.TileHeight),
+                new Material("Plataforma", 1, 1, 1, ECollisionType.Inelastic),
+                true,
+                this.platform));
 
-        this.brick_3 = new Entity("resources/brick3.png", ECollisionType.Elastic);
-        this.brick_3.SetPosition(new Vector2f(480, 300));
-        */
-       
+        this.platform.Position = new Vector2f(20, 200);
+
+        this.gameObjects.Add(this.player);
+        this.gameObjects.Add(this.platform);
+
         Run();
     }
 
     public void Update(float deltaTime)
     {
-        this.player?.Update(deltaTime);
+        foreach (var g in this.gameObjects)
+        {
+            g?.Update(deltaTime);
+        }
 
-        /*
-        CollisionDispatcher.CollisionCheck(this.player, this.floor);
-        CollisionDispatcher.CollisionCheck(this.player, this.brick_1);
-        CollisionDispatcher.CollisionCheck(this.player, this.brick_2);
-        CollisionDispatcher.CollisionCheck(this.player, this.brick_3);
+        CollisionDispatcher.CollisionCheck(this.player.GetComponent<Rigidbody>(), this.platform.GetComponent<Rigidbody>());
 
-        CollisionDispatcher.CollisionCheck(this.brick_2, this.floor);
-        CollisionDispatcher.CollisionCheck(this.brick_2, this.brick_1);
-        CollisionDispatcher.CollisionCheck(this.brick_2, this.brick_3);
-
-        CollisionDispatcher.CollisionCheck(this.brick_3, this.floor);
-        CollisionDispatcher.CollisionCheck(this.brick_3, this.brick_1);
-        CollisionDispatcher.CollisionCheck(this.brick_3, this.brick_2);
-        */
     }
 
     protected void Run()
@@ -97,7 +101,17 @@ public class Game
     {
         this.window.Clear(Color.White);
 
-        this.player.Renderer.Render(ref this.window);
+        this.gameObjects?.ForEach(g => ((Renderer)g?.GetComponent<Renderer>())?.Render(ref this.window));
+
+        this.player.Rigidbody.ColliderTop.Render(ref this.window);
+        this.player.Rigidbody.ColliderBottom.Render(ref this.window);
+        this.player.Rigidbody.ColliderRight.Render(ref this.window);
+        this.player.Rigidbody.ColliderLeft.Render(ref this.window);
+
+        this.platform.GetComponent<Rigidbody>().ColliderTop.Render(ref this.window);
+        this.platform.GetComponent<Rigidbody>().ColliderBottom.Render(ref this.window);
+        this.platform.GetComponent<Rigidbody>().ColliderRight.Render(ref this.window);
+        this.platform.GetComponent<Rigidbody>().ColliderLeft.Render(ref this.window);
 
         this.window.Display();
     }

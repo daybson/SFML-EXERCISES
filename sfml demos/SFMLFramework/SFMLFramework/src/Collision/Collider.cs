@@ -19,28 +19,37 @@ public enum ECollisionType
     None
 }
 
-public class Collider : IComponent
+public class Collider : IComponent, IRender, IObserver<GameObject>
 {
     /// <summary>
     /// Shape de visualização do collider
     /// </summary>
     private RectangleShape shape;
+
+    /// <summary>
+    /// Barreira do collider
+    /// </summary>
     private FloatRect bound;
+
     /// <summary>
     /// Direção onde o collider será posicionado em relação ao sprite
     /// </summary>
     private EDirection direction;
+
     /// <summary>
     /// Espessura do collider quando renderizado
     /// </summary>
     private int colliderThickness;
+
     /// <summary>
     /// Dimensão do sprite (wifth, height)
     /// </summary>
     private Vector2f spriteDimension;
 
     public RectangleShape Shape { get { return shape; } }
+
     public FloatRect Bound { get { return bound; } }
+
     public EDirection Direction { get { return direction; } }
 
     public bool IsEnabled { get; set; }
@@ -75,37 +84,52 @@ public class Collider : IComponent
         }
 
         shape.OutlineColor = Color.Magenta;
-        shape.OutlineThickness = 0.6f;
+        shape.OutlineThickness = 1f;
         shape.FillColor = Color.Transparent;
+
+        this.Root.Subscribe(this);
     }
 
-    public void UpdatePosition(Vector2f displacement)
+    public void Update(float deltaTime)
+    {
+
+    }
+
+    public void Render(ref RenderWindow window)
+    {
+        window.Draw(this.shape);
+    }
+
+    public void OnNext(GameObject value)
     {
         switch (this.direction)
         {
             case EDirection.Down:
-                this.bound.Left = this.Root.Position.X;
-                this.bound.Top = this.Root.Position.Y + this.spriteDimension.Y - this.colliderThickness;
+                this.bound.Left = value.Position.X;
+                this.bound.Top = value.Position.Y + this.spriteDimension.Y - this.colliderThickness;
                 break;
             case EDirection.Up:
-                this.bound.Left = this.Root.Position.X;
-                this.bound.Top = this.Root.Position.Y;
+                this.bound.Left = value.Position.X;
+                this.bound.Top = value.Position.Y;
                 break;
             case EDirection.Right:
-                this.bound.Left = this.Root.Position.X + this.spriteDimension.X - this.colliderThickness;
-                this.bound.Top = this.Root.Position.Y + this.colliderThickness;
+                this.bound.Left = value.Position.X + this.spriteDimension.X - this.colliderThickness;
+                this.bound.Top = value.Position.Y + this.colliderThickness;
                 break;
             case EDirection.Left:
-                this.bound.Left = this.Root.Position.X;
-                this.bound.Top = this.Root.Position.Y + this.colliderThickness;
+                this.bound.Left = value.Position.X;
+                this.bound.Top = value.Position.Y + this.colliderThickness;
                 break;
         }
 
         this.shape.Position = new Vector2f(this.bound.Left, this.bound.Top);
     }
 
-    public void Update(float deltaTime)
+    public void OnError(Exception error)
     {
+    }
 
+    public void OnCompleted()
+    {
     }
 }

@@ -1,43 +1,37 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
   <Class Name="Collider">
-    <Position X="5" Y="4.5" Width="2.25" />
-    <Compartments>
-      <Compartment Name="Fields" Collapsed="true" />
-      <Compartment Name="Properties" Collapsed="true" />
-      <Compartment Name="Methods" Collapsed="true" />
-    </Compartments>
+    <Position X="3.75" Y="4" Width="4" />
     <TypeIdentifier>
-      <HashCode>AAQEAQAAAAAQICAAACEAAAAAAAAAAAAAAAACAAAABgA=</HashCode>
-      <FileName>src\Collider.cs</FileName>
+      <HashCode>AEQEAQAAAACQICIAACEAAAAAAAAAAAAAABACAAAABgA=</HashCode>
+      <FileName>src\Collision\Collider.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Rigidbody">
-    <Position X="10" Y="4.75" Width="1.5" />
+    <Position X="10" Y="4.25" Width="1.5" />
     <Compartments>
-      <Compartment Name="Fields" Collapsed="true" />
       <Compartment Name="Properties" Collapsed="true" />
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <AssociationLine Name="Material" Type="SFMLFramework.Material" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="10.188" Y="6.18" />
-        <Point X="10.188" Y="7.571" />
-        <Point X="9.75" Y="7.571" />
+        <Point X="10.188" Y="7.411" />
+        <Point X="10.188" Y="9.571" />
+        <Point X="9.75" Y="9.571" />
       </Path>
     </AssociationLine>
     <AssociationLine Name="ColliderBottom" Type="Collider" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="10" Y="5.552" />
-        <Point X="9.625" Y="5.552" />
-        <Point X="9.625" Y="5.534" />
-        <Point X="7.25" Y="5.534" />
+        <Point X="10" Y="6.023" />
+        <Point X="9.625" Y="6.023" />
+        <Point X="9.625" Y="7.259" />
+        <Point X="7.75" Y="7.259" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
       <HashCode>AMSAgQBAACAQQCAgABEAAAAAAAAxAgRAAAwEBACEAAE=</HashCode>
-      <FileName>src\Rigidbody.cs</FileName>
+      <FileName>src\Physics\Rigidbody.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Material" />
@@ -49,10 +43,10 @@
     <Lollipop Position="0.1" />
   </Class>
   <Class Name="SFMLFramework.Material">
-    <Position X="8" Y="6.5" Width="1.75" />
+    <Position X="8" Y="8.5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAQAAAAAAAAAAAAAAAQgEAQAAAAAAAAAAAAA=</HashCode>
-      <FileName>src\Material.cs</FileName>
+      <FileName>src\Physics\Material.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="CollisionType" />
@@ -62,7 +56,7 @@
     <Position X="11.75" Y="8.5" Width="4" />
     <InheritanceLine Type="SFMLFramework.GameObject" FixedToPoint="true">
       <Path>
-        <Point X="20.5" Y="3.982" />
+        <Point X="20.5" Y="4.367" />
         <Point X="20.5" Y="9.5" />
         <Point X="15.75" Y="9.5" />
       </Path>
@@ -71,19 +65,19 @@
       <Path>
         <Point X="11.75" Y="9.438" />
         <Point X="11.25" Y="9.438" />
-        <Point X="11.25" Y="6.18" />
+        <Point X="11.25" Y="7.411" />
       </Path>
     </AssociationLine>
     <AssociationLine Name="Renderer" Type="Renderer" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="15.75" Y="9" />
-        <Point X="17.219" Y="9" />
-        <Point X="17.219" Y="5.312" />
+        <Point X="17.344" Y="9" />
+        <Point X="17.344" Y="7.595" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAAAAAAAABAAAAAAAAAAAAAAAACAAAAgCAA=</HashCode>
-      <FileName>src\Player.cs</FileName>
+      <FileName>src\GameObject\Player.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Rigidbody" />
@@ -98,7 +92,7 @@
     </Compartments>
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAEAAAQAAAAgAAAAAAAAAAAAAAAAAAAAAQA=</HashCode>
-      <FileName>src\KeyboardEventDispatcher.cs</FileName>
+      <FileName>src\Input\KeyboardEventDispatcher.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SFMLFramework.PlatformPlayerController" Collapsed="true">
@@ -109,58 +103,65 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAQAAgAAAgAAACAMAAEAAEAAAAAAIAAAEAUACAEAAAA=</HashCode>
-      <FileName>src\PlatformPlayerController.cs</FileName>
+      <HashCode>AAQAAgAAAoAAACAMAAEAAEAAAAAAIAAAEAUACAEAAAA=</HashCode>
+      <FileName>src\Input\PlatformPlayerController.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="PlayerKeyboardController" />
     </ShowAsAssociation>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="Renderer" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="16.75" Y="4.75" Width="1.5" />
+  <Class Name="Renderer" BaseTypeListCollapsed="true">
+    <Position X="16.25" Y="4.5" Width="3.5" />
     <TypeIdentifier>
       <HashCode>AEQAAAAAAACABCIAAAEAAEAAAAAAAAAAABAAAAAAAAA=</HashCode>
-      <FileName>src\Renderer.cs</FileName>
+      <FileName>src\Renderization\Renderer.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="SpriteSheet" Collapsed="true">
-    <Position X="17.75" Y="7.25" Width="1.5" />
+    <Position X="18" Y="8.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>EAABAAAAgAAIAAgAAAFAACQAABIgAgAQCACAAQAAAAE=</HashCode>
-      <FileName>src\SpriteSheet.cs</FileName>
+      <FileName>src\Renderization\SpriteSheet.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SFMLFramework.GameObject">
     <Position X="19.25" Y="0.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAACAAAYAgAAAAIAAAAABEAAAAAAAAAAAAAgA=</HashCode>
-      <FileName>src\GameObject.cs</FileName>
+      <HashCode>AAQAAAAAACAIAYAgAAAAJAAAAABEAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>src\GameObject\GameObject.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Interface Name="SFMLFramework.ISpritesheetOrientable">
-    <Position X="17.75" Y="5.75" Width="2" />
+  <Class Name="CollisionDispatcher">
+    <Position X="0.5" Y="9" Width="5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>src\Collision\CollisionDispatcher.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="SFMLFramework.ISpritesheetOrientable" Collapsed="true">
+    <Position X="17.75" Y="7.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAABAAAAAAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>src\ISpritesheetOrientable.cs</FileName>
+      <FileName>src\Renderization\ISpritesheetOrientable.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="SpriteSheet" />
     </ShowAsAssociation>
   </Interface>
   <Interface Name="ICollisionable">
-    <Position X="1.25" Y="0.5" Width="2.75" />
+    <Position X="0.5" Y="5" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AECAgAAAAAAAAAAgAAAAAAAAAAAhAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>src\ICollisionable.cs</FileName>
+      <FileName>src\Collision\ICollisionable.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Enum Name="ECollisionType" Collapsed="true">
-    <Position X="8" Y="9.25" Width="1.5" />
+    <Position X="8.25" Y="11.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>CAAAABAAAAAAABAAAAAAgAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
-      <FileName>src\Collider.cs</FileName>
+      <FileName>src\Collision\Collider.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Font Name="Segoe UI" Size="9" />

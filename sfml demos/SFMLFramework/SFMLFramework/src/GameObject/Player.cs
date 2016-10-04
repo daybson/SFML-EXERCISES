@@ -32,7 +32,14 @@ public class Player : GameObject
         Renderer.Root = this;
         Subscribe(Renderer);
 
-        Rigidbody = new Rigidbody(new Vector2f(), new Vector2f(), 5, new Vector2f(), new Vector2f(Renderer.SpriteSheet.TileWidth, Renderer.SpriteSheet.TileHeight), this);
+        Rigidbody = new Rigidbody(V2.Zero,
+                                  V2.Zero,
+                                  5,
+                                  V2.Zero,
+                                  new Vector2f(Renderer.SpriteSheet.TileWidth, Renderer.SpriteSheet.TileHeight), 
+                                  new Material("Personagem", 1, 1, 1, ECollisionType.Inelastic),
+                                  false,
+                                  this);
         Rigidbody.Root = this;
 
         PlatformPlayerController = new PlatformPlayerController(Rigidbody, Renderer);

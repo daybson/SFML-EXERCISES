@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SFML.Graphics;
+using SFMLFramework.src.Helper;
 
 public class CollisionDispatcher
 {
@@ -19,30 +20,34 @@ public class CollisionDispatcher
 
         if (active.ColliderTop.Bound.Intersects(passive.ColliderBottom.Bound, out overlap))
         {
-            var hitInfo = new CollisionInfo(overlap, EDirection.Up, new SFML.System.Vector2f());//active.ImpactForce);
+            var hitInfo = new CollisionInfo(overlap, EDirection.Up, V2.Zero);//active.ImpactForce);
             active.SolveCollision(hitInfo);
             passive.SolveCollision(hitInfo.Inverse());
+            Console.WriteLine("COLISAO");
         }
 
         if (active.ColliderBottom.Bound.Intersects(passive.ColliderTop.Bound, out overlap))
         {
-            var hitInfo = new CollisionInfo(overlap, EDirection.Down, new SFML.System.Vector2f());// active.ImpactForce);
+            var hitInfo = new CollisionInfo(overlap, EDirection.Down, V2.Zero);// active.ImpactForce);
             active.SolveCollision(hitInfo);
             passive.SolveCollision(hitInfo.Inverse());
+            Console.WriteLine("COLISAO");
         }
 
         if (active.ColliderRight.Bound.Intersects(passive.ColliderLeft.Bound, out overlap))
         {
-            var hitInfo = new CollisionInfo(overlap, EDirection.Right, new SFML.System.Vector2f());//active.ImpactForce);
+            var hitInfo = new CollisionInfo(overlap, EDirection.Right, V2.Zero);//active.ImpactForce);
             active.SolveCollision(hitInfo);
             passive.SolveCollision(hitInfo.Inverse());
+            Console.WriteLine("COLISAO");
         }
 
         if (active.ColliderLeft.Bound.Intersects(passive.ColliderRight.Bound, out overlap))
         {
-            var hitInfo = new CollisionInfo(overlap, EDirection.Left, new SFML.System.Vector2f());// active.ImpactForce);
+            var hitInfo = new CollisionInfo(overlap, EDirection.Left, V2.Zero);// active.ImpactForce);
             active.SolveCollision(hitInfo);
             passive.SolveCollision(hitInfo.Inverse());
+            Console.WriteLine("COLISAO");
         }
     }
 }

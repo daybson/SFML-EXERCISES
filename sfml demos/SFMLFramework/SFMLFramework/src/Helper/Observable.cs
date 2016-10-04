@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SFMLFramework.src
 {
-    public class Observable<T> : IObservable<T>
+    public abstract class Observable<T> : IObservable<T>
     {
         private List<IObserver<T>> observers;
 

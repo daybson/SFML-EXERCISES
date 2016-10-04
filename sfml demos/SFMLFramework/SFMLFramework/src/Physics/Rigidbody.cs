@@ -34,12 +34,12 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
     /// Tamanho do sprite (width, height)
     /// </summary>
     private Vector2f spriteDimension;
-   
+
     /// <summary>
-    /// Objeto estático
+    /// Especifica se o corpo deve responder à colisões ou se mantém fiel à sua posição atual (incluindo uma posição ditada por uma animação)
     /// </summary>
     private bool isKinematic;
-   
+
     /// <summary>
     /// Somatório de todas as forças sendo aplicadas ao corpo
     /// </summary>
@@ -53,19 +53,31 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
     /// <summary>
     /// Espessura do collider
     /// </summary>
-    private int colliderThickness;
+    private int colliderThickness = 4;
 
     /// <summary>
     /// Material de que é composto o corpo rígido
     /// </summary>
-    public SFMLFramework.Material Material { get; set; }
+    public Material Material { get; set; }
 
+    /// <summary>
+    /// Collider do topo
+    /// </summary>
     public Collider ColliderTop { get; set; }
 
+    /// <summary>
+    /// Collider direito
+    /// </summary>
     public Collider ColliderRight { get; set; }
 
+    /// <summary>
+    /// Collider esquerdo
+    /// </summary>
     public Collider ColliderLeft { get; set; }
 
+    /// <summary>
+    /// Collider de baixo
+    /// </summary>
     public Collider ColliderBottom { get; set; }
 
     public Vector2f Acceleration { get { return acceleration; } }
@@ -84,10 +96,12 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
 
     public GameObject Root { get; set; }
 
-    public Rigidbody(Vector2f acceleration, Vector2f displacement, float mass, Vector2f velocity, Vector2f dimension, GameObject root)
+    public Rigidbody(Vector2f acceleration, Vector2f displacement, float mass, Vector2f velocity, Vector2f dimension, Material material, bool isKinematic, GameObject root)
     {
         this.mass = mass;
         this.Root = root;
+        this.Material = material;
+        this.isKinematic = isKinematic;
 
         this.ColliderTop = new Collider(dimension, EDirection.Up, this.colliderThickness, this.Root);
         this.ColliderBottom = new Collider(dimension, EDirection.Down, this.colliderThickness, this.Root);
@@ -111,8 +125,7 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
     /// </summary>
     public void SolveCollision(CollisionInfo hitInfo)
     {
-
-        if (Material.CollisionType == ECollisionType.None)
+        if (this.isKinematic || Material?.CollisionType == ECollisionType.None)
             return;
 
         switch (Material.CollisionType)

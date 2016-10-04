@@ -103,7 +103,7 @@ namespace SFMLFramework
         {
             if (!this.isJumping)
             {
-                IKineticController.AddForce(Extension.Top * this.JUMP_FORCE);
+                IKineticController.AddForce(V2.Top * this.JUMP_FORCE);
                 this.isJumping = true;
                 this.OnSpriteSheetOrientationChange(EDirection.Up);
             }
@@ -120,9 +120,9 @@ namespace SFMLFramework
         private void Move()
         {
             if (this.moveRigth)
-                IKineticController.AddForce(Extension.Right * this.WALK_FORCE);
+                IKineticController.AddForce(V2.Right * this.WALK_FORCE);
             else if (this.moveLeft)
-                IKineticController.AddForce(Extension.Left * this.WALK_FORCE);
+                IKineticController.AddForce(V2.Left * this.WALK_FORCE);
         }
     }
 }
