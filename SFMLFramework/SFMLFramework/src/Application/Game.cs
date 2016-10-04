@@ -51,7 +51,7 @@ public class Game
         this.window.KeyReleased += this.keyboard.ProcessKeyboardReleased;
         this.player.SetKeyboardInput(ref this.keyboard);
 
-        var platformRenderer = new Renderer(Resources.Load("resources/brick.png"));
+        var platformRenderer = new Renderer(Resources.Load("brick.png"));
         this.platform.Components.Add(platformRenderer);
         this.platform.Subscribe(platformRenderer);
 

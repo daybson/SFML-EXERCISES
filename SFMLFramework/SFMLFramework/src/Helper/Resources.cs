@@ -10,10 +10,11 @@ namespace SFMLFramework
     /// </summary>
     public class Resources
     {
-        public static SpriteSheet Load(string path)
+        private static readonly string spritePath = "resources/textures/";
+
+        public static SpriteSheet Load(string name)
         {
-            return new SpriteSheet(path);
-            //this.iMove.OnChangeDirection += this.spriteSheet.SetDirection;            
+            return new SpriteSheet(spritePath + name);
         }
     }
 }

@@ -28,7 +28,7 @@ public class Player : GameObject
 
     public Player()
     {
-        Renderer = new Renderer(Resources.Load("resources/dragon.png"));
+        Renderer = new Renderer(Resources.Load("dragon.png"));
         Renderer.Root = this;
         Subscribe(Renderer);
 
