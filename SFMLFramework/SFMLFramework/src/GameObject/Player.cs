@@ -37,7 +37,7 @@ public class Player : GameObject
                                   5,
                                   V2.Zero,
                                   new Vector2f(Renderer.SpriteSheet.TileWidth, Renderer.SpriteSheet.TileHeight), 
-                                  new Material("Personagem", 1, 1, 1, ECollisionType.Inelastic),
+                                  new Material("Personagem", 1, 1, 1, ECollisionType.Elastic),
                                   false,
                                   this);
         Rigidbody.Root = this;

@@ -14,22 +14,22 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
     /// Aceleração atuante no corpo
     /// </summary>
     private Vector2f acceleration;
-    
+
     /// <summary>
     /// Velocidade de movimento do corpo
     /// </summary>
     private Vector2f velocity;
-    
+
     /// <summary>
     /// Deslocamento do corpo em movimento
     /// </summary>
     private Vector2f displacement;
-   
+
     /// <summary>
     /// Massa do corpo
     /// </summary>
     private float mass;
-    
+
     /// <summary>
     /// Tamanho do sprite (width, height)
     /// </summary>
@@ -44,12 +44,12 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
     /// Somatório de todas as forças sendo aplicadas ao corpo
     /// </summary>
     private Vector2f finalForce;
-    
+
     /// <summary>
     /// Força gravitacional atuante sobre o corpo
     /// </summary>
     private Vector2f gravityForce;
-   
+
     /// <summary>
     /// Espessura do collider
     /// </summary>
@@ -88,7 +88,7 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
 
     public float Mass { get { return mass; } }
 
-    public Vector2f Velocity { get { return velocity; } }
+    public Vector2f Velocity { get { return this.finalForce; } }
 
     public PlatformPlayerController PlatformPlayerController { get; set; }
 
@@ -117,7 +117,7 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
         this.finalForce *= deltaTime;
 
         Root.Position += this.finalForce;
-        Console.WriteLine("F:" + finalForce.ToString());
+        //Console.WriteLine("F:" + finalForce.ToString());
     }
 
     /// <summary>
@@ -128,11 +128,16 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
         if (this.isKinematic || Material?.CollisionType == ECollisionType.None)
             return;
 
+        var Vr = hitInfo.Force + Velocity;
+        var Pmomemtum = Mass * Vr;
+        var KenergyX = (0.5f * Mass * Vr.X * Vr.X) * -1;
+        var KenergyY = (0.5f * Mass * Vr.Y * Vr.Y) * -500;
+
         switch (Material.CollisionType)
         {
             case ECollisionType.Elastic:
                 #region
-                AddMovement(new Vector2f(-hitInfo.Force.X, -hitInfo.Force.Y));
+                AddForce(new Vector2f(KenergyX, KenergyY));
                 break;
             #endregion
 
@@ -184,7 +189,7 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
     }
 
     public void AddForce(Vector2f force)
-    {        
+    {
         this.finalForce += force;
     }
 }
