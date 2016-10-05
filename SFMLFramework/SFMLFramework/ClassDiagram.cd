@@ -30,7 +30,7 @@
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AMSAgQBAACAQQCAgABEAAAAAAAAxAgRAAAwEBACEAAE=</HashCode>
+      <HashCode>AMSAgQBAACAQQCAgABEAAAAAAAAxAgRAAgQEBACEAAE=</HashCode>
       <FileName>src\Physics\Rigidbody.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -45,7 +45,7 @@
   <Class Name="SFMLFramework.Material">
     <Position X="8" Y="8.5" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAQAAAAAAAAAAAAAAAQgEAQAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAABAAAAAQAAAAAAAAAAAAABAQgEAQEAAAAAAAAAAAA=</HashCode>
       <FileName>src\Physics\Material.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -103,7 +103,7 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAQAAgAAAoAAACAMAAEAAEAAAAAAIAAAEAUACAEAAAA=</HashCode>
+      <HashCode>AAQAAgAAAoAAACAMAAEAAEAAAAAAIAAAEAUACAEBAAA=</HashCode>
       <FileName>src\Input\PlatformPlayerController.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -153,12 +153,12 @@
   <Interface Name="ICollisionable">
     <Position X="0.5" Y="5" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AECAgAAAAAAAAAAgAAAAAAAAAAAhAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AECAgAAAAAAAAAAgAAAAAAAAAAAhAAAAAgAAAACEAAA=</HashCode>
       <FileName>src\Collision\ICollisionable.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Enum Name="ECollisionType" Collapsed="true">
-    <Position X="8.25" Y="11.25" Width="1.5" />
+    <Position X="11" Y="11" Width="1.5" />
     <TypeIdentifier>
       <HashCode>CAAAABAAAAAAABAAAAAAgAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
       <FileName>src\Collision\Collider.cs</FileName>

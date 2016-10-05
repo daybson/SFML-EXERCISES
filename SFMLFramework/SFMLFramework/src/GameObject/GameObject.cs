@@ -54,6 +54,7 @@ namespace SFMLFramework
 
         public virtual void Update(float deltaTime)
         {
+            this.Components.ForEach(c => c.Update(deltaTime));
         }
 
         /// <summary>

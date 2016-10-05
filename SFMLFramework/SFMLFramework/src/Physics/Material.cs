@@ -19,18 +19,22 @@ namespace SFMLFramework
         /// Fricção do material (resistência a movimento)
         /// </summary>
         private float friction;
+        public float Friction { get { return friction; } }
 
         /// <summary>
         /// Permite uma variação da elasticidade do material.
         /// </summary>
         private float bounciness;
+        public float Bounciness { get { return bounciness; } }
 
         /// <summary>
         /// Densidade do material
         /// </summary>
         private float density;
+        public float Density { get { return density; } }
 
         public ECollisionType CollisionType { get; set; }
+
 
         public Material(string name, float friction, float bounciness, float density, ECollisionType collisionType)
         {

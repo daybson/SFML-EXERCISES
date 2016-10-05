@@ -32,9 +32,10 @@ public class Renderer : IComponent, IRender, ISpritesheetOrientable, IObserver<G
     /// <summary>
     /// Recebe uma instância da SpriteSheet que o componente deve renderizar
     /// </summary>
-    public Renderer(SpriteSheet spriteSheet)
+    public Renderer(SpriteSheet spriteSheet, GameObject root)
     {
         SpriteSheet = spriteSheet;
+        Root = root;
     }
 
     /// <summary>

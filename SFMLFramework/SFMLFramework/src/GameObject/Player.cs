@@ -19,28 +19,32 @@ public enum EDirection
 
 public class Player : GameObject
 {
+    #region Fields
+
     public Rigidbody Rigidbody { get; set; }
 
     public Renderer Renderer { get; set; }
 
     public PlatformPlayerController PlatformPlayerController { get; set; }
 
+    #endregion
+
+
+    #region Methods
 
     public Player()
     {
-        Renderer = new Renderer(Resources.Load("dragon.png"));
-        Renderer.Root = this;
+        Renderer = new Renderer(Resources.LoadSpriteSheet("dragon.png"), this);
         Subscribe(Renderer);
 
         Rigidbody = new Rigidbody(V2.Zero,
                                   V2.Zero,
                                   5,
                                   V2.Zero,
-                                  new Vector2f(Renderer.SpriteSheet.TileWidth, Renderer.SpriteSheet.TileHeight), 
-                                  new Material("Personagem", 1, 1, 1, ECollisionType.Elastic),
+                                  new Vector2f(Renderer.SpriteSheet.TileWidth, Renderer.SpriteSheet.TileHeight),
+                                  new Material("Personagem", 1, 1, 1, ECollisionType.Inelastic),
                                   false,
                                   this);
-        Rigidbody.Root = this;
 
         PlatformPlayerController = new PlatformPlayerController(Rigidbody, Renderer);
         PlatformPlayerController.OnSpriteSheetOrientationChange += Renderer.OrientateSpriteSheetTo;
@@ -51,12 +55,13 @@ public class Player : GameObject
     public override void Update(float deltaTime)
     {
         base.Update(deltaTime);
-        this.Components.ForEach(c => c.Update(deltaTime));
     }
 
     public void SetKeyboardInput(ref KeyboardInput keyboardInput)
     {
         keyboardInput.OnKeyPressed += PlatformPlayerController.PlayerKeyboardController.OnKeyPressed;
         keyboardInput.OnKeyReleased += PlatformPlayerController.PlayerKeyboardController.OnKeyReleased;
-    }    
+    }
+
+    #endregion
 }

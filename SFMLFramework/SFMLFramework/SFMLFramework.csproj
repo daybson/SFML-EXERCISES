@@ -91,8 +91,10 @@
     <Compile Include="src\GameObject\GameObject.cs" />
     <Compile Include="src\Helper\Extension.cs" />
     <Compile Include="src\Helper\Extensions.cs" />
-    <Compile Include="src\Helper\Observable.cs" />
+    <Compile Include="src\Helper\DesignPatterns\Observable.cs" />
     <Compile Include="src\Helper\Resources.cs" />
+    <Compile Include="src\Helper\DesignPatterns\Singleton.cs" />
+    <Compile Include="src\Helper\VisualDebugger.cs" />
     <Compile Include="src\Input\IKeyboardInput.cs" />
     <Compile Include="src\Input\KeyboardEventDispatcher.cs" />
     <Compile Include="src\Input\KeyboardInput.cs" />
@@ -111,6 +113,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="ClassDiagram.cd" />
+    <None Include="resources\fonts\Roboto-Regular.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="csfml-audio-2.dll">
@@ -165,6 +170,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="OpenTK.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\textures\platform.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\textures\platform.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\textures\rock.png">

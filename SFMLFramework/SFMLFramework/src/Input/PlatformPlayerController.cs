@@ -15,7 +15,7 @@ namespace SFMLFramework
         /// <summary>
         /// Personagem está caindo em queda livre?
         /// </summary>
-        protected bool isFalling;
+        private bool isFalling;
 
         /// <summary>
         /// Personagem está pulando? (true até que toque o solo novamente)
@@ -40,7 +40,7 @@ namespace SFMLFramework
         /// <summary>
         /// Modificador escalar do vetor de caminhada
         /// </summary>
-        protected readonly float WALK_FORCE = 150.0f;
+        protected readonly float WALK_FORCE = 10.0f;
 
         /// <summary>
         /// Expedidor de eventos do teclado
@@ -60,6 +60,19 @@ namespace SFMLFramework
         public bool IsEnabled { get; set; }
 
         public GameObject Root { get; set; }
+
+        public bool IsFalling
+        {
+            get
+            {
+                return isFalling;
+            }
+
+            set
+            {
+                isFalling = value;
+            }
+        }
 
         public PlatformPlayerController(IKineticController iKineticController, ISpritesheetOrientable iSpritesheetOrientable)
         {

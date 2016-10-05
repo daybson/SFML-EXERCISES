@@ -71,7 +71,7 @@ public class Collider : IComponent, IRender, IObserver<GameObject>
                 break;
             case EDirection.Up:
                 shape = new RectangleShape(new Vector2f(this.spriteDimension.X, this.colliderThickness));
-                bound = new FloatRect(this.Root.Position.X, this.Root.Position.Y, this.spriteDimension.Y, this.colliderThickness);
+                bound = new FloatRect(this.Root.Position.X, this.Root.Position.Y, this.spriteDimension.X, this.colliderThickness);
                 break;
             case EDirection.Right:
                 shape = new RectangleShape(new Vector2f(this.colliderThickness, this.spriteDimension.Y - 2 * this.colliderThickness));
