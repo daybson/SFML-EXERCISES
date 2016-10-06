@@ -30,7 +30,8 @@ public class Game
 
     private Player player;
     private GameObject platform;
-    private GameObject inelasticBrick;
+    private GameObject inelasticBrick1;
+    private GameObject inelasticBrick2;
     private GameObject elasticBrick;
     private GameObject partialInelasticBrick;
 
@@ -47,7 +48,8 @@ public class Game
         this.gameObjects = new List<GameObject>();
         this.player = new Player();
         this.platform = new GameObject();
-        this.inelasticBrick = new GameObject();
+        this.inelasticBrick1 = new GameObject();
+        this.inelasticBrick2 = new GameObject();
         this.debugger = new VisualDebugger();
     }
 
@@ -60,6 +62,7 @@ public class Game
         this.window.KeyPressed += this.keyboard.ProcessKeyboardPressed;
         this.window.KeyReleased += this.keyboard.ProcessKeyboardReleased;
         this.player.SetKeyboardInput(ref this.keyboard);
+        this.player.Position = new Vector2f(300, 0);
 
         var platformRenderer = new Renderer(Resources.LoadSpriteSheet("platform.png"), this.platform);
         this.platform.Components.Add(platformRenderer);
@@ -76,24 +79,40 @@ public class Game
                 this.platform));
         this.platform.Position = new Vector2f(0, 200);
 
-        var brickRenderer = new Renderer(Resources.LoadSpriteSheet("brick.png"), this.inelasticBrick);
-        this.inelasticBrick.Components.Add(brickRenderer);
-        this.inelasticBrick.Subscribe(brickRenderer);
-        this.inelasticBrick.Components.Add(
+        var brickRenderer1 = new Renderer(Resources.LoadSpriteSheet("brick.png"), this.inelasticBrick1);
+        this.inelasticBrick1.Components.Add(brickRenderer1);
+        this.inelasticBrick1.Subscribe(brickRenderer1);
+        this.inelasticBrick1.Components.Add(
             new Rigidbody(
                 V2.Zero,
                 V2.Zero,
                 3,
                 V2.Zero,
-                new Vector2f(brickRenderer.SpriteSheet.TileWidth, brickRenderer.SpriteSheet.TileHeight),
+                new Vector2f(brickRenderer1.SpriteSheet.TileWidth, brickRenderer1.SpriteSheet.TileHeight),
                 new Material("Brick", 8, 1, 1, ECollisionType.Inelastic),
                 false,
-                this.inelasticBrick));
-        this.inelasticBrick.Position = new Vector2f(120, 160);
+                this.inelasticBrick1));
+        this.inelasticBrick1.Position = new Vector2f(120, 160);
+
+        var brickRenderer2 = new Renderer(Resources.LoadSpriteSheet("brick.png"), this.inelasticBrick1);
+        this.inelasticBrick2.Components.Add(brickRenderer2);
+        this.inelasticBrick2.Subscribe(brickRenderer2);
+        this.inelasticBrick2.Components.Add(
+            new Rigidbody(
+                V2.Zero,
+                V2.Zero,
+                3,
+                V2.Zero,
+                new Vector2f(brickRenderer2.SpriteSheet.TileWidth, brickRenderer2.SpriteSheet.TileHeight),
+                new Material("Brick", 8, 1, 1, ECollisionType.Inelastic),
+                false,
+                this.inelasticBrick2));
+        this.inelasticBrick2.Position = new Vector2f(220, 160);
 
         this.gameObjects.Add(this.player);
         this.gameObjects.Add(this.platform);
-        this.gameObjects.Add(this.inelasticBrick);
+        this.gameObjects.Add(this.inelasticBrick1);
+        this.gameObjects.Add(this.inelasticBrick2);
 
         Run();
     }
@@ -105,9 +124,12 @@ public class Game
             g.Update(deltaTime);
         }
 
-        CollisionDispatcher.CollisionCheck(this.inelasticBrick.GetComponent<Rigidbody>(), this.platform.GetComponent<Rigidbody>());
+        CollisionDispatcher.CollisionCheck(this.inelasticBrick1.GetComponent<Rigidbody>(), this.platform.GetComponent<Rigidbody>());
+        CollisionDispatcher.CollisionCheck(this.inelasticBrick1.GetComponent<Rigidbody>(), this.inelasticBrick2.GetComponent<Rigidbody>());
+        CollisionDispatcher.CollisionCheck(this.inelasticBrick2.GetComponent<Rigidbody>(), this.platform.GetComponent<Rigidbody>());
         CollisionDispatcher.CollisionCheck(this.player.GetComponent<Rigidbody>(), this.platform.GetComponent<Rigidbody>());
-        CollisionDispatcher.CollisionCheck(this.player.GetComponent<Rigidbody>(), this.inelasticBrick.GetComponent<Rigidbody>());
+        CollisionDispatcher.CollisionCheck(this.player.GetComponent<Rigidbody>(), this.inelasticBrick1.GetComponent<Rigidbody>());
+        CollisionDispatcher.CollisionCheck(this.player.GetComponent<Rigidbody>(), this.inelasticBrick2.GetComponent<Rigidbody>());
     }
 
     protected void Run()
@@ -127,7 +149,7 @@ public class Game
         this.window.Clear(Color.White);
 
         this.gameObjects?.ForEach(g => g?.GetComponent<Renderer>()?.Render(ref this.window));
-        
+
         this.debugger.Render(ref this.window);
 
         this.window.Display();

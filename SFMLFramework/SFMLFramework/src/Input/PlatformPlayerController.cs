@@ -40,7 +40,7 @@ namespace SFMLFramework
         /// <summary>
         /// Modificador escalar do vetor de caminhada
         /// </summary>
-        protected readonly float WALK_FORCE = 10.0f;
+        protected readonly float WALK_FORCE = 25.0f;
 
         /// <summary>
         /// Expedidor de eventos do teclado

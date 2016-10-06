@@ -132,15 +132,12 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
         this.Root.Position = position;
     }
 
-    public void AddForce(Vector2f force)
-    {
-        this.finalForce += force;
-    }
-
     public void Update(float deltaTime)
     {
+        // Gravidade
         this.finalForce += this.gravityForce;
 
+        #region Fricção do piso/ambiente
         if (this.finalForce.X > 0)
         {
             this.finalForce.X -= EnvironmentFriction;
@@ -153,13 +150,25 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
             if (this.finalForce.X + EnvironmentFriction > 0)
                 this.finalForce.X = 0;
         }
+        #endregion
 
         Root.Position += (this.finalForce) * deltaTime;
+
 
         //impede overflow
         this.finalForce -= this.gravityForce;
 
         Console.WriteLine((this.finalForce + this.gravityForce) * deltaTime);
+    }
+
+    public void AddForce(Vector2f force)
+    {
+        this.finalForce += force;
+    }
+
+    public void ReduceForce(Vector2f force)
+    {
+        this.finalForce -= force;
     }
 
     /// <summary>
@@ -169,7 +178,7 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
     {
         if (this.isKinematic || Material?.CollisionType == ECollisionType.None)
             return;
-        
+
         switch (Material.CollisionType)
         {
             case ECollisionType.Elastic:
@@ -187,8 +196,14 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
                  * v = 20 / 8
                  * v = 2.5
                  */
-                var finalSpeed = (this.mass * Velocity.X + hitInfo.Obstacle.Mass * hitInfo.Obstacle.Velocity.X) / (this.mass + hitInfo.Obstacle.Mass);
-                var finalVelocity = new Vector2f(finalSpeed, 0);
+
+                //a nova velocidade final do sistema em colisão é calculada. Como a massa é constante, a menos que alguma força externa (gravidade/fricção) esteja atuando,
+                //a velocidade será sempre a mesma e os corpos nunca cessarão o movimento
+                var newVelocity = new Vector2f((this.mass * Velocity.X + hitInfo.Obstacle.Mass * hitInfo.Obstacle.Velocity.X) / (this.mass + hitInfo.Obstacle.Mass), 0);
+
+                //a velocidade a ser incrementada no sistema é a diferença entre a velocidade final do sistema e a força atual do corpo, ou seja, o quanto falta para que
+                //o corpo atinja a velocidade final, ou o quanto é reduzido sobre sua velocidade atual para que ele se equilibre ao sistema
+                var displacementVelocity = newVelocity - this.finalForce;
 
                 //TODO: falta testar resposta inelástica
                 switch (hitInfo.Direction)
@@ -206,11 +221,11 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
                         break;
                     case EDirection.Right:
                         SetPosition(new Vector2f(this.Root.Position.X - hitInfo.Overlap.Width, this.Root.Position.Y));
-                        AddForce(finalVelocity);
+                        AddForce(displacementVelocity);
                         break;
                     case EDirection.Left:
                         SetPosition(new Vector2f(this.Root.Position.X + hitInfo.Overlap.Width, this.Root.Position.Y));
-                        AddForce(finalVelocity);
+                        AddForce(displacementVelocity);
                         break;
                 }
                 break;
