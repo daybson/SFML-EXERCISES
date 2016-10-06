@@ -14,6 +14,8 @@ public interface ICollisionable
     Collider ColliderRight { get; }
     Collider ColliderLeft { get; }
     Vector2f Velocity { get; }
+    Vector2f MaxVelocity { get; }
     float Mass { get; }
+    float Elasticity { get; }
     void SolveCollision(CollisionInfo hitInfo);
 }

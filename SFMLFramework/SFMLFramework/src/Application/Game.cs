@@ -62,49 +62,43 @@ public class Game
         this.window.KeyPressed += this.keyboard.ProcessKeyboardPressed;
         this.window.KeyReleased += this.keyboard.ProcessKeyboardReleased;
         this.player.SetKeyboardInput(ref this.keyboard);
-        this.player.Position = new Vector2f(300, 0);
+        this.player.Position = new Vector2f(300, 50);
 
         var platformRenderer = new Renderer(Resources.LoadSpriteSheet("platform.png"), this.platform);
         this.platform.Components.Add(platformRenderer);
         this.platform.Subscribe(platformRenderer);
         this.platform.Components.Add(
             new Rigidbody(
-                V2.Zero,
-                V2.Zero,
                 0,
-                V2.Zero,
+                0,
                 new Vector2f(platformRenderer.SpriteSheet.TileWidth, platformRenderer.SpriteSheet.TileHeight),
-                new Material("Plataforma", 1, 1, 1, ECollisionType.Inelastic),
+                new Material("Platform", 1, 1, 1, ECollisionType.Inelastic),
                 true,
                 this.platform));
-        this.platform.Position = new Vector2f(0, 200);
+        this.platform.Position = new Vector2f(0, 230);
 
         var brickRenderer1 = new Renderer(Resources.LoadSpriteSheet("brick.png"), this.inelasticBrick1);
         this.inelasticBrick1.Components.Add(brickRenderer1);
         this.inelasticBrick1.Subscribe(brickRenderer1);
         this.inelasticBrick1.Components.Add(
             new Rigidbody(
-                V2.Zero,
-                V2.Zero,
-                3,
-                V2.Zero,
+                9,
+                0,
                 new Vector2f(brickRenderer1.SpriteSheet.TileWidth, brickRenderer1.SpriteSheet.TileHeight),
-                new Material("Brick", 8, 1, 1, ECollisionType.Inelastic),
-                false,
+                new Material("Brick 1", 8, 1, 1, ECollisionType.Inelastic),
+                true,
                 this.inelasticBrick1));
-        this.inelasticBrick1.Position = new Vector2f(120, 160);
+        this.inelasticBrick1.Position = new Vector2f(120, 185);
 
         var brickRenderer2 = new Renderer(Resources.LoadSpriteSheet("brick.png"), this.inelasticBrick1);
         this.inelasticBrick2.Components.Add(brickRenderer2);
         this.inelasticBrick2.Subscribe(brickRenderer2);
         this.inelasticBrick2.Components.Add(
             new Rigidbody(
-                V2.Zero,
-                V2.Zero,
                 3,
-                V2.Zero,
+                0.5f,
                 new Vector2f(brickRenderer2.SpriteSheet.TileWidth, brickRenderer2.SpriteSheet.TileHeight),
-                new Material("Brick", 8, 1, 1, ECollisionType.Inelastic),
+                new Material("Brick 2", 8, 1, 1, ECollisionType.PartialInelastic),
                 false,
                 this.inelasticBrick2));
         this.inelasticBrick2.Position = new Vector2f(220, 160);

@@ -23,28 +23,28 @@ public class CollisionDispatcher
         {
             isColliding = true;
             active.SolveCollision(new CollisionInfo(overlap, EDirection.Up, passive));
-            passive.SolveCollision(new CollisionInfo(overlap, EDirection.Up, active).Inverse());
+            passive.SolveCollision(new CollisionInfo(overlap, EDirection.Down, active));
         }
 
         if (active.ColliderBottom.Bound.Intersects(passive.ColliderTop.Bound, out overlap))
         {
             isColliding = true;
             active.SolveCollision(new CollisionInfo(overlap, EDirection.Down, passive));
-            passive.SolveCollision(new CollisionInfo(overlap, EDirection.Down, active).Inverse());
+            passive.SolveCollision(new CollisionInfo(overlap, EDirection.Up, active));
         }
 
         if (active.ColliderRight.Bound.Intersects(passive.ColliderLeft.Bound, out overlap))
         {
             isColliding = true;
             active.SolveCollision(new CollisionInfo(overlap, EDirection.Right, passive));
-            passive.SolveCollision(new CollisionInfo(overlap, EDirection.Right, active).Inverse());
+            passive.SolveCollision(new CollisionInfo(overlap, EDirection.Left, active));
         }
 
         if (active.ColliderLeft.Bound.Intersects(passive.ColliderRight.Bound, out overlap))
         {
             isColliding = true;
             active.SolveCollision(new CollisionInfo(overlap, EDirection.Left, passive));
-            passive.SolveCollision(new CollisionInfo(overlap, EDirection.Left, active).Inverse());
+            passive.SolveCollision(new CollisionInfo(overlap, EDirection.Right, active));
         }
 
         //TODO: obter valor do level/tilemap futuramente

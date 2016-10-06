@@ -37,12 +37,10 @@ public class Player : GameObject
         Renderer = new Renderer(Resources.LoadSpriteSheet("dragon.png"), this);
         Subscribe(Renderer);
 
-        Rigidbody = new Rigidbody(V2.Zero,
-                                  V2.Zero,
-                                  10,
-                                  V2.Zero,
+        Rigidbody = new Rigidbody(10f,
+                                  0,
                                   new Vector2f(Renderer.SpriteSheet.TileWidth, Renderer.SpriteSheet.TileHeight),
-                                  new Material("Personagem", 1, 1, 1, ECollisionType.Inelastic),
+                                  new Material("Player 1", 1, 1, 1, ECollisionType.Inelastic),
                                   false,
                                   this);
 

@@ -17,7 +17,7 @@ public class CollisionInfo
     public FloatRect Overlap { get { return overlap; } }
 
     private ICollisionable obstacle;
-    public ICollisionable Obstacle { get { return obstacle; } }
+    public ICollisionable RigidBody { get { return obstacle; } }
 
 
     #endregion

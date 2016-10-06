@@ -17,10 +17,12 @@ public class SpriteSheet
     /// Textura carregada
     /// </summary>
     private Texture texture;
+
     /// <summary>
     /// tile do sprite
     /// </summary>
     private IntRect tile;
+
     /// <summary>
     /// Sprite em exibição no moment
     /// </summary>
@@ -30,40 +32,51 @@ public class SpriteSheet
     public int TileHeight { get { return tileHeight; } }
     public int TileWidth { get { return tileWidth; } }
 
+    public Vector2i size;
+    public Vector2i Size { get { return size; } }
+
     private string pathTexture;
 
     /// <summary>
     /// Altura dos tiles da spritesheet
     /// </summary>
     private int tileHeight;
+
     /// <summary>
     /// Largura dos tiles da spritesheet
     /// </summary>
     private int tileWidth;
+
     /// <summary>
     /// Quantidade de colunas da spritesheet
     /// </summary>
     private int rows;
+
     /// <summary>
     /// Quantidade de colunas do spritesheet
     /// </summary>
     private int columns;
+
     /// <summary>
     /// Total de frames do spritesheet
     /// </summary>
     private int frameCount;
+
     /// <summary>
     /// Tempo total de duração da animação
     /// </summary>
     private float animationTime;
+
     /// <summary>
     /// Tempo de exibição de cada frame
     /// </summary>
     private float frameTime;
+
     /// <summary>
     /// Contador do tempo de exibição do frame atual
     /// </summary>
     private float currentFrameTime;
+
     /// <summary>
     /// Frame atual da animação
     /// </summary>
@@ -100,6 +113,8 @@ public class SpriteSheet
         tile = new IntRect(0, 0, tileWidth, tileHeight);
         sprite = new Sprite(texture, tile);
         sprite.Position = new Vector2f(200, 200);
+
+        this.size = new Vector2i(tileWidth, tileHeight);
 
         currentFrame = 0;
         currentFrameTime = 0;
