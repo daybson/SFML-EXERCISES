@@ -61,7 +61,7 @@ public class Game
         this.window.KeyPressed += this.keyboard.ProcessKeyboardPressed;
         this.window.KeyReleased += this.keyboard.ProcessKeyboardReleased;
         this.player.SetKeyboardInput(ref this.keyboard);
-        this.player.Position = new Vector2f(300, 50);
+        this.player.Position = new Vector2f(340, 100);
 
         var platformRenderer = new Renderer(Resources.LoadSpriteSheet("platform.png"), this.platform);
         this.platform.Components.Add(platformRenderer);
@@ -97,7 +97,7 @@ public class Game
                 5,
                 0.5f,
                 new Vector2f(brickRenderer2.SpriteSheet.TileWidth, brickRenderer2.SpriteSheet.TileHeight),
-                new Material("Brick 2", 8, 1, 1, ECollisionType.PartialInelastic),
+                new Material("Brick 2", 8, 1, 1, ECollisionType.Elastic),
                 false,
                 this.partialInelasticBrick));
         this.partialInelasticBrick.Position = new Vector2f(200, 160);

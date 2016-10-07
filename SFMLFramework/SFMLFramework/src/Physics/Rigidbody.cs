@@ -143,37 +143,39 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
 
     public void Update(float deltaTime)
     {
-        // Gravidade
-        if(!isKinematic)
-        { this.finalForce += this.gravityForce;
+       
+        if (!isKinematic)
+        { 
+            // Gravidade
+            this.finalForce += this.gravityForce;
 
-        #region Fricção do piso/ambiente
-        if (this.finalForce.X > 0)
-        {
-            this.finalForce.X -= EnvironmentFriction;
-            if (this.finalForce.X - EnvironmentFriction < 0)
-                this.finalForce.X = 0;
-        }
-        else if (this.finalForce.X < 0)
-        {
-            this.finalForce.X += EnvironmentFriction;
-            if (this.finalForce.X + EnvironmentFriction > 0)
-                this.finalForce.X = 0;
-        }
-        #endregion
-
-        Root.Position += (this.finalForce) * deltaTime;
-        
-        //impede overflow
-        this.finalForce -= this.gravityForce;
+            #region Fricção do piso/ambiente
+            if (this.finalForce.X > 0)
+            {
+                this.finalForce.X -= EnvironmentFriction;
+                if (this.finalForce.X - EnvironmentFriction < 0)
+                    this.finalForce.X = 0;
             }
+            else if (this.finalForce.X < 0)
+            {
+                this.finalForce.X += EnvironmentFriction;
+                if (this.finalForce.X + EnvironmentFriction > 0)
+                    this.finalForce.X = 0;
+            }
+            #endregion
+
+            Root.Position += (this.finalForce) * deltaTime;
+
+            //impede overflow
+            this.finalForce -= this.gravityForce;
+        }
     }
 
     public void AddForce(Vector2f force)
     {
         this.finalForce += force;
-        //this.finalForce.X = Extensions.Clamp(this.finalForce.X, -MaxVelocity.X, MaxVelocity.X);
-        //this.finalForce.Y = Extensions.Clamp(this.finalForce.Y, -MaxVelocity.Y, MaxVelocity.Y);
+        this.finalForce.X = Extensions.Clamp(this.finalForce.X, -MaxVelocity.X, MaxVelocity.X);
+        this.finalForce.Y = Extensions.Clamp(this.finalForce.Y, -MaxVelocity.Y, MaxVelocity.Y);
     }
 
     public void ReduceForce(Vector2f force)
@@ -193,6 +195,48 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
         {
             case ECollisionType.Elastic:
                 #region
+                /*
+                * Equação da velocidade final dos corpos em colisão elástica
+                *http://www.real-world-physics-problems.com/elastic-collision.html
+                * Ei = Ef
+                * Ei = (0.5 * ma * vai * vai) + (0.5 * mb * vbi * vbi) 
+                * Ef = (0.5 * ma * vaf * vaf) + (0.5 * mb * vbf * vbf)                
+                * 
+                * Vaf = ((ma - mb) / (ma + mb)) * Vai  +  2 * mb / (ma + mb) * Vbi
+                * Vbf = 2 * ma / (ma + mb) * Vai  +  ((mb - ma) / (ma + mb)) * Vbi                  
+
+                var Vaf = ((this.mass - hitInfo.RigidBody.Mass) / (this.mass + hitInfo.RigidBody.Mass)) * this.finalForce.X + 2 * hitInfo.RigidBody.Mass / (this.mass + hitInfo.RigidBody.Mass) * hitInfo.RigidBody.Velocity.X;
+                var Vbf = 2 * this.mass / (this.mass + hitInfo.RigidBody.Mass) * this.finalForce.X + ((hitInfo.RigidBody.Mass - this.mass) / (this.mass + hitInfo.RigidBody.Mass)) * hitInfo.RigidBody.Velocity.X;
+
+                var Ei = (0.5 * this.mass * this.finalForce.X * this.finalForce.X) + (0.5 * hitInfo.RigidBody.Mass * hitInfo.RigidBody.Velocity.X * hitInfo.RigidBody.Velocity.X);
+                var Ef = (0.5 * this.mass * Vaf * Vaf) + (0.5 * hitInfo.RigidBody.Mass * Vbf * Vbf);
+                */
+
+                var v = new Vector2f(finalForce.X, finalForce.Y);
+
+                switch (hitInfo.Direction)
+                {
+                    case EDirection.Down:
+                        SetPosition(new Vector2f(this.Root.Position.X, this.Root.Position.Y - hitInfo.Overlap.Height));
+                        EnvironmentFriction = hitInfo.RigidBody.Material.Friction;
+                        break;
+                    case EDirection.Up:
+                        SetPosition(new Vector2f(this.Root.Position.X, Root.Position.Y + hitInfo.Overlap.Height));
+                        velocity.Y = 0;
+                        break;
+                    case EDirection.Right:
+                        SetPosition(new Vector2f(this.Root.Position.X - hitInfo.Overlap.Width, this.Root.Position.Y));
+                        finalForce.X = 0;
+                        AddForce(new Vector2f(-Math.Abs(v.X), -Math.Abs(v.Y)));
+                        Console.WriteLine("Reflection force R: " + v.ToString());
+                        break;
+                    case EDirection.Left:
+                        SetPosition(new Vector2f(this.Root.Position.X + hitInfo.Overlap.Width, this.Root.Position.Y));
+                        finalForce.X = 0;
+                        AddForce(new Vector2f(Math.Abs(v.X), Math.Abs(v.Y)));
+                        Console.WriteLine("Reflection force L: " + v.ToString());
+                        break;
+                }
                 break;
             #endregion
 
@@ -284,14 +328,14 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
                         SetPosition(new Vector2f(this.Root.Position.X - hitInfo.Overlap.Width, this.Root.Position.Y));
                         this.finalForce.X = 0;
                         AddForce(displacementVelocity2 * V2.Left.X);
-                        Console.WriteLine("Reflection force R: " + (displacementVelocity2 * V2.Left.X).ToString());
+                        Console.WriteLine("Reflection force R: " + (displacementVelocity2).ToString());
                         break;
 
                     case EDirection.Left:
                         SetPosition(new Vector2f(this.Root.Position.X + hitInfo.Overlap.Width, this.Root.Position.Y));
                         this.finalForce.X = 0;
                         AddForce(new Vector2f(displacementVelocity2.X, displacementVelocity2.Y));
-                        Console.WriteLine("Reflection force L: " + (displacementVelocity2 * V2.Left.X).ToString());
+                        Console.WriteLine("Reflection force L: " + (displacementVelocity2).ToString());
                         break;
                 }
 
