@@ -35,7 +35,7 @@ namespace SFMLFramework
         /// <summary>
         /// Modificador escalar do vetor de pulo
         /// </summary>
-        protected readonly float JUMP_FORCE = 10.0f;
+        protected readonly float JUMP_FORCE = 900.0f;
 
         /// <summary>
         /// Modificador escalar do vetor de caminhada
@@ -67,11 +67,6 @@ namespace SFMLFramework
             {
                 return isFalling;
             }
-
-            set
-            {
-                isFalling = value;
-            }
         }
 
         public PlatformPlayerController(IKineticController iKineticController, ISpritesheetOrientable iSpritesheetOrientable)
@@ -80,12 +75,6 @@ namespace SFMLFramework
             IKineticController = iKineticController;
 
             OnSpriteSheetOrientationChange = iSpritesheetOrientable.OrientateSpriteSheetTo;
-
-            PlayerKeyboardController.keyPressedActions.Add(Keyboard.Key.A, () => Walk(EDirection.Left, true));
-            PlayerKeyboardController.keyPressedActions.Add(Keyboard.Key.D, () => Walk(EDirection.Right, true));
-            PlayerKeyboardController.keyReleasedActions.Add(Keyboard.Key.A, () => Walk(EDirection.Left, false));
-            PlayerKeyboardController.keyReleasedActions.Add(Keyboard.Key.D, () => Walk(EDirection.Right, false));
-            PlayerKeyboardController.keyPressedActions.Add(Keyboard.Key.Space, () => Jump());
 
             this.isFalling = true;
             this.isJumping = true;
@@ -114,6 +103,7 @@ namespace SFMLFramework
         /// </summary>
         public void Jump()
         {
+            Console.WriteLine("Jump()");
             if (!this.isJumping)
             {
                 IKineticController.AddForce(V2.Top * this.JUMP_FORCE);
@@ -136,6 +126,27 @@ namespace SFMLFramework
                 IKineticController.AddForce(V2.Right * this.WALK_FORCE);
             else if (this.moveLeft)
                 IKineticController.AddForce(V2.Left * this.WALK_FORCE);
+        }
+
+        /// <summary>
+        /// Método delegado de resposta a alguma colisão, para atualizar as devidas variáveis do controlador do personagem
+        /// </summary>
+        /// <param name="direction">Direção de ocorrência da colisão</param>
+        public void OnCollisionResponse(EDirection direction)
+        {
+            switch (direction)
+            {
+                case EDirection.Down:
+                    this.isFalling = false;
+                    this.isJumping = false;
+                    break;
+                case EDirection.Left:
+                    this.moveLeft = false;
+                    break;
+                case EDirection.Right:
+                    this.moveRigth = false;
+                    break;
+            }
         }
     }
 }

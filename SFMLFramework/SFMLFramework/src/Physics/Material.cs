@@ -10,10 +10,13 @@ namespace SFMLFramework
     /// </summary>
     public sealed class Material
     {
+        #region Fields
+
         /// <summary>
         /// Nome do tipo de material (borracha, metal, etc.)
         /// </summary>
         private string name;
+        public string Name { get { return name; } }
 
         /// <summary>
         /// Fricção do material (resistência a movimento)
@@ -22,7 +25,7 @@ namespace SFMLFramework
         public float Friction { get { return friction; } }
 
         /// <summary>
-        /// Permite uma variação da elasticidade do material.
+        /// Coeficiente de restituição do corpo (elasticidade)
         /// </summary>
         private float bounciness;
         public float Bounciness { get { return bounciness; } }
@@ -33,16 +36,27 @@ namespace SFMLFramework
         private float density;
         public float Density { get { return density; } }
 
-        public ECollisionType CollisionType { get; set; }
+        /// <summary>
+        /// Tipo da resposta de colisão do material
+        /// </summary>
+        public ECollisionType collisionType;
+        public ECollisionType CollisionType { get { return collisionType; } }
 
+
+        #endregion
+
+
+        #region Public
 
         public Material(string name, float friction, float bounciness, float density, ECollisionType collisionType)
         {
             this.name = name;
             this.friction = friction;
-            this.bounciness = bounciness;
+            this.bounciness = Extensions.Clamp(bounciness, Physx.MinElasticity, Physx.MaxElasticity);
             this.density = density;
-            this.CollisionType = collisionType;
+            this.collisionType = collisionType;
         }
+
+        #endregion
     }
 }

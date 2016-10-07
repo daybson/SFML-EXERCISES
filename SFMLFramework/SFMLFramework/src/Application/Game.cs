@@ -63,6 +63,14 @@ public class Game
         this.player.SetKeyboardInput(ref this.keyboard);
         this.player.Position = new Vector2f(340, 100);
 
+        this.player.PlatformPlayerController.PlayerKeyboardController.keyPressedActions.Add(Keyboard.Key.A, () => this.player.PlatformPlayerController.Walk(EDirection.Left, true));
+        this.player.PlatformPlayerController.PlayerKeyboardController.keyPressedActions.Add(Keyboard.Key.D, () => this.player.PlatformPlayerController.Walk(EDirection.Right, true));
+        this.player.PlatformPlayerController.PlayerKeyboardController.keyReleasedActions.Add(Keyboard.Key.A, () => this.player.PlatformPlayerController.Walk(EDirection.Left, false));
+        this.player.PlatformPlayerController.PlayerKeyboardController.keyReleasedActions.Add(Keyboard.Key.D, () => this.player.PlatformPlayerController.Walk(EDirection.Right, false));
+        this.player.PlatformPlayerController.PlayerKeyboardController.keyPressedActions.Add(Keyboard.Key.Space, () => this.player.PlatformPlayerController.Jump());
+        this.player.Rigidbody.OnCollisionResponse += this.player.PlatformPlayerController.OnCollisionResponse;
+
+
         var platformRenderer = new Renderer(Resources.LoadSpriteSheet("platform.png"), this.platform);
         this.platform.Components.Add(platformRenderer);
         this.platform.Subscribe(platformRenderer);
