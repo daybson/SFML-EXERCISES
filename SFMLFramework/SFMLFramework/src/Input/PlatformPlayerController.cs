@@ -12,6 +12,8 @@ namespace SFMLFramework
     /// </summary>
     public class PlatformPlayerController : IComponent
     {
+        #region Fields
+
         /// <summary>
         /// Personagem está caindo em queda livre?
         /// </summary>
@@ -61,13 +63,10 @@ namespace SFMLFramework
 
         public GameObject Root { get; set; }
 
-        public bool IsFalling
-        {
-            get
-            {
-                return isFalling;
-            }
-        }
+        #endregion
+
+
+        #region Public 
 
         public PlatformPlayerController(IKineticController iKineticController, ISpritesheetOrientable iSpritesheetOrientable)
         {
@@ -103,7 +102,6 @@ namespace SFMLFramework
         /// </summary>
         public void Jump()
         {
-            Console.WriteLine("Jump()");
             if (!this.isJumping)
             {
                 IKineticController.AddForce(V2.Top * this.JUMP_FORCE);
@@ -148,5 +146,7 @@ namespace SFMLFramework
                     break;
             }
         }
+
+        #endregion
     }
 }

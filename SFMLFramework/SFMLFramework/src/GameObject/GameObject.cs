@@ -48,6 +48,16 @@ namespace SFMLFramework
         }
 
         /// <summary>
+        /// Construtor
+        /// </summary>
+        /// <param name="name">Nome do gane object</param>
+        public GameObject(string name)
+        {
+            this.name = name;
+        }
+
+
+        /// <summary>
         /// Lista de componentes adicionados ao gameobject
         /// </summary>
         public List<IComponent> Components = new List<IComponent>();
@@ -71,6 +81,12 @@ namespace SFMLFramework
         {
         }
 
+        //TODO: testar....
+        /// <summary>
+        /// Adiciona um componente ao game object e retorna a instância do mesmo
+        /// </summary>
+        /// <typeparam name="T">Tipo do componente</typeparam>
+        /// <returns>Componente instanciado</returns>
         public T AddComponent<T>() where T : IComponent
         {
             T t = GetComponent<T>();

@@ -9,6 +9,7 @@ namespace SFMLFramework
     class Program
     {
         private static Game game;
+        public Game Game { get { return game; } }
 
         static void Main(string[] args)
         {

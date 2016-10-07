@@ -22,6 +22,8 @@ using SFMLFramework.src.Helper;
 
 public class Game
 {
+    #region Fields
+
     public Vector2u windowSize;
     public string windowTitle;
     public Clock clock;
@@ -29,13 +31,22 @@ public class Game
     private KeyboardInput keyboard;
 
     private Player player;
+    public Player Player { get { return player; } }
+
     private GameObject platform;
     private GameObject inelasticBrick1;
     private GameObject partialInelasticBrick;
     private GameObject elasticBrick;
 
     private List<GameObject> gameObjects;
+    public List<GameObject> GameObjects { get { return gameObjects; } }
+
     private VisualDebugger debugger;
+
+    #endregion
+
+
+    #region Public
 
     public Game(string title)
     {
@@ -51,6 +62,8 @@ public class Game
         this.partialInelasticBrick = new GameObject();
         this.debugger = new VisualDebugger();
     }
+
+
 
     public void Start()
     {
@@ -134,6 +147,11 @@ public class Game
         CollisionDispatcher.CollisionCheck(this.player.GetComponent<Rigidbody>(), this.partialInelasticBrick.GetComponent<Rigidbody>());
     }
 
+    #endregion
+
+
+    #region Protected
+
     protected void Run()
     {
         while (this.window.IsOpen)
@@ -156,4 +174,7 @@ public class Game
 
         this.window.Display();
     }
+
+    #endregion
+
 }
