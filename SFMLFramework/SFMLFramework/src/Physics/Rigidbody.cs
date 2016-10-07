@@ -282,13 +282,15 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
 
                     case EDirection.Right:
                         SetPosition(new Vector2f(this.Root.Position.X - hitInfo.Overlap.Width, this.Root.Position.Y));
+                        this.finalForce.X = 0;
                         AddForce(displacementVelocity2 * V2.Left.X);
                         Console.WriteLine("Reflection force R: " + (displacementVelocity2 * V2.Left.X).ToString());
                         break;
 
                     case EDirection.Left:
                         SetPosition(new Vector2f(this.Root.Position.X + hitInfo.Overlap.Width, this.Root.Position.Y));
-                        AddForce(displacementVelocity2 * V2.Right.X);
+                        this.finalForce.X = 0;
+                        AddForce(new Vector2f(displacementVelocity2.X, displacementVelocity2.Y));
                         Console.WriteLine("Reflection force L: " + (displacementVelocity2 * V2.Left.X).ToString());
                         break;
                 }
