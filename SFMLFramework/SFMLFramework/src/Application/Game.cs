@@ -13,6 +13,7 @@ using SFML.Graphics;
 using SFML.Window;
 using System;
 using System.Collections.Generic;
+
 using System.Linq;
 using System.Text;
 using SFML.System;
@@ -24,7 +25,7 @@ public class Game
 {
     #region Fields
 
-    public Vector2u windowSize;
+    public static readonly Vector2u windowSize = new Vector2u(800, 600);
     public string windowTitle;
     public Clock clock;
     protected RenderWindow window;
@@ -33,10 +34,10 @@ public class Game
     private Player player;
     public Player Player { get { return player; } }
 
-    private GameObject platform;
-    private GameObject inelasticBrick;
-    private GameObject partialInelasticBrick;
-    private GameObject elasticBrick;
+    private GameObject platformTop;
+    private GameObject platformBottom;
+    private GameObject platformRight;
+    private GameObject platformLeft;
 
     private List<GameObject> gameObjects;
     public List<GameObject> GameObjects { get { return gameObjects; } }
@@ -51,7 +52,6 @@ public class Game
     public Game(string title)
     {
         this.windowTitle = title;
-        this.windowSize = new Vector2u(800, 600);
         this.clock = new Clock();
         this.keyboard = new KeyboardInput(ref this.window);
         this.gameObjects = new List<GameObject>();
@@ -62,22 +62,29 @@ public class Game
     {
         this.debugger.SetMessage("Teste");
 
-        this.window = new RenderWindow(new VideoMode(this.windowSize.X, this.windowSize.Y), windowTitle);
+        this.window = new RenderWindow(new VideoMode(windowSize.X, windowSize.Y), windowTitle);
         this.window.SetFramerateLimit(60);
         this.window.KeyPressed += this.keyboard.ProcessKeyboardPressed;
         this.window.KeyReleased += this.keyboard.ProcessKeyboardReleased;
 
-        this.player = GameObjectCreator.CreatePlayer(ref this.keyboard);
-        this.platform = GameObjectCreator.CreatePlatform();
-        this.inelasticBrick = GameObjectCreator.CreateInelasticBrick();
-        //this.elasticBrick = GameObjectCreator.CreateElasticBrick();
-        //this.partialInelasticBrick = GameObjectCreator.CreatePartialInelasticBrick();
+        this.platformBottom = GameObjectCreator.CreateBottomPlatform();
+        this.platformTop = GameObjectCreator.CreateTopPlatform();
+        this.platformRight = GameObjectCreator.CreateRightPlatform();
+        this.platformLeft = GameObjectCreator.CreateLeftPlatform();
 
-        this.gameObjects.Add(this.player);
-        this.gameObjects.Add(this.platform);
-        this.gameObjects.Add(this.inelasticBrick);
-        //this.gameObjects.Add(this.partialInelasticBrick);
-        //this.gameObjects.Add(this.elasticBrick);
+        //this.player = GameObjectCreator.CreatePlayer(ref this.keyboard);
+        //this.gameObjects.Add(this.player);
+
+        this.gameObjects.Add(this.platformTop);
+        this.gameObjects.Add(this.platformBottom);
+        this.gameObjects.Add(this.platformRight);
+        this.gameObjects.Add(this.platformLeft);
+
+        this.gameObjects.Add(this.platformTop);
+        this.gameObjects.Add(GameObjectCreator.CreateInelasticBrick(new Vector2f(150, 350)));
+        this.gameObjects.Add(GameObjectCreator.CreateInelasticBrick(new Vector2f(400, 450)));
+
+        this.gameObjects.Find(g => g.name == "InelasticBrick").GetComponent<Rigidbody>().AddForce(new Vector2f(-50f, 0f));
 
         Run();
     }
@@ -125,7 +132,7 @@ public class Game
     {
         this.window.Clear(Color.White);
 
-        foreach(var g in this.gameObjects)
+        foreach (var g in this.gameObjects)
         {
             g.GetComponent<Renderer>()?.Render(ref this.window);
             g.GetComponent<Rigidbody>()?.ColliderBottom.Render(ref this.window);

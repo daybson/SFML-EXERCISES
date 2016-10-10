@@ -6,7 +6,7 @@ using System.Text;
 
 public static class Physx
 {
-    public static readonly float Gravity = 5f;
+    public static readonly float Gravity = 20f;
 
     public static readonly float Air = 1.0f;
     public static readonly float Water = 3.0f;

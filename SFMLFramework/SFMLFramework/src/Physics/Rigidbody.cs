@@ -98,14 +98,15 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
 
     public GameObject Root { get; set; }
 
-    public Vector2f MaxVelocity { get { return new Vector2f(150, -500); } }
+    private Vector2f maxVelocity;
+    public Vector2f MaxVelocity { get { return maxVelocity; } }
 
     #endregion
 
 
     #region Methods
 
-    public Rigidbody(float mass, float elasticity, Vector2f spriteDimension, Material material, bool isKinematic, GameObject root)
+    public Rigidbody(float mass, float elasticity, Vector2f spriteDimension, Material material, bool isKinematic, GameObject root, Vector2f maxVelocity)
     {
         this.mass = mass;
         this.Root = root;
@@ -114,6 +115,7 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
         this.netForce = new Vector2f(0, -0.0001f);
         this.spriteDimension = spriteDimension;
         this.colliderThickness = 4;
+        this.maxVelocity = maxVelocity;
 
         this.ColliderTop = new Collider(this.spriteDimension, EDirection.Up, this.colliderThickness, this.Root);
         this.ColliderBottom = new Collider(this.spriteDimension, EDirection.Down, this.colliderThickness, this.Root);
@@ -135,10 +137,12 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
     public void Update(float deltaTime)
     {
         //G-FORCE
-        if (!isKinematic && this.netForce.Y < 0)
+        if (!isKinematic)
             this.netForce += new Vector2f(0, this.mass * Physx.Gravity);
 
+
         #region Fricção do piso/ambiente
+        //TODO: remove da fricção 
         if (Material.CollisionType != ECollisionType.Elastic)
         {
             if (this.netForce.X > 0)
@@ -156,7 +160,14 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
         }
         #endregion
 
+
+        if (this.Root.name.Equals("Player"))
+            Console.WriteLine(netForce.ToString());
+
+
         Root.Position += this.netForce * deltaTime;
+
+        this.netForce.Y = 0;
     }
 
     /// <summary>
@@ -168,7 +179,12 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
         this.netForce += force;
 
         //TODO: definir impacto do uso ou não de velocidade máxima
-        //this.finalForce.X = Extensions.Clamp(this.finalForce.X, -MaxVelocity.X, MaxVelocity.X);
+
+        if (this.netForce.X > MaxVelocity.X)
+            this.netForce.X = MaxVelocity.X;
+        else if (this.netForce.X < -MaxVelocity.X)
+            this.netForce.X = -MaxVelocity.X;
+
         //this.finalForce.Y = Extensions.Clamp(this.finalForce.Y, -MaxVelocity.Y, MaxVelocity.Y);
     }
 
@@ -247,15 +263,17 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
                  */
                 #endregion
 
-                //TODO: Calcular para Y
+                /* a nova velocidade final do sistema em colisão é calculada. Como a massa é constante, a menos que alguma força externa (gravidade/fricção) esteja atuando,
+                a velocidade será sempre a mesma e os corpos nunca cessarão o movimento */
 
-                //a nova velocidade final do sistema em colisão é calculada. Como a massa é constante, a menos que alguma força externa (gravidade/fricção) esteja atuando,
-                //a velocidade será sempre a mesma e os corpos nunca cessarão o movimento
-                var newVelocity = new Vector2f((this.mass * Velocity.X + hitInfo.RigidBody.Mass * hitInfo.RigidBody.Velocity.X) / (this.mass + hitInfo.RigidBody.Mass), 0);
+                //var newVelocity = new Vector2f((this.mass * Velocity.X + hitInfo.RigidBody.Mass * hitInfo.RigidBody.Velocity.X) / (this.mass + hitInfo.RigidBody.Mass),
+                //                               (this.mass * Velocity.Y + hitInfo.RigidBody.Mass * hitInfo.RigidBody.Velocity.Y) / (this.mass + hitInfo.RigidBody.Mass));
 
-                //a velocidade a ser incrementada no sistema é a diferença entre a velocidade final do sistema e a força atual do corpo, ou seja, o quanto falta para que
-                //o corpo atinja a velocidade final, ou o quanto é reduzido sobre sua velocidade atual para que ele se equilibre ao sistema
-                var displacementVelocityX = newVelocity - this.netForce;
+
+                /* a velocidade a ser incrementada no sistema é a diferença entre a velocidade final do sistema e a força atual do corpo, ou seja, o quanto falta para que
+                o corpo atinja a velocidade final, ou o quanto é reduzido sobre sua velocidade atual para que ele se equilibre ao sistema */
+
+                //var displacementVelocity = newVelocity - this.netForce;
 
                 this.OnCollisionResponse(hitInfo.Direction);
 
@@ -264,17 +282,26 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
                     case EDirection.Down:
                         SetPosition(new Vector2f(this.Root.Position.X, this.Root.Position.Y - hitInfo.Overlap.Height));
                         EnvironmentFriction = hitInfo.RigidBody.Material.Friction;
+                        //this.netForce.Y = 0;
+                        //AddForce(newVelocity);
                         break;
+
                     case EDirection.Up:
                         SetPosition(new Vector2f(this.Root.Position.X, Root.Position.Y + hitInfo.Overlap.Height));
+                        //this.netForce.Y = 0;
+                        //AddForce(newVelocity);
                         break;
+
                     case EDirection.Right:
                         SetPosition(new Vector2f(this.Root.Position.X - hitInfo.Overlap.Width, this.Root.Position.Y));
-                        AddForce(displacementVelocityX);
+                        //this.netForce.X = 0;
+                        //AddForce(newVelocity);
                         break;
+
                     case EDirection.Left:
                         SetPosition(new Vector2f(this.Root.Position.X + hitInfo.Overlap.Width, this.Root.Position.Y));
-                        AddForce(displacementVelocityX);
+                        //this.netForce.X = 0;
+                        //AddForce(newVelocity);
                         break;
                 }
                 break;

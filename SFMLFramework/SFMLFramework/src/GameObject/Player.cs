@@ -34,15 +34,17 @@ public class Player : GameObject
 
     public Player()
     {
+        name = "Player";
         Renderer = new Renderer(Resources.LoadSpriteSheet("dragon.png"), this);
         Subscribe(Renderer);
 
-        Rigidbody = new Rigidbody(10f,
+        Rigidbody = new Rigidbody(8f,
                                   0,
                                   new Vector2f(Renderer.SpriteSheet.TileWidth, Renderer.SpriteSheet.TileHeight),
                                   new Material("Player 1", 1, 1, 1, ECollisionType.Inelastic),
                                   false,
-                                  this);
+                                  this,
+                                  new Vector2f(200, 60));
 
         PlatformPlayerController = new PlatformPlayerController(Rigidbody, Renderer);
         PlatformPlayerController.OnSpriteSheetOrientationChange += Renderer.OrientateSpriteSheetTo;

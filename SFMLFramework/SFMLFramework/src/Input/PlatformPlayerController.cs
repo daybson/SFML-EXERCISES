@@ -37,12 +37,12 @@ namespace SFMLFramework
         /// <summary>
         /// Modificador escalar do vetor de pulo
         /// </summary>
-        protected readonly float JUMP_FORCE = 900.0f;
+        protected readonly float JUMP_FORCE = 1500.0f;
 
         /// <summary>
         /// Modificador escalar do vetor de caminhada
         /// </summary>
-        protected readonly float WALK_FORCE = 25.0f;
+        protected readonly float WALK_FORCE = 100.0f;
 
         /// <summary>
         /// Expedidor de eventos do teclado
