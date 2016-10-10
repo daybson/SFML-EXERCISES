@@ -32,6 +32,7 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
     /// Somatório de todas as forças sendo aplicadas ao corpo
     /// </summary>
     private Vector2f netForce;
+    public Vector2f NetForce { get { return netForce; } }
 
     /// <summary>
     /// Espessura do collider
@@ -99,11 +100,6 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
 
     public Vector2f MaxVelocity { get { return new Vector2f(150, -500); } }
 
-    /// <summary>
-    /// Taxa de cálculo da espessura do collider (80% da menor medida entre altura e largura)
-    /// </summary>
-    private static readonly float COLLIDER_THICKNESS_RATIO = 0.8f;
-
     #endregion
 
 
@@ -115,10 +111,9 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
         this.Root = root;
         this.Material = material;
         this.isKinematic = isKinematic;
-        this.netForce = V2.Zero;
+        this.netForce = new Vector2f(0, -0.0001f);
         this.spriteDimension = spriteDimension;
-
-        this.colliderThickness = (int)(Math.Min(this.spriteDimension.X, this.spriteDimension.Y) * COLLIDER_THICKNESS_RATIO);
+        this.colliderThickness = 4;
 
         this.ColliderTop = new Collider(this.spriteDimension, EDirection.Up, this.colliderThickness, this.Root);
         this.ColliderBottom = new Collider(this.spriteDimension, EDirection.Down, this.colliderThickness, this.Root);
@@ -141,7 +136,7 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
     {
         //G-FORCE
         if (!isKinematic && this.netForce.Y < 0)
-            this.netForce += new Vector2f(0, this.mass * Physx.GAcc);
+            this.netForce += new Vector2f(0, this.mass * Physx.Gravity);
 
         #region Fricção do piso/ambiente
         if (Material.CollisionType != ECollisionType.Elastic)
@@ -251,7 +246,7 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
                  * v = 2.5
                  */
                 #endregion
-                
+
                 //TODO: Calcular para Y
 
                 //a nova velocidade final do sistema em colisão é calculada. Como a massa é constante, a menos que alguma força externa (gravidade/fricção) esteja atuando,

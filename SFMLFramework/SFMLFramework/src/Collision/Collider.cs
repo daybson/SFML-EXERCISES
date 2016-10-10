@@ -83,7 +83,7 @@ public class Collider : IComponent, IRender, IObserver<GameObject>
                 break;
         }
 
-        shape.OutlineColor = Color.Magenta;
+        shape.OutlineColor = Color.Blue;
         shape.OutlineThickness = 1f;
         shape.FillColor = Color.Transparent;
 

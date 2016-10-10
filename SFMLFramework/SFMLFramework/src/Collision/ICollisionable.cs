@@ -16,5 +16,7 @@ public interface ICollisionable
     Vector2f Velocity { get; }
     Vector2f MaxVelocity { get; }
     float Mass { get; }
+    Vector2f NetForce { get; }
+    GameObject Root { get; }
     void SolveCollision(CollisionInfo hitInfo);
 }

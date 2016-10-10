@@ -21,7 +21,7 @@ namespace SFMLFramework
         /// <summary>
         /// Nome do objeto
         /// </summary>
-        protected string name;
+        public string name;
 
         /// <summary>
         /// Id único do objeto

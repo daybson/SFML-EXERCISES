@@ -34,7 +34,7 @@ public class Game
     public Player Player { get { return player; } }
 
     private GameObject platform;
-    private GameObject inelasticBrick1;
+    private GameObject inelasticBrick;
     private GameObject partialInelasticBrick;
     private GameObject elasticBrick;
 
@@ -54,16 +54,9 @@ public class Game
         this.windowSize = new Vector2u(800, 600);
         this.clock = new Clock();
         this.keyboard = new KeyboardInput(ref this.window);
-
         this.gameObjects = new List<GameObject>();
-        this.player = new Player();
-        this.platform = new GameObject();
-        this.inelasticBrick1 = new GameObject();
-        this.partialInelasticBrick = new GameObject();
         this.debugger = new VisualDebugger();
     }
-
-
 
     public void Start()
     {
@@ -73,61 +66,18 @@ public class Game
         this.window.SetFramerateLimit(60);
         this.window.KeyPressed += this.keyboard.ProcessKeyboardPressed;
         this.window.KeyReleased += this.keyboard.ProcessKeyboardReleased;
-        this.player.SetKeyboardInput(ref this.keyboard);
-        this.player.Position = new Vector2f(340, 100);
 
-        this.player.PlatformPlayerController.PlayerKeyboardController.keyPressedActions.Add(Keyboard.Key.A, () => this.player.PlatformPlayerController.Walk(EDirection.Left, true));
-        this.player.PlatformPlayerController.PlayerKeyboardController.keyPressedActions.Add(Keyboard.Key.D, () => this.player.PlatformPlayerController.Walk(EDirection.Right, true));
-        this.player.PlatformPlayerController.PlayerKeyboardController.keyReleasedActions.Add(Keyboard.Key.A, () => this.player.PlatformPlayerController.Walk(EDirection.Left, false));
-        this.player.PlatformPlayerController.PlayerKeyboardController.keyReleasedActions.Add(Keyboard.Key.D, () => this.player.PlatformPlayerController.Walk(EDirection.Right, false));
-        this.player.PlatformPlayerController.PlayerKeyboardController.keyPressedActions.Add(Keyboard.Key.Space, () => this.player.PlatformPlayerController.Jump());
-        this.player.Rigidbody.OnCollisionResponse += this.player.PlatformPlayerController.OnCollisionResponse;
-
-
-        var platformRenderer = new Renderer(Resources.LoadSpriteSheet("platform.png"), this.platform);
-        this.platform.Components.Add(platformRenderer);
-        this.platform.Subscribe(platformRenderer);
-        this.platform.Components.Add(
-            new Rigidbody(
-                0,
-                0,
-                new Vector2f(platformRenderer.SpriteSheet.TileWidth, platformRenderer.SpriteSheet.TileHeight),
-                new Material("Platform", 1, 1, 1, ECollisionType.Inelastic),
-                true,
-                this.platform));
-        this.platform.Position = new Vector2f(0, 230);
-
-        var brickRenderer1 = new Renderer(Resources.LoadSpriteSheet("brick.png"), this.inelasticBrick1);
-        this.inelasticBrick1.Components.Add(brickRenderer1);
-        this.inelasticBrick1.Subscribe(brickRenderer1);
-        this.inelasticBrick1.Components.Add(
-            new Rigidbody(
-                9,
-                0,
-                new Vector2f(brickRenderer1.SpriteSheet.TileWidth, brickRenderer1.SpriteSheet.TileHeight),
-                new Material("Brick 1", 8, 1, 1, ECollisionType.Inelastic),
-                true,
-                this.inelasticBrick1));
-        this.inelasticBrick1.Position = new Vector2f(120, 185);
-
-        var brickRenderer2 = new Renderer(Resources.LoadSpriteSheet("brick.png"), this.inelasticBrick1);
-        this.partialInelasticBrick.Components.Add(brickRenderer2);
-        this.partialInelasticBrick.Subscribe(brickRenderer2);
-        this.partialInelasticBrick.Components.Add(
-            new Rigidbody(
-                5,
-                0.5f,
-                new Vector2f(brickRenderer2.SpriteSheet.TileWidth, brickRenderer2.SpriteSheet.TileHeight),
-                new Material("Brick 2", 8, 1, 1, ECollisionType.Elastic),
-                false,
-                this.partialInelasticBrick));
-        this.partialInelasticBrick.Position = new Vector2f(200, 160);
-        this.partialInelasticBrick.GetComponent<Rigidbody>().AddForce(new Vector2f(150, 0));
+        this.player = GameObjectCreator.CreatePlayer(ref this.keyboard);
+        this.platform = GameObjectCreator.CreatePlatform();
+        this.inelasticBrick = GameObjectCreator.CreateInelasticBrick();
+        //this.elasticBrick = GameObjectCreator.CreateElasticBrick();
+        //this.partialInelasticBrick = GameObjectCreator.CreatePartialInelasticBrick();
 
         this.gameObjects.Add(this.player);
         this.gameObjects.Add(this.platform);
-        this.gameObjects.Add(this.inelasticBrick1);
-        this.gameObjects.Add(this.partialInelasticBrick);
+        this.gameObjects.Add(this.inelasticBrick);
+        //this.gameObjects.Add(this.partialInelasticBrick);
+        //this.gameObjects.Add(this.elasticBrick);
 
         Run();
     }
@@ -137,14 +87,21 @@ public class Game
         foreach (var g in this.gameObjects)
         {
             g.Update(deltaTime);
-        }
 
-        CollisionDispatcher.CollisionCheck(this.inelasticBrick1.GetComponent<Rigidbody>(), this.platform.GetComponent<Rigidbody>());
-        CollisionDispatcher.CollisionCheck(this.inelasticBrick1.GetComponent<Rigidbody>(), this.partialInelasticBrick.GetComponent<Rigidbody>());
-        CollisionDispatcher.CollisionCheck(this.partialInelasticBrick.GetComponent<Rigidbody>(), this.platform.GetComponent<Rigidbody>());
-        CollisionDispatcher.CollisionCheck(this.player.GetComponent<Rigidbody>(), this.platform.GetComponent<Rigidbody>());
-        CollisionDispatcher.CollisionCheck(this.player.GetComponent<Rigidbody>(), this.inelasticBrick1.GetComponent<Rigidbody>());
-        CollisionDispatcher.CollisionCheck(this.player.GetComponent<Rigidbody>(), this.partialInelasticBrick.GetComponent<Rigidbody>());
+            //Loop de colisão
+            for (var i = 0; i < this.gameObjects.Count; i++)
+            {
+                //evita teste com si mesmo
+                if (g != this.gameObjects[i])
+                {
+                    var gRigidBody = g.GetComponent<Rigidbody>();
+                    var gIndexRigidBody = gameObjects[i].GetComponent<Rigidbody>();
+
+                    if (gRigidBody != null && gIndexRigidBody != null)
+                        CollisionDispatcher.CollisionCheck(gRigidBody, gIndexRigidBody, deltaTime);
+                }
+            }
+        }
     }
 
     #endregion
@@ -168,7 +125,14 @@ public class Game
     {
         this.window.Clear(Color.White);
 
-        this.gameObjects?.ForEach(g => g?.GetComponent<Renderer>()?.Render(ref this.window));
+        foreach(var g in this.gameObjects)
+        {
+            g.GetComponent<Renderer>()?.Render(ref this.window);
+            g.GetComponent<Rigidbody>()?.ColliderBottom.Render(ref this.window);
+            g.GetComponent<Rigidbody>()?.ColliderTop.Render(ref this.window);
+            g.GetComponent<Rigidbody>()?.ColliderRight.Render(ref this.window);
+            g.GetComponent<Rigidbody>()?.ColliderLeft.Render(ref this.window);
+        }
 
         this.debugger.Render(ref this.window);
 

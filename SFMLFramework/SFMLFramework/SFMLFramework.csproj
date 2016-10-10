@@ -92,6 +92,7 @@
     <Compile Include="src\Helper\Extension.cs" />
     <Compile Include="src\Helper\Extensions.cs" />
     <Compile Include="src\Helper\DesignPatterns\Observable.cs" />
+    <Compile Include="src\Helper\GameObjectCreator.cs" />
     <Compile Include="src\Helper\Resources.cs" />
     <Compile Include="src\Helper\DesignPatterns\Singleton.cs" />
     <Compile Include="src\Helper\VisualDebugger.cs" />
@@ -130,22 +131,22 @@
     <Content Include="csfml-window-2.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\textures\brick.png">
+    <Content Include="resources\textures\inelasticBrick.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\textures\brick.txt">
+    <Content Include="resources\textures\inelasticBrick.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\textures\brick2.png">
+    <Content Include="resources\textures\elasticBrick.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\textures\brick2.txt">
+    <Content Include="resources\textures\elasticBrick.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\textures\brick3.png">
+    <Content Include="resources\textures\partialInelasticBrick.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\textures\brick3.txt">
+    <Content Include="resources\textures\partialInelasticBrick.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\textures\dragon.png">
