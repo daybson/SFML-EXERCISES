@@ -20,7 +20,7 @@ namespace SFMLFramework
         /// <summary>
         /// GameObject ao qual o componente está relacionado
         /// </summary>
-        GameObject Root        {            get;            set;        }
+        GameObject Root { get; set; }
 
         /// <summary>
         /// Atualiza o componente a cada frame

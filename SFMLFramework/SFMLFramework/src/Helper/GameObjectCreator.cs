@@ -32,6 +32,8 @@ namespace SFMLFramework.src.Helper
         public static GameObject CreateInelasticBrick(Vector2f position)
         {
             var inelasticBrick = new GameObject("InelasticBrick");
+            inelasticBrick.Position = position;
+
             var renderer = new Renderer(Resources.LoadSpriteSheet("inelasticBrick.png"), inelasticBrick);
             inelasticBrick.Components.Add(renderer);
             inelasticBrick.Subscribe(renderer);
@@ -44,7 +46,6 @@ namespace SFMLFramework.src.Helper
                     false,
                     inelasticBrick,
                     new Vector2f(50, 50)));
-            inelasticBrick.Position = position;
             return inelasticBrick;
         }
 
@@ -60,9 +61,9 @@ namespace SFMLFramework.src.Helper
                     0,
                     new Vector2f(renderer.SpriteSheet.TileWidth, renderer.SpriteSheet.TileHeight),
                     new Material("PartialInelasticBrick", 8, 1, 1, ECollisionType.PartialInelastic),
-                    true,
+                    false,
                     partialInelasticBrick,
-                    new Vector2f(50, 50)));
+                    new Vector2f(50, 100)));
             partialInelasticBrick.Position = new Vector2f(120, 185);
             return partialInelasticBrick;
         }
@@ -77,92 +78,36 @@ namespace SFMLFramework.src.Helper
             player.PlatformPlayerController.PlayerKeyboardController.keyReleasedActions.Add(Keyboard.Key.D, () => player.PlatformPlayerController.Walk(EDirection.Right, false));
             player.PlatformPlayerController.PlayerKeyboardController.keyPressedActions.Add(Keyboard.Key.Space, () => player.PlatformPlayerController.Jump());
             player.Rigidbody.OnCollisionResponse += player.PlatformPlayerController.OnCollisionResponse;
-            player.Position = new Vector2f(300, 300);
             return player;
         }
 
-        public static GameObject CreateTopPlatform()
+        public static GameObject CreatePlatform(EDirection direction, Vector2f position)
         {
-            var platform = new GameObject("PlatformTop");
+            var platform = new GameObject("Platform" + direction.ToString());
 
-            var platformRenderer = new Renderer(Resources.LoadSpriteSheet("platform.png"), platform);
+            string sprite = "";
+            if (direction == EDirection.Left || direction == EDirection.Right)
+                sprite = "platformSide.png";
+            else
+                sprite = "platform.png";
+            platform.Position = position;
+
+            var platformRenderer = new Renderer(Resources.LoadSpriteSheet(sprite), platform);
             platform.Components.Add(platformRenderer);
             platform.Subscribe(platformRenderer);
             platform.Components.Add(
                 new Rigidbody(
-                    0,
+                    9,
                     0,
                     new Vector2f(platformRenderer.SpriteSheet.TileWidth, platformRenderer.SpriteSheet.TileHeight),
-                    new Material("Platform", 1, 1, 1, ECollisionType.Inelastic),
+                    new Material("RPlatform" + direction.ToString(), 1, 1, 1, ECollisionType.Inelastic),
                     true,
                     platform,
                     new Vector2f(50, 50)));
-            platform.Position = new Vector2f(0, 0);
 
             return platform;
         }
 
-        public static GameObject CreateBottomPlatform()
-        {
-            var platform = new GameObject("PlatformBottom");
 
-            var platformRenderer = new Renderer(Resources.LoadSpriteSheet("platform.png"), platform);
-            platform.Components.Add(platformRenderer);
-            platform.Subscribe(platformRenderer);
-            platform.Components.Add(
-                new Rigidbody(
-                    0,
-                    0,
-                    new Vector2f(platformRenderer.SpriteSheet.TileWidth, platformRenderer.SpriteSheet.TileHeight),
-                    new Material("Platform", 1, 1, 1, ECollisionType.Inelastic),
-                    true,
-                    platform,
-                    new Vector2f(50, 50)));
-            platform.Position = new Vector2f(0, Game.windowSize.Y - platformRenderer.SpriteSheet.TileHeight);
-
-            return platform;
-        }
-
-        public static GameObject CreateLeftPlatform()
-        {
-            var platform = new GameObject("PlatformLeft");
-
-            var platformRenderer = new Renderer(Resources.LoadSpriteSheet("platformSide.png"), platform);
-            platform.Components.Add(platformRenderer);
-            platform.Subscribe(platformRenderer);
-            platform.Components.Add(
-                new Rigidbody(
-                    0,
-                    0,
-                    new Vector2f(platformRenderer.SpriteSheet.TileWidth, platformRenderer.SpriteSheet.TileHeight),
-                    new Material("Platform", 1, 1, 1, ECollisionType.Inelastic),
-                    true,
-                    platform,
-                    new Vector2f(50, 50)));
-            platform.Position = V2.Zero;
-
-            return platform;
-        }
-
-        public static GameObject CreateRightPlatform()
-        {
-            var platform = new GameObject("PlatformRight");
-
-            var platformRenderer = new Renderer(Resources.LoadSpriteSheet("platformSide.png"), platform);
-            platform.Components.Add(platformRenderer);
-            platform.Subscribe(platformRenderer);
-            platform.Components.Add(
-                new Rigidbody(
-                    0,
-                    0,
-                    new Vector2f(platformRenderer.SpriteSheet.TileWidth, platformRenderer.SpriteSheet.TileHeight),
-                    new Material("Platform", 1, 1, 1, ECollisionType.Inelastic),
-                    true,
-                    platform,
-                    new Vector2f(50, 50)));
-            platform.Position = new Vector2f(Game.windowSize.X - platformRenderer.SpriteSheet.TileWidth, 0);
-
-            return platform;
-        }
     }
 }

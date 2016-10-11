@@ -43,26 +43,5 @@ public class CollisionInfo
         return this.overlap.ToString() + " " + this.direction.ToString();
     }
 
-    public CollisionInfo Inverse()
-    {
-        var inverseCollision = this;
-        switch (inverseCollision.direction)
-        {
-            case EDirection.Down:
-                inverseCollision.direction = EDirection.Up;
-                break;
-            case EDirection.Up:
-                inverseCollision.direction = EDirection.Down;
-                break;
-            case EDirection.Right:
-                inverseCollision.direction = EDirection.Left;
-                break;
-            case EDirection.Left:
-                inverseCollision.direction = EDirection.Right;
-                break;
-        }
-        return inverseCollision;
-    }
-
     #endregion
 }

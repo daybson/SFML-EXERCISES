@@ -5,6 +5,7 @@ using System.Text;
 using SFML.Graphics;
 using SFMLFramework.src;
 using SFML.System;
+using SFMLFramework.src.Helper;
 
 namespace SFMLFramework
 {
@@ -13,6 +14,8 @@ namespace SFMLFramework
     /// </summary>
     public class GameObject : Observable<GameObject>
     {
+        public VisualDebugger text;
+
         /// <summary>
         /// GameObject está habilitado? (somente executa Update caso esteja)
         /// </summary>
@@ -45,6 +48,7 @@ namespace SFMLFramework
         /// </summary>
         public GameObject()
         {
+            this.isEnabled = true;
         }
 
         /// <summary>
@@ -54,6 +58,7 @@ namespace SFMLFramework
         public GameObject(string name)
         {
             this.name = name;
+            this.isEnabled = true;
         }
 
 

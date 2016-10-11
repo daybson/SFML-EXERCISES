@@ -8,12 +8,27 @@ using static SFML.Graphics.Text;
 
 namespace SFMLFramework.src.Helper
 {
-    public class VisualDebugger : IRender
+    public class VisualDebugger : IRender, IComponent
     {
         private string defaultFont = "Roboto-Regular.ttf";
         private Font font;
         private Text text;
         public Text Text { get { return text; } }
+
+        public bool IsEnabled
+        {
+            get;
+
+            set;
+        }
+
+        public GameObject Root
+        {
+            get;
+
+            set;
+        }
+
         private uint defaultCharacterSize = 10;
         private Color defaultColor = Color.Black;
         private Styles defaultStyle = Styles.Regular;
@@ -36,6 +51,11 @@ namespace SFMLFramework.src.Helper
         public void Render(ref RenderWindow window)
         {
             window.Draw(this.text);
+        }
+
+        public void Update(float deltaTime)
+        {
+            throw new NotImplementedException();
         }
     }
 }

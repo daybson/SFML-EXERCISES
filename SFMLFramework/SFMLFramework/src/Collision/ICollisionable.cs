@@ -18,5 +18,6 @@ public interface ICollisionable
     float Mass { get; }
     Vector2f NetForce { get; }
     GameObject Root { get; }
+    bool IsKinematic { get; }
     void SolveCollision(CollisionInfo hitInfo);
 }

@@ -27,6 +27,7 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
     /// Especifica se o corpo deve responder à colisões ou se mantém fiel à sua posição atual (incluindo uma posição ditada por uma animação)
     /// </summary>
     private bool isKinematic;
+    public bool IsKinematic { get { return isKinematic; } }
 
     /// <summary>
     /// Somatório de todas as forças sendo aplicadas ao corpo
@@ -112,10 +113,11 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
         this.Root = root;
         this.Material = material;
         this.isKinematic = isKinematic;
-        this.netForce = new Vector2f(0, -0.0001f);
+        this.netForce = V2.Zero;
         this.spriteDimension = spriteDimension;
         this.colliderThickness = 4;
         this.maxVelocity = maxVelocity;
+        this.IsEnabled = true;
 
         this.ColliderTop = new Collider(this.spriteDimension, EDirection.Up, this.colliderThickness, this.Root);
         this.ColliderBottom = new Collider(this.spriteDimension, EDirection.Down, this.colliderThickness, this.Root);
@@ -138,36 +140,25 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
     {
         //G-FORCE
         if (!isKinematic)
-            this.netForce += new Vector2f(0, this.mass * Physx.Gravity);
+            AddForce(new Vector2f(0, this.mass * Physx.Gravity));
 
 
         #region Fricção do piso/ambiente
-        //TODO: remove da fricção 
-        if (Material.CollisionType != ECollisionType.Elastic)
+        if (this.netForce.X > 0)
         {
-            if (this.netForce.X > 0)
-            {
-                this.netForce.X -= EnvironmentFriction;
-                if (this.netForce.X - EnvironmentFriction < 0)
-                    this.netForce.X = 0;
-            }
-            else if (this.netForce.X < 0)
-            {
-                this.netForce.X += EnvironmentFriction;
-                if (this.netForce.X + EnvironmentFriction > 0)
-                    this.netForce.X = 0;
-            }
+            this.netForce.X -= EnvironmentFriction;
+            if (this.netForce.X - EnvironmentFriction < 0)
+                this.netForce.X = 0;
+        }
+        else if (this.netForce.X < 0)
+        {
+            this.netForce.X += EnvironmentFriction;
+            if (this.netForce.X + EnvironmentFriction > 0)
+                this.netForce.X = 0;
         }
         #endregion
 
-
-        if (this.Root.name.Equals("Player"))
-            Console.WriteLine(netForce.ToString());
-
-
         Root.Position += this.netForce * deltaTime;
-
-        this.netForce.Y = 0;
     }
 
     /// <summary>
@@ -178,14 +169,15 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
     {
         this.netForce += force;
 
-        //TODO: definir impacto do uso ou não de velocidade máxima
-
         if (this.netForce.X > MaxVelocity.X)
             this.netForce.X = MaxVelocity.X;
         else if (this.netForce.X < -MaxVelocity.X)
             this.netForce.X = -MaxVelocity.X;
 
-        //this.finalForce.Y = Extensions.Clamp(this.finalForce.Y, -MaxVelocity.Y, MaxVelocity.Y);
+        if (this.netForce.Y > MaxVelocity.Y)
+            this.netForce.Y = MaxVelocity.Y;
+        else if (this.netForce.Y < -MaxVelocity.Y)
+            this.netForce.Y = -MaxVelocity.Y;
     }
 
     /// <summary>
@@ -193,7 +185,7 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
     /// </summary>
     public void SolveCollision(CollisionInfo hitInfo)
     {
-        if (this.isKinematic || Material?.CollisionType == ECollisionType.None)
+        if (this.isKinematic)
             return;
 
         OnCollisionResponse(hitInfo.Direction);
@@ -202,7 +194,7 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
         {
             case ECollisionType.Elastic:
                 #region
-
+                Console.WriteLine("Elastic");
                 #region Doc
                 /*
                 * Equação da velocidade final dos corpos em colisão elástica
@@ -221,7 +213,7 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
                 var Ef = (0.5 * this.mass * Vaf * Vaf) + (0.5 * hitInfo.RigidBody.Mass * Vbf * Vbf);
                 */
                 #endregion
-
+                /*
                 var previousNetForce = this.netForce;
 
                 switch (hitInfo.Direction)
@@ -247,12 +239,13 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
                         AddForce(new Vector2f(Math.Abs(previousNetForce.X), previousNetForce.Y));
                         break;
                 }
+                */
                 break;
             #endregion
 
             case ECollisionType.Inelastic:
                 #region
-
+                Console.WriteLine("Inelastic");
                 #region Doc
                 /*
                  * Equação da velocidade final dos corpos em colisão inelástica
@@ -265,52 +258,51 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
 
                 /* a nova velocidade final do sistema em colisão é calculada. Como a massa é constante, a menos que alguma força externa (gravidade/fricção) esteja atuando,
                 a velocidade será sempre a mesma e os corpos nunca cessarão o movimento */
+                var newVelocity = new Vector2f((this.mass * Velocity.X + hitInfo.RigidBody.Mass * hitInfo.RigidBody.Velocity.X) / (this.mass + hitInfo.RigidBody.Mass),
+                                               (this.mass * Velocity.Y + hitInfo.RigidBody.Mass * hitInfo.RigidBody.Velocity.Y) / (this.mass + hitInfo.RigidBody.Mass));
 
-                //var newVelocity = new Vector2f((this.mass * Velocity.X + hitInfo.RigidBody.Mass * hitInfo.RigidBody.Velocity.X) / (this.mass + hitInfo.RigidBody.Mass),
-                //                               (this.mass * Velocity.Y + hitInfo.RigidBody.Mass * hitInfo.RigidBody.Velocity.Y) / (this.mass + hitInfo.RigidBody.Mass));
-
-
+                //Console.WriteLine("New Velocity: " + newVelocity.ToString());
                 /* a velocidade a ser incrementada no sistema é a diferença entre a velocidade final do sistema e a força atual do corpo, ou seja, o quanto falta para que
                 o corpo atinja a velocidade final, ou o quanto é reduzido sobre sua velocidade atual para que ele se equilibre ao sistema */
-
                 //var displacementVelocity = newVelocity - this.netForce;
-
-                this.OnCollisionResponse(hitInfo.Direction);
 
                 switch (hitInfo.Direction)
                 {
                     case EDirection.Down:
                         SetPosition(new Vector2f(this.Root.Position.X, this.Root.Position.Y - hitInfo.Overlap.Height));
-                        EnvironmentFriction = hitInfo.RigidBody.Material.Friction;
-                        //this.netForce.Y = 0;
-                        //AddForce(newVelocity);
                         break;
-
                     case EDirection.Up:
                         SetPosition(new Vector2f(this.Root.Position.X, Root.Position.Y + hitInfo.Overlap.Height));
-                        //this.netForce.Y = 0;
-                        //AddForce(newVelocity);
                         break;
-
                     case EDirection.Right:
                         SetPosition(new Vector2f(this.Root.Position.X - hitInfo.Overlap.Width, this.Root.Position.Y));
-                        //this.netForce.X = 0;
-                        //AddForce(newVelocity);
                         break;
-
                     case EDirection.Left:
                         SetPosition(new Vector2f(this.Root.Position.X + hitInfo.Overlap.Width, this.Root.Position.Y));
-                        //this.netForce.X = 0;
-                        //AddForce(newVelocity);
                         break;
                 }
+
+                if (hitInfo.Direction == EDirection.Right || hitInfo.Direction == EDirection.Left)
+                {
+                    this.netForce.X = 0;
+                    if (!hitInfo.RigidBody.IsKinematic)
+                        this.netForce.X = newVelocity.X;
+                }
+                else if (hitInfo.Direction == EDirection.Up || hitInfo.Direction == EDirection.Down)
+                {
+                    this.netForce.Y = 0;
+                    if (!hitInfo.RigidBody.IsKinematic)
+                        this.netForce.Y = newVelocity.Y;
+                }
+
                 break;
             #endregion
-
             case ECollisionType.PartialInelastic:
                 #region
+                Console.WriteLine("PartialInelastic");
                 #region Doc
-                /*
+
+                /**
                 * Equação da velocidade final dos corpos em colisão parcialmente inelástica
                 * https://pt.wikipedia.org/wiki/Colis%C3%A3o_inel%C3%A1stica
                 * Va = (e * mb * (vb - va) + ma * va + mb * vb) / (ma + mb)
@@ -332,6 +324,7 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
 
                 //TODO: Calcular para Y
 
+                /*
                 var Va = (Material.Bounciness * hitInfo.RigidBody.Mass * (hitInfo.RigidBody.Velocity - this.netForce) + this.mass * this.netForce + hitInfo.RigidBody.Mass * hitInfo.RigidBody.Velocity) / (this.mass + hitInfo.RigidBody.Mass);
                 var Vb = (hitInfo.RigidBody.Material.Bounciness * this.mass * (this.netForce - hitInfo.RigidBody.Velocity) + this.mass * this.netForce + hitInfo.RigidBody.Mass * hitInfo.RigidBody.Velocity) / (this.mass + hitInfo.RigidBody.Mass);
 
@@ -362,14 +355,19 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
                         AddForce(new Vector2f(displacementVelocity2.X, displacementVelocity2.Y));
                         break;
                 }
-
+                */
                 break;
             #endregion
 
             case ECollisionType.Trigger:
                 #region
+                Console.WriteLine("Trigger");
                 break;
-                #endregion
+            #endregion
+
+            default:
+                Console.WriteLine("NAO TRATADO");
+                break;
         }
     }
 

@@ -36,6 +36,7 @@ public class Renderer : IComponent, IRender, ISpritesheetOrientable, IObserver<G
     {
         SpriteSheet = spriteSheet;
         Root = root;
+        Root.Subscribe(this);
     }
 
     /// <summary>

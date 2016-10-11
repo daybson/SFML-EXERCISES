@@ -31,18 +31,14 @@ public class Game
     protected RenderWindow window;
     private KeyboardInput keyboard;
 
+    private bool isDebugging;
+    private bool isRendering;
+
     private Player player;
     public Player Player { get { return player; } }
 
-    private GameObject platformTop;
-    private GameObject platformBottom;
-    private GameObject platformRight;
-    private GameObject platformLeft;
-
     private List<GameObject> gameObjects;
     public List<GameObject> GameObjects { get { return gameObjects; } }
-
-    private VisualDebugger debugger;
 
     #endregion
 
@@ -55,59 +51,60 @@ public class Game
         this.clock = new Clock();
         this.keyboard = new KeyboardInput(ref this.window);
         this.gameObjects = new List<GameObject>();
-        this.debugger = new VisualDebugger();
     }
 
     public void Start()
     {
-        this.debugger.SetMessage("Teste");
-
+        isDebugging = true;
         this.window = new RenderWindow(new VideoMode(windowSize.X, windowSize.Y), windowTitle);
         this.window.SetFramerateLimit(60);
         this.window.KeyPressed += this.keyboard.ProcessKeyboardPressed;
         this.window.KeyReleased += this.keyboard.ProcessKeyboardReleased;
 
-        this.platformBottom = GameObjectCreator.CreateBottomPlatform();
-        this.platformTop = GameObjectCreator.CreateTopPlatform();
-        this.platformRight = GameObjectCreator.CreateRightPlatform();
-        this.platformLeft = GameObjectCreator.CreateLeftPlatform();
+        this.window.KeyReleased += (sender, e) => { if (e.Code == Keyboard.Key.P) isDebugging = !isDebugging; };
+        this.window.KeyReleased += (sender, e) => { if (e.Code == Keyboard.Key.R) isRendering = !isRendering; };
 
-        //this.player = GameObjectCreator.CreatePlayer(ref this.keyboard);
-        //this.gameObjects.Add(this.player);
+        this.player = GameObjectCreator.CreatePlayer(ref this.keyboard);
+        this.player.Position = V2.Right * 650;
 
-        this.gameObjects.Add(this.platformTop);
-        this.gameObjects.Add(this.platformBottom);
-        this.gameObjects.Add(this.platformRight);
-        this.gameObjects.Add(this.platformLeft);
+        /*
+        this.gameObjects.Add(GameObjectCreator.CreateInelasticBrick(new Vector2f(760, 300));
+        this.gameObjects.Add(GameObjectCreator.CreateInelasticBrick(new Vector2f(760, 350));
+        */
 
-        this.gameObjects.Add(this.platformTop);
         this.gameObjects.Add(GameObjectCreator.CreateInelasticBrick(new Vector2f(150, 350)));
-        this.gameObjects.Add(GameObjectCreator.CreateInelasticBrick(new Vector2f(400, 450)));
+        this.gameObjects.Add(GameObjectCreator.CreateInelasticBrick(new Vector2f(450, 350)));
 
-        this.gameObjects.Find(g => g.name == "InelasticBrick").GetComponent<Rigidbody>().AddForce(new Vector2f(-50f, 0f));
+        //this.gameObjects.Add(GameObjectCreator.CreatePlatform(EDirection.Up, V2.Zero));
+        this.gameObjects.Add(GameObjectCreator.CreatePlatform(EDirection.Down, new Vector2f(0, windowSize.Y - 32)));
+        this.gameObjects.Add(GameObjectCreator.CreatePlatform(EDirection.Right, new Vector2f(windowSize.X - 33, 29)));
+        this.gameObjects.Add(GameObjectCreator.CreatePlatform(EDirection.Left, new Vector2f(0, 32)));
+
+        this.gameObjects.Add(this.player);
 
         Run();
     }
 
     public void Update(float deltaTime)
     {
+        int x = 0;
         foreach (var g in this.gameObjects)
         {
             g.Update(deltaTime);
 
-            //Loop de colisão
+            #region Loop de colisão
             for (var i = 0; i < this.gameObjects.Count; i++)
             {
-                //evita teste com si mesmo
-                if (g != this.gameObjects[i])
+                //evita self teste 
+                if (!g.Equals(this.gameObjects[i]))
                 {
-                    var gRigidBody = g.GetComponent<Rigidbody>();
-                    var gIndexRigidBody = gameObjects[i].GetComponent<Rigidbody>();
-
-                    if (gRigidBody != null && gIndexRigidBody != null)
-                        CollisionDispatcher.CollisionCheck(gRigidBody, gIndexRigidBody, deltaTime);
+                    var gRigidBody = (ICollisionable)g.GetComponent<Rigidbody>();
+                    var gIndexRigidBody = (ICollisionable)gameObjects[i].GetComponent<Rigidbody>();
+                    CollisionDispatcher.CollisionCheck(ref gRigidBody, ref gIndexRigidBody, deltaTime);
                 }
             }
+            #endregion
+            x++;
         }
     }
 
@@ -130,18 +127,21 @@ public class Game
 
     protected void Render()
     {
-        this.window.Clear(Color.White);
+        this.window.Clear(new Color(150, 150, 150));
 
         foreach (var g in this.gameObjects)
         {
-            g.GetComponent<Renderer>()?.Render(ref this.window);
-            g.GetComponent<Rigidbody>()?.ColliderBottom.Render(ref this.window);
-            g.GetComponent<Rigidbody>()?.ColliderTop.Render(ref this.window);
-            g.GetComponent<Rigidbody>()?.ColliderRight.Render(ref this.window);
-            g.GetComponent<Rigidbody>()?.ColliderLeft.Render(ref this.window);
-        }
+            if (isRendering)
+                g.GetComponent<Renderer>()?.Render(ref this.window);
 
-        this.debugger.Render(ref this.window);
+            if (isDebugging)
+            {
+                g.GetComponent<Rigidbody>()?.ColliderBottom.Render(ref this.window);
+                g.GetComponent<Rigidbody>()?.ColliderTop.Render(ref this.window);
+                g.GetComponent<Rigidbody>()?.ColliderRight.Render(ref this.window);
+                g.GetComponent<Rigidbody>()?.ColliderLeft.Render(ref this.window);
+            }
+        }
 
         this.window.Display();
     }
