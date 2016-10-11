@@ -44,7 +44,7 @@ public class Collider : IComponent, IRender, IObserver<GameObject>
     /// <summary>
     /// Dimensão do sprite (wifth, height)
     /// </summary>
-    private Vector2f spriteDimension;
+    private Vector2i spriteDimension;
 
     public RectangleShape Shape { get { return shape; } }
 
@@ -56,7 +56,7 @@ public class Collider : IComponent, IRender, IObserver<GameObject>
 
     public GameObject Root { get; set; }
 
-    public Collider(Vector2f spriteDimension, EDirection direction, int colliderThickness, GameObject root)
+    public Collider(Vector2i spriteDimension, EDirection direction, int colliderThickness, GameObject root)
     {
         this.Root = root;
         this.direction = direction;
@@ -79,7 +79,7 @@ public class Collider : IComponent, IRender, IObserver<GameObject>
                 break;
             case EDirection.Left:
                 shape = new RectangleShape(new Vector2f(this.colliderThickness, this.spriteDimension.Y - 2 * this.colliderThickness));
-                bound = new FloatRect(this.Root.Position.X, this.Root.Position.Y + this.colliderThickness, this.colliderThickness, this.spriteDimension.X - this.colliderThickness);
+                bound = new FloatRect(this.Root.Position.X, this.Root.Position.Y + this.colliderThickness, this.colliderThickness, this.spriteDimension.Y - this.colliderThickness);
                 break;
         }
 

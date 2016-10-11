@@ -18,13 +18,8 @@ public class CollisionDispatcher
     /// <returns></returns>
     public static void CollisionCheck(ref ICollisionable active, ref ICollisionable passive, float deltaTime)
     {
-        //TODO BUG! plataforma direita não sofre colisão com nada pelo collider esquerdo
-
         if (active == null || passive == null)
-        {
-            Console.WriteLine("NULL:");
             return;
-        }
 
         FloatRect overlap;
 

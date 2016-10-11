@@ -66,16 +66,10 @@ public class Game
 
         this.player = GameObjectCreator.CreatePlayer(ref this.keyboard);
         this.player.Position = V2.Right * 650;
-
-        /*
-        this.gameObjects.Add(GameObjectCreator.CreateInelasticBrick(new Vector2f(760, 300));
-        this.gameObjects.Add(GameObjectCreator.CreateInelasticBrick(new Vector2f(760, 350));
-        */
-
+        
         this.gameObjects.Add(GameObjectCreator.CreateInelasticBrick(new Vector2f(150, 350)));
         this.gameObjects.Add(GameObjectCreator.CreateInelasticBrick(new Vector2f(450, 350)));
 
-        //this.gameObjects.Add(GameObjectCreator.CreatePlatform(EDirection.Up, V2.Zero));
         this.gameObjects.Add(GameObjectCreator.CreatePlatform(EDirection.Down, new Vector2f(0, windowSize.Y - 32)));
         this.gameObjects.Add(GameObjectCreator.CreatePlatform(EDirection.Right, new Vector2f(windowSize.X - 33, 29)));
         this.gameObjects.Add(GameObjectCreator.CreatePlatform(EDirection.Left, new Vector2f(0, 32)));

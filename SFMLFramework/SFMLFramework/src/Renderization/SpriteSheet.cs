@@ -29,23 +29,14 @@ public class SpriteSheet
     private Sprite sprite;
     public Sprite Sprite { get { return sprite; } }
 
-    public int TileHeight { get { return tileHeight; } }
-    public int TileWidth { get { return tileWidth; } }
-
-    public Vector2i size;
+    /// <summary>
+    /// Dimensões em pixels dos tiles do spritesheet (X = largura, Y = altura)
+    /// </summary>
+    protected Vector2i size;
     public Vector2i Size { get { return size; } }
 
+
     private string pathTexture;
-
-    /// <summary>
-    /// Altura dos tiles da spritesheet
-    /// </summary>
-    private int tileHeight;
-
-    /// <summary>
-    /// Largura dos tiles da spritesheet
-    /// </summary>
-    private int tileWidth;
 
     /// <summary>
     /// Quantidade de colunas da spritesheet
@@ -99,6 +90,8 @@ public class SpriteSheet
         var metaFile = pathTexture.Replace(".png", ".txt");
         var lines = File.ReadAllLines(metaFile);
 
+        int tileWidth = 0;
+        int tileHeight = 0;
         int.TryParse(lines[0], out tileWidth);
         int.TryParse(lines[1], out tileHeight);
         int.TryParse(lines[2], out rows);
@@ -118,7 +111,6 @@ public class SpriteSheet
 
         currentFrame = 0;
         currentFrameTime = 0;
-
     }
 
     /// <summary>
@@ -138,7 +130,7 @@ public class SpriteSheet
             else
             {
                 currentFrame++;
-                tile.Left += tileWidth;
+                tile.Left += this.size.X;
             }
 
             currentFrameTime = 0.0f;
@@ -156,9 +148,9 @@ public class SpriteSheet
 
         switch (direction)
         {
-            case EDirection.Left: newTop = tileHeight; break;
-            case EDirection.Right: newTop = tileHeight * (rows - 2); break;
-            case EDirection.Up: newTop = tileHeight * (rows - 1); break;
+            case EDirection.Left: newTop = this.size.Y; break;
+            case EDirection.Right: newTop = this.size.Y * (rows - 2); break;
+            case EDirection.Up: newTop = this.size.X * (rows - 1); break;
             case EDirection.Down: newTop = 0; break;
         }
 
