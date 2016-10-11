@@ -39,7 +39,7 @@ public class Player : GameObject
 
         Rigidbody = new Rigidbody(12f,
                                   0,
-                                  new Vector2f(Renderer.SpriteSheet.TileWidth, Renderer.SpriteSheet.TileHeight),
+                                  Renderer.SpriteSheet.Size,
                                   new Material("Player 1", 1, 1, 1, ECollisionType.Inelastic),
                                   false,
                                   this,

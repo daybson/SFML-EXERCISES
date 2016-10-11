@@ -21,7 +21,7 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
     /// <summary>
     /// Tamanho do sprite (width, height)
     /// </summary>
-    private Vector2f spriteDimension;
+    private Vector2i spriteDimension;
 
     /// <summary>
     /// Especifica se o corpo deve responder à colisões ou se mantém fiel à sua posição atual (incluindo uma posição ditada por uma animação)
@@ -78,7 +78,7 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
     /// <summary>
     /// Dimensão do sprite
     /// </summary>
-    public Vector2f SpriteDimension { get { return spriteDimension; } }
+    public Vector2i SpriteDimension { get { return spriteDimension; } }
 
     /// <summary>
     /// Massa do corpo
@@ -107,7 +107,7 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
 
     #region Methods
 
-    public Rigidbody(float mass, float elasticity, Vector2f spriteDimension, Material material, bool isKinematic, GameObject root, Vector2f maxVelocity)
+    public Rigidbody(float mass, float elasticity, Vector2i spriteDimension, Material material, bool isKinematic, GameObject root, Vector2f maxVelocity)
     {
         this.mass = mass;
         this.Root = root;
