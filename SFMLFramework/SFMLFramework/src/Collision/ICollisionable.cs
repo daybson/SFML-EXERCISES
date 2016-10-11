@@ -19,5 +19,6 @@ public interface ICollisionable
     Vector2f NetForce { get; }
     GameObject Root { get; }
     bool IsKinematic { get; }
+    Vector2f Momentum { get; }
     void SolveCollision(CollisionInfo hitInfo);
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SFML.System;
 
 namespace SFMLFramework
 {
@@ -22,5 +23,6 @@ namespace SFMLFramework
         /// </summary>
         /// <param name="force">vetor da força sendo aplicada</param>
         void AddForce(SFML.System.Vector2f force);
+        void SetForce(Vector2f vector2f);
     }
 }

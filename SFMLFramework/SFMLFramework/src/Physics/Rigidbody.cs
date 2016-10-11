@@ -95,6 +95,9 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
     /// </summary>
     public PlatformPlayerController PlatformPlayerController { get; set; }
 
+    private Vector2f momentum;
+    public Vector2f Momentum { get { return momentum; } }
+
     public bool IsEnabled { get; set; }
 
     public GameObject Root { get; set; }
@@ -115,7 +118,7 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
         this.isKinematic = isKinematic;
         this.netForce = V2.Zero;
         this.spriteDimension = spriteDimension;
-        this.colliderThickness = 4;
+        this.colliderThickness = 6;
         this.maxVelocity = maxVelocity;
         this.IsEnabled = true;
 
@@ -139,9 +142,8 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
     public void Update(float deltaTime)
     {
         //G-FORCE
-        if (!isKinematic)
+        if (!this.isKinematic)
             AddForce(new Vector2f(0, this.mass * Physx.Gravity));
-
 
         #region Fricção do piso/ambiente
         if (this.netForce.X > 0)
@@ -158,6 +160,10 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
         }
         #endregion
 
+        this.momentum = this.mass * netForce;
+
+        Console.WriteLine(netForce.Y);
+
         Root.Position += this.netForce * deltaTime;
     }
 
@@ -169,15 +175,7 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
     {
         this.netForce += force;
 
-        if (this.netForce.X > MaxVelocity.X)
-            this.netForce.X = MaxVelocity.X;
-        else if (this.netForce.X < -MaxVelocity.X)
-            this.netForce.X = -MaxVelocity.X;
-
-        if (this.netForce.Y > MaxVelocity.Y)
-            this.netForce.Y = MaxVelocity.Y;
-        else if (this.netForce.Y < -MaxVelocity.Y)
-            this.netForce.Y = -MaxVelocity.Y;
+        ClampForce();
     }
 
     /// <summary>
@@ -245,7 +243,6 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
 
             case ECollisionType.Inelastic:
                 #region
-                Console.WriteLine("Inelastic");
                 #region Doc
                 /*
                  * Equação da velocidade final dos corpos em colisão inelástica
@@ -258,8 +255,8 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
 
                 /* a nova velocidade final do sistema em colisão é calculada. Como a massa é constante, a menos que alguma força externa (gravidade/fricção) esteja atuando,
                 a velocidade será sempre a mesma e os corpos nunca cessarão o movimento */
-                var newVelocity = new Vector2f((this.mass * Velocity.X + hitInfo.RigidBody.Mass * hitInfo.RigidBody.Velocity.X) / (this.mass + hitInfo.RigidBody.Mass),
-                                               (this.mass * Velocity.Y + hitInfo.RigidBody.Mass * hitInfo.RigidBody.Velocity.Y) / (this.mass + hitInfo.RigidBody.Mass));
+                var newVelocity = new Vector2f((this.momentum.X + hitInfo.RigidBody.Momentum.X) / (this.mass + hitInfo.RigidBody.Mass),
+                                               (this.momentum.Y + hitInfo.RigidBody.Momentum.Y) / (this.mass + hitInfo.RigidBody.Mass));
 
                 //Console.WriteLine("New Velocity: " + newVelocity.ToString());
                 /* a velocidade a ser incrementada no sistema é a diferença entre a velocidade final do sistema e a força atual do corpo, ou seja, o quanto falta para que
@@ -269,16 +266,16 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
                 switch (hitInfo.Direction)
                 {
                     case EDirection.Down:
-                        SetPosition(new Vector2f(this.Root.Position.X, this.Root.Position.Y - hitInfo.Overlap.Height));
+                        this.Root.Position = new Vector2f(this.Root.Position.X, this.Root.Position.Y - hitInfo.Overlap.Height);
                         break;
                     case EDirection.Up:
-                        SetPosition(new Vector2f(this.Root.Position.X, Root.Position.Y + hitInfo.Overlap.Height));
+                        this.Root.Position = new Vector2f(this.Root.Position.X, Root.Position.Y + hitInfo.Overlap.Height);
                         break;
                     case EDirection.Right:
-                        SetPosition(new Vector2f(this.Root.Position.X - hitInfo.Overlap.Width, this.Root.Position.Y));
+                        this.Root.Position = new Vector2f(this.Root.Position.X - hitInfo.Overlap.Width, this.Root.Position.Y);
                         break;
                     case EDirection.Left:
-                        SetPosition(new Vector2f(this.Root.Position.X + hitInfo.Overlap.Width, this.Root.Position.Y));
+                        this.Root.Position = new Vector2f(this.Root.Position.X + hitInfo.Overlap.Width, this.Root.Position.Y);
                         break;
                 }
 
@@ -366,10 +363,28 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
             #endregion
 
             default:
-                Console.WriteLine("NAO TRATADO");
                 break;
         }
     }
 
+    public void SetForce(Vector2f force)
+    {
+        this.netForce = force;
+        ClampForce();
+    }
+
+
+    private void ClampForce()
+    {
+        if (this.netForce.X > MaxVelocity.X)
+            this.netForce.X = MaxVelocity.X;
+        else if (this.netForce.X < -MaxVelocity.X)
+            this.netForce.X = -MaxVelocity.X;
+
+        if (this.netForce.Y > MaxVelocity.Y)
+            this.netForce.Y = MaxVelocity.Y;
+        //else if (this.netForce.Y < -MaxVelocity.Y)
+           // this.netForce.Y = -MaxVelocity.Y;
+    }
     #endregion
 }

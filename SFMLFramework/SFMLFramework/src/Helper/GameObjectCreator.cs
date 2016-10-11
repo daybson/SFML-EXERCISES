@@ -20,7 +20,7 @@ namespace SFMLFramework.src.Helper
             var inelasticBrick = new GameObject("InelasticBrick");
             var renderer = new Renderer(Resources.LoadSpriteSheet("inelasticBrick.png"), inelasticBrick);
             inelasticBrick.Components.Add(renderer);
-            inelasticBrick.Components.Add(new Rigidbody(9, 0, renderer.SpriteSheet.Size, inelasticMaterial, false, inelasticBrick, V2.One * 50));
+            inelasticBrick.Components.Add(new Rigidbody(1, 0, renderer.SpriteSheet.Size, inelasticMaterial, false, inelasticBrick, V2.One * 50));
             inelasticBrick.Position = position;
             return inelasticBrick;
         }

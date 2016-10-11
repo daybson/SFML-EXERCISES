@@ -65,6 +65,8 @@ public class Game
         this.window.KeyReleased += (sender, e) => { if (e.Code == Keyboard.Key.R) isRendering = !isRendering; };
 
         this.player = GameObjectCreator.CreatePlayer(ref this.keyboard);
+        this.gameObjects.Add(this.player);
+
         this.player.Position = V2.Right * 650;
         
         this.gameObjects.Add(GameObjectCreator.CreateInelasticBrick(new Vector2f(150, 350)));
@@ -74,7 +76,6 @@ public class Game
         this.gameObjects.Add(GameObjectCreator.CreatePlatform(EDirection.Right, new Vector2f(windowSize.X - 33, 29)));
         this.gameObjects.Add(GameObjectCreator.CreatePlatform(EDirection.Left, new Vector2f(0, 32)));
 
-        this.gameObjects.Add(this.player);
 
         Run();
     }

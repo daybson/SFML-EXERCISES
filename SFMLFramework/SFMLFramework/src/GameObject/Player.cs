@@ -34,21 +34,14 @@ public class Player : GameObject
 
     public Player()
     {
-        name = "Player 1";
+        this.name = "Player 1";
         Renderer = new Renderer(Resources.LoadSpriteSheet("dragon.png"), this);
-
-        Rigidbody = new Rigidbody(12f,
-                                  0,
-                                  Renderer.SpriteSheet.Size,
-                                  new Material("Player 1", 1, 1, 1, ECollisionType.Inelastic),
-                                  false,
-                                  this,
-                                  new Vector2f(200, 100));
-
+        Rigidbody = new Rigidbody(25f, 0, Renderer.SpriteSheet.Size, new Material("Player 1", 1, 1, 1, ECollisionType.Inelastic), false, this, new Vector2f(600, 300));
         PlatformPlayerController = new PlatformPlayerController(Rigidbody, Renderer);
         PlatformPlayerController.OnSpriteSheetOrientationChange += Renderer.OrientateSpriteSheetTo;
-
-        this.Components.AddRange(new List<IComponent> { PlatformPlayerController, Rigidbody, Renderer });
+        this.Components.Add(PlatformPlayerController);
+        this.Components.Add(Rigidbody);
+        this.Components.Add(Renderer);
     }
 
     public override void Update(float deltaTime)

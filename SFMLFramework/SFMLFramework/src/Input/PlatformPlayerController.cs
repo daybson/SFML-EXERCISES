@@ -37,12 +37,12 @@ namespace SFMLFramework
         /// <summary>
         /// Modificador escalar do vetor de pulo
         /// </summary>
-        protected readonly float JUMP_FORCE = 1500.0f;
+        protected readonly float JUMP_FORCE = 3500.0f;
 
         /// <summary>
         /// Modificador escalar do vetor de caminhada
         /// </summary>
-        protected readonly float WALK_FORCE = 100.0f;
+        protected readonly float WALK_FORCE = 250.0f;
 
         /// <summary>
         /// Expedidor de eventos do teclado
@@ -121,9 +121,9 @@ namespace SFMLFramework
         private void Move()
         {
             if (this.moveRigth)
-                IKineticController.AddForce(V2.Right * this.WALK_FORCE);
+                IKineticController.SetForce(V2.Right * this.WALK_FORCE);
             else if (this.moveLeft)
-                IKineticController.AddForce(V2.Left * this.WALK_FORCE);
+                IKineticController.SetForce(V2.Left * this.WALK_FORCE);
         }
 
         /// <summary>
