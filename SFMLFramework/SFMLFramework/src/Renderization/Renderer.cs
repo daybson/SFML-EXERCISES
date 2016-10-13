@@ -23,11 +23,18 @@ using SFMLFramework;
 /// </summary>
 public class Renderer : IComponent, IRender, ISpritesheetOrientable, IObserver<GameObject>
 {
+    #region Fields
+
     public SpriteSheet SpriteSheet { get; set; }
 
     public bool IsEnabled { get; set; }
 
     public GameObject Root { get; set; }
+
+    #endregion
+
+
+    #region Public
 
     /// <summary>
     /// Recebe uma instância da SpriteSheet que o componente deve renderizar
@@ -60,6 +67,11 @@ public class Renderer : IComponent, IRender, ISpritesheetOrientable, IObserver<G
         SpriteSheet.SetDirection(direction);
     }
 
+    #endregion
+
+
+    #region IObserver
+
     public void OnNext(GameObject value)
     {
         SpriteSheet.Sprite.Position = value.Position;
@@ -67,11 +79,13 @@ public class Renderer : IComponent, IRender, ISpritesheetOrientable, IObserver<G
 
     public void OnError(Exception error)
     {
-        
+
     }
 
     public void OnCompleted()
     {
-        
+
     }
+
+    #endregion
 }

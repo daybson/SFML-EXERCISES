@@ -31,6 +31,9 @@ public class Game
     protected RenderWindow window;
     private KeyboardInput keyboard;
 
+    private GameObject canvas;
+    private UIText labelCommands;
+
     private bool isDebugging;
     private bool isRendering;
 
@@ -51,31 +54,58 @@ public class Game
         this.clock = new Clock();
         this.keyboard = new KeyboardInput(ref this.window);
         this.gameObjects = new List<GameObject>();
+
+        this.canvas = new GameObject("Canvas");
+        this.labelCommands = new UIText(this.canvas);
+        this.canvas.Components.Add(labelCommands);
     }
 
     public void Start()
     {
         isDebugging = true;
         this.window = new RenderWindow(new VideoMode(windowSize.X, windowSize.Y), windowTitle);
-        this.window.SetFramerateLimit(60);
+        this.window.SetFramerateLimit(120);
         this.window.KeyPressed += this.keyboard.ProcessKeyboardPressed;
         this.window.KeyReleased += this.keyboard.ProcessKeyboardReleased;
 
-        this.window.KeyReleased += (sender, e) => { if (e.Code == Keyboard.Key.P) isDebugging = !isDebugging; };
-        this.window.KeyReleased += (sender, e) => { if (e.Code == Keyboard.Key.R) isRendering = !isRendering; };
+        this.labelCommands.Display = (v) => this.labelCommands.SetMessage(
+            "A = move player esquerda\n" +
+            "D = move player direita\n" +
+            "Seta esqueda = move cubo1 esquerda\n" +
+            "Seta direita = move cubo1 direita\n" +
+            "Numpad4 = move cubo2 esquerda\n" +
+            "Numpad6 = move cubo2 direita"
+            );
+        this.canvas.Position = V2.Zero;
+
+        this.gameObjects.Add(this.canvas);
 
         this.player = GameObjectCreator.CreatePlayer(ref this.keyboard);
         this.gameObjects.Add(this.player);
 
         this.player.Position = V2.Right * 650;
-        
-        this.gameObjects.Add(GameObjectCreator.CreateInelasticBrick(new Vector2f(150, 350)));
-        this.gameObjects.Add(GameObjectCreator.CreateInelasticBrick(new Vector2f(450, 350)));
+
+        var r = GameObjectCreator.CreateElasticBrick(new Vector2f(340, 400));
+        this.gameObjects.Add(r);
+
+        var l = GameObjectCreator.CreateElasticBrick(new Vector2f(450, 400));
+        this.gameObjects.Add(l);
 
         this.gameObjects.Add(GameObjectCreator.CreatePlatform(EDirection.Down, new Vector2f(0, windowSize.Y - 32)));
         this.gameObjects.Add(GameObjectCreator.CreatePlatform(EDirection.Right, new Vector2f(windowSize.X - 33, 29)));
         this.gameObjects.Add(GameObjectCreator.CreatePlatform(EDirection.Left, new Vector2f(0, 32)));
 
+        this.window.KeyReleased += (sender, e) => { if (e.Code == Keyboard.Key.F) isDebugging = !isDebugging; };
+        this.window.KeyReleased += (sender, e) => { if (e.Code == Keyboard.Key.R) isRendering = !isRendering; };
+
+
+        this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Right) r.GetComponent<Rigidbody>().AddForce(V2.Right * 200); };
+        this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Left) r.GetComponent<Rigidbody>().AddForce(V2.Left * 200); };
+
+        this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Numpad6) l.GetComponent<Rigidbody>().AddForce(V2.Right * 200); };
+        this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Numpad4) l.GetComponent<Rigidbody>().AddForce(V2.Left * 200); };
+
+        r.GetComponent<Rigidbody>().AddForce(V2.Right * 150);
 
         Run();
     }
@@ -83,6 +113,9 @@ public class Game
     public void Update(float deltaTime)
     {
         int x = 0;
+
+        this.labelCommands.Display.Invoke(V2.Zero);
+
         foreach (var g in this.gameObjects)
         {
             g.Update(deltaTime);
@@ -135,6 +168,7 @@ public class Game
                 g.GetComponent<Rigidbody>()?.ColliderTop.Render(ref this.window);
                 g.GetComponent<Rigidbody>()?.ColliderRight.Render(ref this.window);
                 g.GetComponent<Rigidbody>()?.ColliderLeft.Render(ref this.window);
+                g.GetComponent<UIText>()?.Render(ref this.window);
             }
         }
 
@@ -142,5 +176,4 @@ public class Game
     }
 
     #endregion
-
 }

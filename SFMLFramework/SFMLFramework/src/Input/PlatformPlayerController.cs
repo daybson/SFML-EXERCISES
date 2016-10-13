@@ -37,7 +37,7 @@ namespace SFMLFramework
         /// <summary>
         /// Modificador escalar do vetor de pulo
         /// </summary>
-        protected readonly float JUMP_FORCE = 3500.0f;
+        protected readonly float JUMP_FORCE = 2000.0f;
 
         /// <summary>
         /// Modificador escalar do vetor de caminhada

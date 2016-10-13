@@ -110,7 +110,7 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
 
     #region Methods
 
-    public Rigidbody(float mass, float elasticity, Vector2i spriteDimension, Material material, bool isKinematic, GameObject root, Vector2f maxVelocity)
+    public Rigidbody(float mass, Vector2i spriteDimension, Material material, bool isKinematic, GameObject root, Vector2f maxVelocity)
     {
         this.mass = mass;
         this.Root = root;
@@ -146,6 +146,7 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
             AddForce(new Vector2f(0, this.mass * Physx.Gravity));
 
         #region Fricção do piso/ambiente
+        /*
         if (this.netForce.X > 0)
         {
             this.netForce.X -= EnvironmentFriction;
@@ -158,13 +159,17 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
             if (this.netForce.X + EnvironmentFriction > 0)
                 this.netForce.X = 0;
         }
+        */
         #endregion
 
         this.momentum = this.mass * netForce;
 
-        Console.WriteLine(netForce.Y);
-
         Root.Position += this.netForce * deltaTime;
+
+        //exibe velocidade atual no label
+        var label = Root.GetComponent<UIText>();
+        if (label != null)
+            label.Display.Invoke(this.netForce);
     }
 
     /// <summary>
@@ -183,61 +188,74 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
     /// </summary>
     public void SolveCollision(CollisionInfo hitInfo)
     {
+        //Corpos cinemáticos não sofrem ação de forças
         if (this.isKinematic)
             return;
 
+        //Executa métodos inscritos no evento de colisão
         OnCollisionResponse(hitInfo.Direction);
 
+        //responde a colisão de acordo com o material do rigidbody
         switch (Material.CollisionType)
         {
             #region ELASTICA
             case ECollisionType.Elastic:
-                Console.WriteLine("Elastic");
-                #region Doc
+                /** A colisão é denominada elástica quando ocorre conservação da energia e do momento linear dos corpos envolvidos. 
+                 * A principal característica desse tipo de colisão é que, após o choque, a velocidade das partículas muda de direção,
+                 *  mas a velocidade relativa entre os dois corpos mantém-se igual. 
+                 *  http://mundoeducacao.bol.uol.com.br/fisica/colisoes-elasticas-inelasticas.htm
+                 * 
+                 * Equação da velocidade final dos corpos em colisão elástica
+                 * http://www.real-world-physics-problems.com/elastic-collision.html
+                 * Ei = Ef
+                 * Ei = (0.5 * ma * vai * vai) + (0.5 * mb * vbi * vbi) 
+                 * Ef = (0.5 * ma * vaf * vaf) + (0.5 * mb * vbf * vbf)                
+                 * 
+                 * Vaf = ((ma - mb) / (ma + mb)) * Vai  +  2 * mb / (ma + mb) * Vbi
+                 * Vbf = 2 * ma / (ma + mb) * Vai  +  ((mb - ma) / (ma + mb)) * Vbi                  
+                 */
+
+                var finalElasticVelocity = ((this.mass - hitInfo.RigidBody.Mass) / (this.mass + hitInfo.RigidBody.Mass)) * this.netForce + 2 * hitInfo.RigidBody.Mass / (this.mass + hitInfo.RigidBody.Mass) * hitInfo.RigidBody.Velocity;
+                var Vbf = 2 * this.mass / (this.mass + hitInfo.RigidBody.Mass) * this.netForce + ((hitInfo.RigidBody.Mass - this.mass) / (this.mass + hitInfo.RigidBody.Mass)) * hitInfo.RigidBody.Velocity;
+
                 /*
-                * Equação da velocidade final dos corpos em colisão elástica
-                *http://www.real-world-physics-problems.com/elastic-collision.html
-                * Ei = Ef
-                * Ei = (0.5 * ma * vai * vai) + (0.5 * mb * vbi * vbi) 
-                * Ef = (0.5 * ma * vaf * vaf) + (0.5 * mb * vbf * vbf)                
-                * 
-                * Vaf = ((ma - mb) / (ma + mb)) * Vai  +  2 * mb / (ma + mb) * Vbi
-                * Vbf = 2 * ma / (ma + mb) * Vai  +  ((mb - ma) / (ma + mb)) * Vbi                  
-
-                var Vaf = ((this.mass - hitInfo.RigidBody.Mass) / (this.mass + hitInfo.RigidBody.Mass)) * this.finalForce.X + 2 * hitInfo.RigidBody.Mass / (this.mass + hitInfo.RigidBody.Mass) * hitInfo.RigidBody.Velocity.X;
-                var Vbf = 2 * this.mass / (this.mass + hitInfo.RigidBody.Mass) * this.finalForce.X + ((hitInfo.RigidBody.Mass - this.mass) / (this.mass + hitInfo.RigidBody.Mass)) * hitInfo.RigidBody.Velocity.X;
-
-                var Ei = (0.5 * this.mass * this.finalForce.X * this.finalForce.X) + (0.5 * hitInfo.RigidBody.Mass * hitInfo.RigidBody.Velocity.X * hitInfo.RigidBody.Velocity.X);
-                var Ef = (0.5 * this.mass * Vaf * Vaf) + (0.5 * hitInfo.RigidBody.Mass * Vbf * Vbf);
+                var netForceSquare = new Vector2f(this.netForce.X * this.netForce.X, this.netForce.Y * this.netForce.Y);
+                var hitinfoVelocitySquare = new Vector2f(hitInfo.RigidBody.Velocity.X * hitInfo.RigidBody.Velocity.X, hitInfo.RigidBody.Velocity.Y * hitInfo.RigidBody.Velocity.Y);
+                var InitialVelocity = (0.5f * this.mass * netForceSquare) + (0.5f * hitInfo.RigidBody.Mass * hitinfoVelocitySquare);
+                //var FinalVelocity = (0.5 * this.mass * Vaf * Vaf) + (0.5 * hitInfo.RigidBody.Mass * Vbf * Vbf);
                 */
-                #endregion
-                /*
-                var previousNetForce = this.netForce;
+
+                var absElasticVelocity = new Vector2f(Math.Abs(finalElasticVelocity.X), Math.Abs(finalElasticVelocity.Y));
+
+                Console.WriteLine(Root.name + " - " + absElasticVelocity.ToString());
 
                 switch (hitInfo.Direction)
                 {
                     case EDirection.Down:
                         SetPosition(new Vector2f(this.Root.Position.X, this.Root.Position.Y - hitInfo.Overlap.Height));
                         this.netForce.Y = 0;
-                        AddForce(new Vector2f(previousNetForce.X, -Math.Abs(previousNetForce.Y)));
+                        SetForce(new Vector2f(this.netForce.X, -absElasticVelocity.Y));
                         break;
+
                     case EDirection.Up:
                         SetPosition(new Vector2f(this.Root.Position.X, Root.Position.Y + hitInfo.Overlap.Height));
                         this.netForce.Y = 0;
-                        AddForce(new Vector2f(previousNetForce.X, Math.Abs(previousNetForce.Y)));
+                        SetForce(new Vector2f(this.netForce.X, absElasticVelocity.Y));
                         break;
+
                     case EDirection.Right:
                         SetPosition(new Vector2f(this.Root.Position.X - hitInfo.Overlap.Width, this.Root.Position.Y));
                         this.netForce.X = 0;
-                        AddForce(new Vector2f(-Math.Abs(previousNetForce.X), previousNetForce.Y));
+                        SetForce(new Vector2f(-absElasticVelocity.X, this.netForce.Y));
                         break;
+
                     case EDirection.Left:
                         SetPosition(new Vector2f(this.Root.Position.X + hitInfo.Overlap.Width, this.Root.Position.Y));
                         this.netForce.X = 0;
-                        AddForce(new Vector2f(Math.Abs(previousNetForce.X), previousNetForce.Y));
+                        SetForce(new Vector2f(absElasticVelocity.X, this.netForce.Y));
                         break;
                 }
-                */
+
                 break;
             #endregion
 
@@ -253,8 +271,10 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
                  * Como a massa é constante, a menos que alguma força externa (fricção) esteja atuando,
                  * a velocidade será sempre a mesma e os corpos nunca cessarão o movimento
                  **/
-                var newVelocity = new Vector2f((this.momentum.X + hitInfo.RigidBody.Momentum.X) / (this.mass + hitInfo.RigidBody.Mass),
-                                               (this.momentum.Y + hitInfo.RigidBody.Momentum.Y) / (this.mass + hitInfo.RigidBody.Mass));
+                var newInelasticVelocity = new Vector2f(
+                    (this.momentum.X + hitInfo.RigidBody.Momentum.X) / (this.mass + hitInfo.RigidBody.Mass),
+                    (this.momentum.Y + hitInfo.RigidBody.Momentum.Y) / (this.mass + hitInfo.RigidBody.Mass));
+
                 switch (hitInfo.Direction)
                 {
                     case EDirection.Down:
@@ -275,30 +295,35 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
                 {
                     this.netForce.X = 0;
                     if (!hitInfo.RigidBody.IsKinematic)
-                        this.netForce.X = newVelocity.X;
+                        this.netForce.X = newInelasticVelocity.X;
                 }
                 else if (hitInfo.Direction == EDirection.Up || hitInfo.Direction == EDirection.Down)
                 {
                     this.netForce.Y = 0;
                     if (!hitInfo.RigidBody.IsKinematic)
-                        this.netForce.Y = newVelocity.Y;
+                        this.netForce.Y = newInelasticVelocity.Y;
                 }
                 break;
             #endregion
 
             #region PARCIAL INELASTICA
-            case ECollisionType.PartialInelastic: 
-                /**
+            case ECollisionType.PartialInelastic:
+                /** Ocorre conservação de apenas uma parte da energia cinética de forma que a energia final é menor do que a energia inicial. 
+                 * Constituem a maioria das colisões que ocorre na natureza. 
+                 * Nesse caso, após o choque, as partículas separam-se, e a velocidade relativa final é menor do que a inicial.  
+                 * http://mundoeducacao.bol.uol.com.br/fisica/colisoes-elasticas-inelasticas.htm
+                 * 
+                 * 
                  * Nestas colisões o coeficiente de restituição é um valor entre zero e um, 
                  * e consequentemente o valor da velocidade de afastamento é menor que o da de aproximação, 
-                 * porém não é nulo, cada corpo terá uma velocidade.
+                 * porém não é nulo: cada corpo terá uma velocidade diferente.                 * 
                  * 
-                 * Equação da velocidade final dos corpos em colisão parcialmente inelástica
+                 * Equação da velocidade final dos corpos em colisão parcialmente inelástica 
                  * https://pt.wikipedia.org/wiki/Colis%C3%A3o_inel%C3%A1stica
                  * Va = (e * mb * (vb - va) + ma * va + mb * vb) / (ma + mb)
                  * Vb = (e * ma * (va - vb) + ma * va + mb * vb) / (ma + mb)
                  * 
-                 * Coeficiente de Restituição (e - elasticity)
+                 * Coeficiente de Restituição (e = elasticity)
                  * e = 0: colisão elástica; 
                  * e = 1: colisão inelástica; 
                  * e > 0 && e < 1: parcialmente inelástica
@@ -306,39 +331,45 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
                  * (5 * [4,0]) + [0,0] + [12,0]) / 13
                  * ([20,0] + [12,0]) / 13
                  * [32, 0] / 13
-                 * Va = [2.46, 0] - ocorre perda de energia   
+                 * Vfa = [2.46, 0] - ocorre perda de energia   
                  */
 
-                //TODO: Calcular para Y
+                var FinalVelocityA = (Material.Bounciness * hitInfo.RigidBody.Mass * (hitInfo.RigidBody.Velocity - this.netForce) + this.mass * this.netForce + hitInfo.RigidBody.Momentum) /
+                    (this.mass + hitInfo.RigidBody.Mass);
 
-                var Va = (Material.Bounciness * hitInfo.RigidBody.Mass * (hitInfo.RigidBody.Velocity - this.netForce) + this.mass * this.netForce + hitInfo.RigidBody.Mass * hitInfo.RigidBody.Velocity) /  (this.mass + hitInfo.RigidBody.Mass);
-                var Vb = (hitInfo.RigidBody.Material.Bounciness * this.mass * (this.netForce - hitInfo.RigidBody.Velocity) + this.mass * this.netForce + hitInfo.RigidBody.Mass * hitInfo.RigidBody.Velocity) / (this.mass + hitInfo.RigidBody.Mass);
+                var FinalVelocityB = (hitInfo.RigidBody.Material.Bounciness * this.mass * (this.netForce - hitInfo.RigidBody.Velocity) + this.mass * this.netForce + hitInfo.RigidBody.Momentum) /
+                    (this.mass + hitInfo.RigidBody.Mass);
 
-                var newVelocityA = new Vector2f((this.mass * Va.X + hitInfo.RigidBody.Mass * Vb.X) / (this.mass + hitInfo.RigidBody.Mass), 0);
+                var newPartialInelasticVelocity = new Vector2f(
+                    (this.mass * FinalVelocityA.X + hitInfo.RigidBody.Mass * FinalVelocityB.X) / (this.mass + hitInfo.RigidBody.Mass),
+                    (this.mass * FinalVelocityA.Y + hitInfo.RigidBody.Mass * FinalVelocityB.Y) / (this.mass + hitInfo.RigidBody.Mass));
 
-                var displacementVelocity2 = newVelocityA - this.netForce;
-                displacementVelocity2 = new Vector2f(Math.Abs(displacementVelocity2.X), Math.Abs(displacementVelocity2.Y));
+                var absVelocity = new Vector2f(Math.Abs(newPartialInelasticVelocity.X), Math.Abs(newPartialInelasticVelocity.Y));
 
                 switch (hitInfo.Direction)
                 {
                     case EDirection.Down:
                         SetPosition(new Vector2f(this.Root.Position.X, this.Root.Position.Y - hitInfo.Overlap.Height));
+                        this.netForce.Y = 0;
+                        SetForce(new Vector2f(this.netForce.X, -absVelocity.Y));
                         break;
 
                     case EDirection.Up:
                         SetPosition(new Vector2f(this.Root.Position.X, Root.Position.Y + hitInfo.Overlap.Height));
+                        this.netForce.Y = 0;
+                        SetForce(new Vector2f(this.netForce.X, absVelocity.Y));
                         break;
 
                     case EDirection.Right:
                         SetPosition(new Vector2f(this.Root.Position.X - hitInfo.Overlap.Width, this.Root.Position.Y));
                         this.netForce.X = 0;
-                        AddForce(displacementVelocity2 * V2.Left.X);
+                        SetForce(new Vector2f(-absVelocity.X, this.netForce.Y));
                         break;
 
                     case EDirection.Left:
                         SetPosition(new Vector2f(this.Root.Position.X + hitInfo.Overlap.Width, this.Root.Position.Y));
                         this.netForce.X = 0;
-                        AddForce(new Vector2f(displacementVelocity2.X, displacementVelocity2.Y));
+                        SetForce(new Vector2f(absVelocity.X, this.netForce.Y));
                         break;
                 }
                 break;
@@ -352,12 +383,19 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
         }
     }
 
-    public void SetForce(Vector2f force)
+    /// <summary>
+    /// Substitui o valor atual de netforce e executa o ClampForce do novo valor
+    /// </summary>
+    /// <param name="netForce">Novo valor de netforce</param>
+    public void SetForce(Vector2f netForce)
     {
-        this.netForce = force;
+        this.netForce = netForce;
         ClampForce();
     }
 
+    /// <summary>
+    /// Limita o vetor netforce dentro do limite +MaxVelocity e -MaxVelocity
+    /// </summary>
     private void ClampForce()
     {
         if (this.netForce.X > MaxVelocity.X)

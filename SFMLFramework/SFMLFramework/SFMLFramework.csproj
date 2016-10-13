@@ -95,7 +95,8 @@
     <Compile Include="src\Helper\GameObjectCreator.cs" />
     <Compile Include="src\Helper\Resources.cs" />
     <Compile Include="src\Helper\DesignPatterns\Singleton.cs" />
-    <Compile Include="src\Helper\VisualDebugger.cs" />
+    <Compile Include="src\UI\Canvas.cs" />
+    <Compile Include="src\UI\UIText.cs" />
     <Compile Include="src\Input\IKeyboardInput.cs" />
     <Compile Include="src\Input\KeyboardEventDispatcher.cs" />
     <Compile Include="src\Input\KeyboardInput.cs" />

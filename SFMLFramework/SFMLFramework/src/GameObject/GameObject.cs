@@ -14,7 +14,7 @@ namespace SFMLFramework
     /// </summary>
     public class GameObject : Observable<GameObject>
     {
-        public VisualDebugger text;
+        public UIText text;
 
         /// <summary>
         /// GameObject está habilitado? (somente executa Update caso esteja)
@@ -109,8 +109,22 @@ namespace SFMLFramework
         /// <typeparam name="T">Tipo do componente</typeparam>
         /// <returns>Instância do componente</returns>
         public T GetComponent<T>()
+        {            
+            var x = (T)this.Components.Find(c => c.GetType().GetInterfaces().Contains(typeof(T)));
+            if (x == null)
+                return (T)this.Components.Find(c => c.GetType().Equals(typeof(T)));
+            else
+                return x;
+        }
+
+        public IEnumerable<T> GetComponents<T>()
         {
-            return (T)this.Components.Find(c => c.GetType().Equals(typeof(T)));
+            var x = (IEnumerable<T>)this.Components.Where(c => c.GetType().GetInterfaces().Contains(typeof(T)));
+
+            if (x == null)
+                return (IEnumerable<T>)this.Components.Where(c => c.GetType().Equals(typeof(T)));
+            else
+                return x;
         }
 
     }
