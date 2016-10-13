@@ -141,29 +141,43 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
 
     public void Update(float deltaTime)
     {
-        //G-FORCE
+        //Gravidade
         if (!this.isKinematic)
             AddForce(new Vector2f(0, this.mass * Physx.Gravity));
 
-        #region Fricção do piso/ambiente
-        /*
-        if (this.netForce.X > 0)
-        {
-            this.netForce.X -= EnvironmentFriction;
-            if (this.netForce.X - EnvironmentFriction < 0)
-                this.netForce.X = 0;
-        }
-        else if (this.netForce.X < 0)
-        {
-            this.netForce.X += EnvironmentFriction;
-            if (this.netForce.X + EnvironmentFriction > 0)
-                this.netForce.X = 0;
-        }
+        #region Atrito
+
+        /** No mundo real, embora a energia do sistema ELÁSTICO permacena a mesma após a colisão, 
+         * a velocidade diminui decorrente da ação de atrito, sendo convertida para calor e vibração do ar.
+         * Aqui, entretanto, o bouciness do material definirá o quanto do atrito do ambiente será aplicado 
+         * como resistência ao movimento do objeto, inversamente proporcional. 
+         * Assim, um material elástico com bounciness 1 recebe 0 atrito.
         */
+
+        var materialFriction = EnvironmentFriction * Math.Abs(1 - this.Material.Bounciness);
+        Console.WriteLine("Fricção: " + materialFriction);
+
+        if (materialFriction != 0)
+        {
+            if (this.netForce.X > 0)
+            {
+                this.netForce.X -= materialFriction;
+                if (this.netForce.X - materialFriction < 0)
+                    this.netForce.X = 0;
+            }
+            else if (this.netForce.X < 0)
+            {
+                this.netForce.X += materialFriction;
+                if (this.netForce.X + materialFriction > 0)
+                    this.netForce.X = 0;
+            }
+        }
         #endregion
 
+        //Cache do momentum do corpo
         this.momentum = this.mass * netForce;
 
+        //Atualiza a posição via Property para atualizar os componentes inscritos em sua modificação
         Root.Position += this.netForce * deltaTime;
 
         //exibe velocidade atual no label
@@ -195,7 +209,7 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
         //Executa métodos inscritos no evento de colisão
         OnCollisionResponse(hitInfo.Direction);
 
-        //responde a colisão de acordo com o material do rigidbody
+        //Responde a colisão de acordo com o material do rigidbody
         switch (Material.CollisionType)
         {
             #region ELASTICA
@@ -215,6 +229,8 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
                  * Vbf = 2 * ma / (ma + mb) * Vai  +  ((mb - ma) / (ma + mb)) * Vbi                  
                  */
 
+                //TODO: rever cálculo: forças diferentes colidindo estão se igualando para a maior força...
+
                 var finalElasticVelocity = ((this.mass - hitInfo.RigidBody.Mass) / (this.mass + hitInfo.RigidBody.Mass)) * this.netForce + 2 * hitInfo.RigidBody.Mass / (this.mass + hitInfo.RigidBody.Mass) * hitInfo.RigidBody.Velocity;
                 var Vbf = 2 * this.mass / (this.mass + hitInfo.RigidBody.Mass) * this.netForce + ((hitInfo.RigidBody.Mass - this.mass) / (this.mass + hitInfo.RigidBody.Mass)) * hitInfo.RigidBody.Velocity;
 
@@ -226,8 +242,6 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
                 */
 
                 var absElasticVelocity = new Vector2f(Math.Abs(finalElasticVelocity.X), Math.Abs(finalElasticVelocity.Y));
-
-                Console.WriteLine(Root.name + " - " + absElasticVelocity.ToString());
 
                 switch (hitInfo.Direction)
                 {
@@ -377,7 +391,6 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
 
             #region TRIGGER
             case ECollisionType.Trigger:
-                Console.WriteLine("Trigger");
                 break;
                 #endregion
         }

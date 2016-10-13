@@ -17,25 +17,13 @@ namespace SFMLFramework
         /// </summary>
         private string name;
         public string Name { get { return name; } }
-
-        /// <summary>
-        /// Fricção do material (resistência a movimento)
-        /// </summary>
-        private float friction;
-        public float Friction { get { return friction; } }
-
+        
         /// <summary>
         /// Coeficiente de restituição do corpo (elasticidade)
         /// </summary>
         private float bounciness;
         public float Bounciness { get { return bounciness; } }
-
-        /// <summary>
-        /// Densidade do material
-        /// </summary>
-        private float density;
-        public float Density { get { return density; } }
-
+        
         /// <summary>
         /// Tipo da resposta de colisão do material
         /// </summary>
@@ -48,12 +36,10 @@ namespace SFMLFramework
 
         #region Public
 
-        public Material(string name, float friction, float bounciness, float density, ECollisionType collisionType)
+        public Material(string name, float bounciness, ECollisionType collisionType)
         {
             this.name = name;
-            this.friction = friction;
             this.bounciness = Extensions.Clamp(bounciness, Physx.MinElasticity, Physx.MaxElasticity);
-            this.density = density;
             this.collisionType = collisionType;
         }
 
