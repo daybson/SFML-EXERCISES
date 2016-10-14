@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SFML.Graphics;
+﻿using System.Collections.Generic;
 using SFMLFramework.src;
 using SFML.System;
-using SFMLFramework.src.Helper;
 
 namespace SFMLFramework
 {
@@ -14,7 +9,7 @@ namespace SFMLFramework
     /// </summary>
     public class GameObject : Observable<GameObject>
     {
-        public UIText text;
+        #region Fields
 
         /// <summary>
         /// GameObject está habilitado? (somente executa Update caso esteja)
@@ -31,8 +26,10 @@ namespace SFMLFramework
         /// </summary>
         protected int id;
 
+        /// <summary>
+        /// Posição do game object no mundo
+        /// </summary>
         protected Vector2f position;
-
         public Vector2f Position
         {
             get { return this.position; }
@@ -51,6 +48,17 @@ namespace SFMLFramework
             this.isEnabled = true;
         }
 
+
+        /// <summary>
+        /// Lista de componentes adicionados ao gameobject
+        /// </summary>
+        public List<IComponent> Components = new List<IComponent>();
+
+        #endregion
+
+
+        #region Public 
+
         /// <summary>
         /// Construtor
         /// </summary>
@@ -61,12 +69,10 @@ namespace SFMLFramework
             this.isEnabled = true;
         }
 
-
         /// <summary>
-        /// Lista de componentes adicionados ao gameobject
+        /// Atualiza todos os componentes adicionados a lista de componentes
         /// </summary>
-        public List<IComponent> Components = new List<IComponent>();
-
+        /// <param name="deltaTime">Tempo transcorrido desde o último frame</param>
         public virtual void Update(float deltaTime)
         {
             this.Components.ForEach(c => c.Update(deltaTime));
@@ -75,16 +81,12 @@ namespace SFMLFramework
         /// <summary>
         /// Inicializa os parâmetros do gameobject para seu estado padrão
         /// </summary>
-        public virtual void Start()
-        {
-        }
+        public virtual void Start() { }
 
         /// <summary>
         /// Destroy o objeto e seus componentes
         /// </summary>
-        public void Destroy()
-        {
-        }
+        public void Destroy() { }
 
         //TODO: testar....
         /// <summary>
@@ -113,5 +115,6 @@ namespace SFMLFramework
             return (T)this.Components.Find(c => c.GetType().Equals(typeof(T)));
         }
 
+        #endregion
     }
 }

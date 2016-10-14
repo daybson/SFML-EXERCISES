@@ -20,11 +20,18 @@ using SFML.Window;
 
 
 /// <summary>
-/// Expede os eventos de teclado para os controladores registrados para recebê-los
+/// Envia os eventos de teclado para os controladores registrados para recebê-los
 /// </summary>
 public class KeyboardEventDispatcher
 {
+    /// <summary>
+    /// Dicionário de teclas pressionadas e respectivas Actions a serem executadas
+    /// </summary>
     public Dictionary<Keyboard.Key, Action> keyPressedActions;
+
+    /// <summary>
+    /// Dicionário de teclas liberadas e respectivas Actions a serem executadas
+    /// </summary>
     public Dictionary<Keyboard.Key, Action> keyReleasedActions;
 
     public KeyboardEventDispatcher()
@@ -33,12 +40,20 @@ public class KeyboardEventDispatcher
         this.keyReleasedActions = new Dictionary<Keyboard.Key, Action>();
     }
 
+    /// <summary>
+    /// Recebe a tecla pressionada e busca no dicionário por algum método correspondente a ela
+    /// </summary>
+    /// <param name="key">Tecla pressionada no teclado</param>
     public void OnKeyPressed(Keyboard.Key key)
     {
         if (this.keyPressedActions.ContainsKey(key))
             this.keyPressedActions[key].Invoke();
     }
 
+    /// <summary>
+    /// Recebe a tecla liberada e busca no dicionário por algum método correspondente a ela
+    /// </summary>
+    /// <param name="key">Tecla liberada no teclado</param>
     public void OnKeyReleased(Keyboard.Key key)
     {
         if (this.keyReleasedActions.ContainsKey(key))

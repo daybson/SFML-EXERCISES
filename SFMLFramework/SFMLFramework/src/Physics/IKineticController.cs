@@ -6,6 +6,10 @@ using SFML.System;
 
 namespace SFMLFramework
 {
+    /// <summary>
+    /// Delegate de métodos que devam ser executados ao ocorrer alguma colisão
+    /// </summary>
+    /// <param name="direction">Direção da colisão</param>
     public delegate void CollisionResponse(EDirection direction);
     
     /// <summary>
@@ -14,7 +18,7 @@ namespace SFMLFramework
     public interface IKineticController
     {
         /// <summary>
-        /// Executa uma resposta a alguma colisão
+        /// Armazena os métodos a serem executados em resposta a alguma colisão
         /// </summary>
         CollisionResponse OnCollisionResponse { get; set; }
 
@@ -22,7 +26,12 @@ namespace SFMLFramework
         /// Adiciona uma força de atuação ao corpo
         /// </summary>
         /// <param name="force">vetor da força sendo aplicada</param>
-        void AddForce(SFML.System.Vector2f force);
+        void AddForce(Vector2f force);
+
+        /// <summary>
+        /// Substitui a força atual no corpo pela informada
+        /// </summary>
+        /// <param name="vector2f">Nova força atuante no corpo</param>
         void SetForce(Vector2f vector2f);
     }
 }

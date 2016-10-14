@@ -1,20 +1,18 @@
 ﻿using SFML.System;
 using SFML.Window;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SFMLFramework.src.Helper
 {
+    /// <summary>
+    /// Classe auxiliar para criação rápida de objetos no jogo
+    /// </summary>
     public static class GameObjectCreator
     {
         #region Fields
 
-        public static readonly Material InelasticMaterial = new Material("Inelastic", 0.5f, ECollisionType.Inelastic);
+        public static readonly Material InelasticMaterial = new Material("Inelastic", 0.9f, ECollisionType.Inelastic);
         public static readonly Material ElasticMaterial = new Material("Elastic", 1, ECollisionType.Elastic);
-        public static readonly Material PartialInelasticMaterial = new Material("PartialInelastic", 0.5f, ECollisionType.PartialInelastic);
+        public static readonly Material PartialInelasticMaterial = new Material("PartialInelastic", 0.4f, ECollisionType.PartialInelastic);
 
         #endregion
 
@@ -29,6 +27,10 @@ namespace SFMLFramework.src.Helper
 
             var rigidbody = new Rigidbody(3f, renderer.SpriteSheet.Size, InelasticMaterial, false, inelasticBrick, V2.One * 50);
             inelasticBrick.Components.Add(rigidbody);
+
+            var label = new UIText(inelasticBrick, new Vector2i(0, -28));
+            inelasticBrick.Components.Add(label);
+            label.Display = (v) => label.SetMessage(string.Format("Vx: {0}\nVy: {1}", rigidbody.Velocity.X.ToString("0.0"), rigidbody.Velocity.Y.ToString("0.0")));
 
             inelasticBrick.Position = position;
 
@@ -76,7 +78,13 @@ namespace SFMLFramework.src.Helper
             var partialInelasticBrick = new GameObject("PartialInelasticBrick");
             var renderer = new Renderer(Resources.LoadSpriteSheet("partialInelasticBrick.png"), partialInelasticBrick);
             partialInelasticBrick.Components.Add(renderer);
-            partialInelasticBrick.Components.Add(new Rigidbody(2, renderer.SpriteSheet.Size, PartialInelasticMaterial, false, partialInelasticBrick, new Vector2f(50, 190)));
+            var rigidbody = new Rigidbody(2, renderer.SpriteSheet.Size, PartialInelasticMaterial, false, partialInelasticBrick, new Vector2f(250, 190));
+            partialInelasticBrick.Components.Add(rigidbody);
+
+            var label = new UIText(partialInelasticBrick, new Vector2i(0, -28));
+            partialInelasticBrick.Components.Add(label);
+            label.Display = (v) => label.SetMessage(string.Format("Vx: {0}\nVy: {1}", rigidbody.Velocity.X.ToString("0.0"), rigidbody.Velocity.Y.ToString("0.0")));
+
             partialInelasticBrick.Position = position;
             return partialInelasticBrick;
         }

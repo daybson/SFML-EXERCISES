@@ -35,9 +35,6 @@ public class SpriteSheet
     protected Vector2i size;
     public Vector2i Size { get { return size; } }
 
-
-    private string pathTexture;
-
     /// <summary>
     /// Quantidade de colunas da spritesheet
     /// </summary>
@@ -84,8 +81,6 @@ public class SpriteSheet
     /// <param name="pathTexture">Caminho da textura a ser carregada</param>
     public SpriteSheet(string pathTexture)
     {
-        this.pathTexture = pathTexture;
-
         //read a txt file 'metadata' with informations about the sprite sheet
         var metaFile = pathTexture.Replace(".png", ".txt");
         var lines = File.ReadAllLines(metaFile);

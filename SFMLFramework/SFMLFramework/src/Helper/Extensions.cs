@@ -49,8 +49,7 @@ public static class Extensions
     {
         return new Vector2f(-v1.Y, v1.X);
     }
-
-
+    
     public static Vector2f ProjectOnto(this Vector2f v1, Vector2f v2)
     {
         var dot = v1.Dot(v2);

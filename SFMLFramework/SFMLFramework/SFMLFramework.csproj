@@ -85,10 +85,11 @@
     <Compile Include="src\GameObject\IComponent.cs" />
     <Compile Include="src\Application\Game.cs" />
     <Compile Include="src\GameObject\GameObject.cs" />
-    <Compile Include="src\Helper\Extension.cs" />
+    <Compile Include="src\Helper\V2.cs" />
     <Compile Include="src\Helper\Extensions.cs" />
     <Compile Include="src\Helper\DesignPatterns\Observable.cs" />
     <Compile Include="src\Helper\GameObjectCreator.cs" />
+    <Compile Include="src\Helper\Logger.cs" />
     <Compile Include="src\Helper\Resources.cs" />
     <Compile Include="src\Helper\DesignPatterns\Singleton.cs" />
     <Compile Include="src\UI\UIText.cs" />
@@ -206,6 +207,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Logs\" />
     <Folder Include="resources\audio\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

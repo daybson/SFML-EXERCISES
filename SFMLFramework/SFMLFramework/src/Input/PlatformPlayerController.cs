@@ -1,3 +1,4 @@
+using SFML.System;
 using SFML.Window;
 using SFMLFramework.src.Helper;
 using System;
@@ -8,7 +9,7 @@ using System.Text;
 namespace SFMLFramework
 {
     /// <summary>
-    /// Define o controllador do personagem para jogos de plataforma.
+    /// Define o controllador do personagem específico para jogos de plataforma.
     /// </summary>
     public class PlatformPlayerController : IComponent
     {
@@ -37,12 +38,12 @@ namespace SFMLFramework
         /// <summary>
         /// Modificador escalar do vetor de pulo
         /// </summary>
-        protected readonly float JUMP_FORCE = 2000.0f;
+        protected readonly float JUMP_FORCE = 1200.0f;
 
         /// <summary>
         /// Modificador escalar do vetor de caminhada
         /// </summary>
-        protected readonly float WALK_FORCE = 250.0f;
+        protected readonly float WALK_FORCE = 150.0f;
 
         /// <summary>
         /// Expedidor de eventos do teclado
@@ -68,6 +69,11 @@ namespace SFMLFramework
 
         #region Public 
 
+        /// <summary>
+        /// Cria um controlado de personagem plataforma para um jogador
+        /// </summary>
+        /// <param name="iKineticController">O controlador cinético sobre o qual o input será convertido em força atuante</param>
+        /// <param name="iSpritesheetOrientable">SpriteSheet que receberá notificações do input para se orientar de acordo com ele</param>
         public PlatformPlayerController(IKineticController iKineticController, ISpritesheetOrientable iSpritesheetOrientable)
         {
             PlayerKeyboardController = new KeyboardEventDispatcher();
@@ -80,7 +86,7 @@ namespace SFMLFramework
         }
 
         /// <summary>
-        /// Efetua caminhada, adicionando força Left/Right ao rigidbody
+        /// Gerencia estado das variáveis de caminhada left/right, bem como notifica o spritesheet sobre a mudança de sentido do movimento
         /// </summary>
         public void Walk(EDirection direction, bool value)
         {
@@ -107,6 +113,7 @@ namespace SFMLFramework
                 IKineticController.AddForce(V2.Top * this.JUMP_FORCE);
                 this.isJumping = true;
                 this.OnSpriteSheetOrientationChange(EDirection.Up);
+                Logger.Log(string.Format("Jump: {0}", JUMP_FORCE));
             }
         }
 
@@ -120,10 +127,15 @@ namespace SFMLFramework
         /// </summary>
         private void Move()
         {
+            Vector2f move = V2.Zero;
+
             if (this.moveRigth)
-                IKineticController.SetForce(V2.Right * this.WALK_FORCE);
+                move = this.WALK_FORCE * V2.Right;
             else if (this.moveLeft)
-                IKineticController.SetForce(V2.Left * this.WALK_FORCE);
+                move = this.WALK_FORCE * V2.Left;
+
+            IKineticController.AddForce(move);
+            Logger.Log(string.Format("Move: {0}", move.ToString()));
         }
 
         /// <summary>

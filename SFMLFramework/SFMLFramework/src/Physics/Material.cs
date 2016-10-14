@@ -36,6 +36,12 @@ namespace SFMLFramework
 
         #region Public
 
+        /// <summary>
+        /// Construtor padrão
+        /// </summary>
+        /// <param name="name">Nome do material</param>
+        /// <param name="bounciness">Elasticidade do material (clamp entre 0 e 1), onde 1 significa ação zero de atrito sobre o corpo e 0 ação total de atrito</param>
+        /// <param name="collisionType">Tipo de colisão do material</param>
         public Material(string name, float bounciness, ECollisionType collisionType)
         {
             this.name = name;

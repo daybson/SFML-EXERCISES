@@ -25,6 +25,9 @@ public class Renderer : IComponent, IRender, ISpritesheetOrientable, IObserver<G
 {
     #region Fields
 
+    /// <summary>
+    /// SpriteSheed a ser renderizada
+    /// </summary>
     public SpriteSheet SpriteSheet { get; set; }
 
     public bool IsEnabled { get; set; }
@@ -49,6 +52,7 @@ public class Renderer : IComponent, IRender, ISpritesheetOrientable, IObserver<G
     /// <summary>
     /// Renderiza o Sprite da SpriteSheet na janela informada
     /// </summary>
+    /// <param name="window">Janela de renderização</param>
     public void Render(ref RenderWindow window)
     {
         window.Draw(this.SpriteSheet.Sprite);
@@ -72,20 +76,18 @@ public class Renderer : IComponent, IRender, ISpritesheetOrientable, IObserver<G
 
     #region IObserver
 
+    /// <summary>
+    /// Evento de IObserver que atualiza a posição dos bounds do collider
+    /// </summary>
+    /// <param name="value">GameObject com a posição atualizada</param>
     public void OnNext(GameObject value)
     {
         SpriteSheet.Sprite.Position = value.Position;
     }
 
-    public void OnError(Exception error)
-    {
+    public void OnError(Exception error) { }
 
-    }
-
-    public void OnCompleted()
-    {
-
-    }
+    public void OnCompleted() { }
 
     #endregion
 }

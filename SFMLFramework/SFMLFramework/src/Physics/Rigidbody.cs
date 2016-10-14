@@ -105,6 +105,9 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
 
     public GameObject Root { get; set; }
 
+    /// <summary>
+    /// Velocidade máxima de deslocamento do corpo
+    /// </summary>
     private Vector2f maxVelocity;
     public Vector2f MaxVelocity { get { return maxVelocity; } }
 
@@ -113,6 +116,15 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
 
     #region Methods
 
+    /// <summary>
+    /// Construtor padrão de corpo rígido
+    /// </summary>
+    /// <param name="mass">Massa do corpo</param>
+    /// <param name="spriteDimension">Dimensões do sprite (usado para criar os colliders de colisão do corpo)</param>
+    /// <param name="material">Material físico do corpo</param>
+    /// <param name="isKinematic"><code>true</code> para um corpo que não sofre ação de forças de movimento (mas sofre colisões), permanecendo estático em sua posição</param>
+    /// <param name="root">GameObject ao qual o corpo será atribuido</param>
+    /// <param name="maxVelocity">Velocidade máxima de movimentação do corpo</param>
     public Rigidbody(float mass, Vector2i spriteDimension, Material material, bool isKinematic, GameObject root, Vector2f maxVelocity)
     {
         this.mass = mass;
@@ -200,6 +212,8 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
             return;
 
         this.netForce += force;
+        Logger.Log(string.Format("AddForce: {0}", this.netForce.ToString()));
+
         ClampForce();
     }
 

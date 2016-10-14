@@ -6,6 +6,9 @@ using System.Text;
 
 namespace SFMLFramework.src.Helper
 {
+    /// <summary>
+    /// Classe com referências para vetores comumente usados
+    /// </summary>
     public static class V2
     {
         public static readonly Vector2f Left = new Vector2f(-1, 0);

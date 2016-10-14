@@ -2,9 +2,6 @@
 using SFML.System;
 using SFMLFramework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 
 /// <summary>
@@ -19,8 +16,13 @@ public enum ECollisionType
     None
 }
 
+/// <summary>
+/// Representa um collider retangular ao redor de um sprite
+/// </summary>
 public class Collider : IComponent, IRender, IObserver<GameObject>
 {
+    #region Fields
+
     /// <summary>
     /// Shape de visualização do collider
     /// </summary>
@@ -42,7 +44,7 @@ public class Collider : IComponent, IRender, IObserver<GameObject>
     private int colliderThickness;
 
     /// <summary>
-    /// Dimensão do sprite (wifth, height)
+    /// Dimensão do sprite (width, height)
     /// </summary>
     private Vector2i spriteDimension;
 
@@ -56,6 +58,18 @@ public class Collider : IComponent, IRender, IObserver<GameObject>
 
     public GameObject Root { get; set; }
 
+    #endregion
+
+
+    #region Public
+
+    /// <summary>
+    /// Cria um novo collider em uma das extremidades do sprite informado
+    /// </summary>
+    /// <param name="spriteDimension">Dimensão do sprite</param>
+    /// <param name="direction">Direção onde o collider será posicionado</param>
+    /// <param name="colliderThickness">Espessura visual do collider (usado apenas para debug visual)</param>
+    /// <param name="root">GameObject ao qual o corpo será atribuido</param>
     public Collider(Vector2i spriteDimension, EDirection direction, int colliderThickness, GameObject root)
     {
         this.Root = root;
@@ -95,11 +109,19 @@ public class Collider : IComponent, IRender, IObserver<GameObject>
 
     }
 
+    /// <summary>
+    /// Renderiza o Sprite da SpriteSheet na janela informada
+    /// </summary>
+    /// <param name="window">Janela de renderização</param>
     public void Render(ref RenderWindow window)
     {
         window.Draw(this.shape);
     }
 
+    /// <summary>
+    /// Evento de IObserver que atualiza a posição dos bounds do collider
+    /// </summary>
+    /// <param name="value">GameObject com a posição atualizada</param>
     public void OnNext(GameObject value)
     {
         switch (this.direction)
@@ -125,11 +147,9 @@ public class Collider : IComponent, IRender, IObserver<GameObject>
         this.shape.Position = new Vector2f(this.bound.Left, this.bound.Top);
     }
 
-    public void OnError(Exception error)
-    {
-    }
+    public void OnError(Exception error) { }
 
-    public void OnCompleted()
-    {
-    }
+    public void OnCompleted() { }
+
+    #endregion
 }
