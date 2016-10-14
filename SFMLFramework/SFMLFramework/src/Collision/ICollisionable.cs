@@ -13,6 +13,7 @@ public interface ICollisionable
     Collider ColliderBottom { get; }
     Collider ColliderRight { get; }
     Collider ColliderLeft { get; }
+    Vector2f InitialVelocity { get; }
     Vector2f Velocity { get; }
     Vector2f MaxVelocity { get; }
     float Mass { get; }
@@ -21,4 +22,6 @@ public interface ICollisionable
     bool IsKinematic { get; }
     Vector2f Momentum { get; }
     void SolveCollision(CollisionInfo hitInfo);
+
+    void SetForce(Vector2f netForce);
 }

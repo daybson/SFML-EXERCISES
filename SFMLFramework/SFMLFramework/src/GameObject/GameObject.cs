@@ -109,22 +109,8 @@ namespace SFMLFramework
         /// <typeparam name="T">Tipo do componente</typeparam>
         /// <returns>Instância do componente</returns>
         public T GetComponent<T>()
-        {            
-            var x = (T)this.Components.Find(c => c.GetType().GetInterfaces().Contains(typeof(T)));
-            if (x == null)
-                return (T)this.Components.Find(c => c.GetType().Equals(typeof(T)));
-            else
-                return x;
-        }
-
-        public IEnumerable<T> GetComponents<T>()
         {
-            var x = (IEnumerable<T>)this.Components.Where(c => c.GetType().GetInterfaces().Contains(typeof(T)));
-
-            if (x == null)
-                return (IEnumerable<T>)this.Components.Where(c => c.GetType().Equals(typeof(T)));
-            else
-                return x;
+            return (T)this.Components.Find(c => c.GetType().Equals(typeof(T)));
         }
 
     }

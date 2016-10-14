@@ -26,8 +26,12 @@ namespace SFMLFramework.src.Helper
             var inelasticBrick = new GameObject("InelasticBrick");
             var renderer = new Renderer(Resources.LoadSpriteSheet("inelasticBrick.png"), inelasticBrick);
             inelasticBrick.Components.Add(renderer);
-            inelasticBrick.Components.Add(new Rigidbody(1, renderer.SpriteSheet.Size, InelasticMaterial, false, inelasticBrick, V2.One * 50));
+
+            var rigidbody = new Rigidbody(3f, renderer.SpriteSheet.Size, InelasticMaterial, false, inelasticBrick, V2.One * 50);
+            inelasticBrick.Components.Add(rigidbody);
+
             inelasticBrick.Position = position;
+
             return inelasticBrick;
         }
 
@@ -35,11 +39,9 @@ namespace SFMLFramework.src.Helper
         {
             var elasticBrick = new GameObject("ElasticBrick");
             var renderer = new Renderer(Resources.LoadSpriteSheet("elasticBrick.png"), elasticBrick);
-
-            //TODO: passar Add na lista de componentes para construtor do componente -> evita chamada externa?
             elasticBrick.Components.Add(renderer);
 
-            var rigidbody = new Rigidbody(25, renderer.SpriteSheet.Size, ElasticMaterial, false, elasticBrick, V2.One * 250);
+            var rigidbody = new Rigidbody(1, renderer.SpriteSheet.Size, ElasticMaterial, false, elasticBrick, V2.One * 250);
             elasticBrick.Components.Add(rigidbody);
 
             var label = new UIText(elasticBrick, new Vector2i(0, -28));
@@ -47,6 +49,25 @@ namespace SFMLFramework.src.Helper
             label.Display = (v) => label.SetMessage(string.Format("Vx: {0}\nVy: {1}", rigidbody.Velocity.X.ToString("0.0"), rigidbody.Velocity.Y.ToString("0.0")));
 
             elasticBrick.Position = position;
+
+            return elasticBrick;
+        }
+
+        public static GameObject CreateElasticBrick2(Vector2f position)
+        {
+            var elasticBrick = new GameObject("ElasticBrick");
+            var renderer = new Renderer(Resources.LoadSpriteSheet("elasticBrick.png"), elasticBrick);
+            elasticBrick.Components.Add(renderer);
+
+            var rigidbody = new Rigidbody(8, renderer.SpriteSheet.Size, ElasticMaterial, false, elasticBrick, V2.One * 250);
+            elasticBrick.Components.Add(rigidbody);
+
+            var label = new UIText(elasticBrick, new Vector2i(0, -28));
+            elasticBrick.Components.Add(label);
+            label.Display = (v) => label.SetMessage(string.Format("Vx: {0}\nVy: {1}", rigidbody.Velocity.X.ToString("0.0"), rigidbody.Velocity.Y.ToString("0.0")));
+
+            elasticBrick.Position = position;
+
             return elasticBrick;
         }
 

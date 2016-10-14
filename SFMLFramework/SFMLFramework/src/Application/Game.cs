@@ -62,60 +62,73 @@ public class Game
 
     public void Start()
     {
-        isDebugging = true;
-        this.window = new RenderWindow(new VideoMode(windowSize.X, windowSize.Y), windowTitle);
-        this.window.SetFramerateLimit(120);
-        this.window.KeyPressed += this.keyboard.ProcessKeyboardPressed;
-        this.window.KeyReleased += this.keyboard.ProcessKeyboardReleased;
+        try
+        {
+            isDebugging = true;
+            isRendering = true;
+            this.window = new RenderWindow(new VideoMode(windowSize.X, windowSize.Y), windowTitle);
+            this.window.SetFramerateLimit(120);
+            this.window.KeyPressed += this.keyboard.ProcessKeyboardPressed;
+            this.window.KeyReleased += this.keyboard.ProcessKeyboardReleased;
 
-        this.labelCommands.Display = (v) => this.labelCommands.SetMessage(
-            "A = move player esquerda\n" +
-            "D = move player direita\n" +
-            "Seta esqueda = move cubo1 esquerda\n" +
-            "Seta direita = move cubo1 direita\n" +
-            "Numpad4 = move cubo2 esquerda\n" +
-            "Numpad6 = move cubo2 direita"
-            );
-        this.canvas.Position = V2.Zero;
+            this.labelCommands.Display = (v) => this.labelCommands.SetMessage(
+                "A = move player esquerda\n" +
+                "D = move player direita\n" +
+                "Seta esqueda = move cubo1 esquerda\n" +
+                "Seta direita = move cubo1 direita\n" +
+                "Numpad4 = move cubo2 esquerda\n" +
+                "Numpad6 = move cubo2 direita"
+                );
+            this.canvas.Position = new Vector2f(windowSize.X/2, 0);
+            this.gameObjects.Add(this.canvas);
 
-        this.gameObjects.Add(this.canvas);
-
-        this.player = GameObjectCreator.CreatePlayer(ref this.keyboard);
-        this.gameObjects.Add(this.player);
-
-        this.player.Position = V2.Right * 650;
-
-        var r = GameObjectCreator.CreateElasticBrick(new Vector2f(340, 400));
-        this.gameObjects.Add(r);
-
-        var l = GameObjectCreator.CreateElasticBrick(new Vector2f(450, 400));
-        this.gameObjects.Add(l);
-
-        this.gameObjects.Add(GameObjectCreator.CreatePlatform(EDirection.Down, new Vector2f(0, windowSize.Y - 32)));
-        this.gameObjects.Add(GameObjectCreator.CreatePlatform(EDirection.Right, new Vector2f(windowSize.X - 33, 29)));
-        this.gameObjects.Add(GameObjectCreator.CreatePlatform(EDirection.Left, new Vector2f(0, 32)));
-
-        this.window.KeyReleased += (sender, e) => { if (e.Code == Keyboard.Key.F) isDebugging = !isDebugging; };
-        this.window.KeyReleased += (sender, e) => { if (e.Code == Keyboard.Key.R) isRendering = !isRendering; };
+            this.player = GameObjectCreator.CreatePlayer(ref this.keyboard);
+            this.gameObjects.Add(this.player);
+            this.player.Position = V2.Right * 650;
 
 
-        this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Right) r.GetComponent<Rigidbody>().AddForce(V2.Right * 200); };
-        this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Left) r.GetComponent<Rigidbody>().AddForce(V2.Left * 200); };
+            var elastic = GameObjectCreator.CreateElasticBrick(new Vector2f(300, 400));
+            this.gameObjects.Add(elastic);
+            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Right) elastic.GetComponent<Rigidbody>().AddForce(V2.Right * 200); };
+            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Left) elastic.GetComponent<Rigidbody>().AddForce(V2.Left * 200); };
 
-        this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Numpad6) l.GetComponent<Rigidbody>().AddForce(V2.Right * 200); };
-        this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Numpad4) l.GetComponent<Rigidbody>().AddForce(V2.Left * 200); };
+            var inelastic = GameObjectCreator.CreateInelasticBrick(new Vector2f(100, 400));
+            this.gameObjects.Add(inelastic);
+            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Right) elastic.GetComponent<Rigidbody>().AddForce(V2.Right * 200); };
+            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Left) elastic.GetComponent<Rigidbody>().AddForce(V2.Left * 200); };
 
-        r.GetComponent<Rigidbody>().AddForce(V2.Right * 150);
 
-        Run();
+            var parcialInelastic = GameObjectCreator.CreatePartialInelasticBrick(new Vector2f(500, 400));
+            this.gameObjects.Add(parcialInelastic);
+            //this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Right) elastic.GetComponent<Rigidbody>().AddForce(V2.Right * 200); };
+            //this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Left) elastic.GetComponent<Rigidbody>().AddForce(V2.Left * 200); };
+
+            /*
+            var right = GameObjectCreator.CreateElasticBrick2(new Vector2f(300, 0));
+            this.gameObjects.Add(right);
+            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Numpad6) right.GetComponent<Rigidbody>().AddForce(V2.Right * 200); };
+            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Numpad4) right.GetComponent<Rigidbody>().AddForce(V2.Left * 200); };
+            */
+
+            this.gameObjects.Add(GameObjectCreator.CreatePlatform(EDirection.Down, new Vector2f(0, windowSize.Y - 32)));
+            this.gameObjects.Add(GameObjectCreator.CreatePlatform(EDirection.Right, new Vector2f(windowSize.X - 33, 29)));
+            this.gameObjects.Add(GameObjectCreator.CreatePlatform(EDirection.Left, new Vector2f(0, 32)));
+
+            this.window.KeyReleased += (sender, e) => { if (e.Code == Keyboard.Key.F) isDebugging = !isDebugging; };
+            this.window.KeyReleased += (sender, e) => { if (e.Code == Keyboard.Key.R) isRendering = !isRendering; };
+
+            this.labelCommands.Display.Invoke(V2.Zero);
+
+            Run();
+        }
+        catch(Exception e)
+        {
+            Console.WriteLine(e.ToString());
+        }
     }
 
     public void Update(float deltaTime)
     {
-        int x = 0;
-
-        this.labelCommands.Display.Invoke(V2.Zero);
-
         foreach (var g in this.gameObjects)
         {
             g.Update(deltaTime);
@@ -132,7 +145,6 @@ public class Game
                 }
             }
             #endregion
-            x++;
         }
     }
 
@@ -160,7 +172,7 @@ public class Game
         foreach (var g in this.gameObjects)
         {
             if (isRendering)
-                g.GetComponent<Renderer>()?.Render(ref this.window);
+               g.GetComponent<Renderer>()?.Render(ref this.window);
 
             if (isDebugging)
             {
