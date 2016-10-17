@@ -66,10 +66,13 @@ public class Player : GameObject
 
         PlatformPlayerController.AudioAdapter = AudioFXController;
 
+        var listener3d = new AudioListener3D(this);
+        
         this.Components.Add(PlatformPlayerController);
         this.Components.Add(Rigidbody);
         this.Components.Add(Renderer);
         this.Components.Add(AudioFXController);
+        this.Components.Add(listener3d);
     }
 
     public override void Update(float deltaTime)

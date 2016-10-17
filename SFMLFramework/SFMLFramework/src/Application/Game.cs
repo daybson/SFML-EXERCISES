@@ -61,6 +61,7 @@ public class Game
             Logger.Log("Starting Game");
 
             this.musicController.LoadMusic("nature024.wav");
+            this.musicController.LoadMusic("battleSoundtrad.wav", true, 5, 1f);
 
             this.window = new RenderWindow(new VideoMode(windowSize.X, windowSize.Y), windowTitle);
             this.window.SetFramerateLimit(120);
@@ -97,6 +98,9 @@ public class Game
 
 
             var inelastic = GameObjectCreator.CreateInelasticBrick(new Vector2f(300, 400));
+
+            inelastic.Subscribe(this.musicController);
+
             this.gameObjects.Add(inelastic);
             this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Right) inelastic.GetComponent<Rigidbody>().AddForce(V2.Right * 200); };
             this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Left) inelastic.GetComponent<Rigidbody>().AddForce(V2.Left * 200); };
@@ -119,6 +123,7 @@ public class Game
             this.labelCommands.Display.Invoke(V2.Zero);
 
             this.musicController.PlayAudio("nature024");
+            this.musicController.PlayAudio("battleSoundtrad");
 
             Run();
         }
@@ -181,6 +186,7 @@ public class Game
                 g.GetComponent<Rigidbody>()?.ColliderTop.Render(ref this.window);
                 g.GetComponent<Rigidbody>()?.ColliderRight.Render(ref this.window);
                 g.GetComponent<Rigidbody>()?.ColliderLeft.Render(ref this.window);
+                g.GetComponent<AudioListener3D>()?.Render(ref this.window);
                 g.GetComponent<UIText>()?.Render(ref this.window);
             }
         }
