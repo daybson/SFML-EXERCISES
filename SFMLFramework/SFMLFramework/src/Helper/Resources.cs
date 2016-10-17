@@ -76,11 +76,29 @@ namespace SFMLFramework
         /// </summary>
         /// <param name="name">Nome do arquivo de SoundBuffer (com extensão)</param>
         /// <returns>Instância do SoundBuffer ou <code>null</code> caso ocorra um erro</returns>
-        public static SoundBuffer LoadSSoundBuffer(string name)
+        public static SoundBuffer LoadSoundBuffer(string name)
         {
             try
             {
                 return new SoundBuffer(audioPath + name);
+            }
+            catch (Exception e)
+            {
+                Logger.Log(e.Message);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Carrega um objeto Music do disco
+        /// </summary>
+        /// <param name="name">Nome do arquivo de SoundBuffer (com extensão)</param>
+        /// <returns>Instância do SoundBuffer ou <code>null</code> caso ocorra um erro</returns>
+        public static Music LoadMusic(string name)
+        {
+            try
+            {
+                return new Music(audioPath + name);
             }
             catch (Exception e)
             {

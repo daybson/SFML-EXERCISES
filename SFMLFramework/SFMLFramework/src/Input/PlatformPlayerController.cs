@@ -181,15 +181,15 @@ namespace SFMLFramework
             switch (type)
             {
                 case AttackTypes.Kick:
-                    AudioAdapter.PlaySound("kick");
+                    AudioAdapter.PlayAudio("kick");
                     break;
 
                 case AttackTypes.Magick:
-                    AudioAdapter.PlaySound("punch");
+                    AudioAdapter.PlayAudio("punch");
                     break;
 
                 case AttackTypes.Punch:
-                    AudioAdapter.PlaySound("magick");
+                    AudioAdapter.PlayAudio("magick");
                     break;
             }
         }

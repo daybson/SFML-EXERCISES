@@ -10,8 +10,8 @@ namespace SFMLFramework.src.Audio
     /// </summary>
     public interface IAudioAdapter
     {
-        void PlaySound(string name);
-        void PauseSound(string name);
-        void StopSound(string name);
+        void PlayAudio(string name);
+        void PauseAudio(string name);
+        void StopAudio(string name);
     }
 }

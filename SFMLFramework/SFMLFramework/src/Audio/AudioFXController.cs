@@ -41,7 +41,7 @@ namespace SFMLFramework.src.Audio
         /// <param name="fileName">Nome do arquivo de som (com extensão). O nome sem extensão será usado como Key no dicionado de Sound</param>
         public void LoadSoundFX(string fileName)
         {
-            var buf = Resources.LoadSSoundBuffer(fileName);
+            var buf = Resources.LoadSoundBuffer(fileName);
             if (buf != null)
             {
                 this.buffer.Add(fileName.Replace(".wav", "").ToString(), buf);
@@ -58,7 +58,7 @@ namespace SFMLFramework.src.Audio
         /// Executa o som, caso exista
         /// </summary>
         /// <param name="name">key do dicionário de Sound</param>
-        public void PlaySound(string name)
+        public void PlayAudio(string name)
         {
             this.sfx[name]?.Play();
             Logger.Log("Playing sound: " + name + " - " + (this.sfx[name] != null));
@@ -69,7 +69,7 @@ namespace SFMLFramework.src.Audio
         /// </summary>
         /// <param name="name">key do dicionário de Sound</param>
 
-        public void PauseSound(string name)
+        public void PauseAudio(string name)
         {
             this.sfx[name]?.Pause();
             Logger.Log("Pausing sound: " + name + " - " + (this.sfx[name] != null));
@@ -79,7 +79,7 @@ namespace SFMLFramework.src.Audio
         /// Para a execução do som, caso exista
         /// </summary>
         /// <param name="name">key do dicionário de Sound</param>
-        public void StopSound(string name)
+        public void StopAudio(string name)
         {
             this.sfx[name]?.Stop();
             Logger.Log("Stop sound: " + name + " - " + (this.sfx[name] != null));

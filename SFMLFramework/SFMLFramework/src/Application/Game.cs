@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using SFML.System;
 using SFMLFramework;
 using SFMLFramework.src.Helper;
+using SFMLFramework.src.Audio;
 
 public class Game
 {
@@ -28,6 +29,8 @@ public class Game
     private List<GameObject> gameObjects;
     public List<GameObject> GameObjects { get { return gameObjects; } }
 
+    private MusicController musicController;
+
     #endregion
 
 
@@ -41,6 +44,7 @@ public class Game
         this.clock = new Clock();
 
         this.gameObjects = new List<GameObject>();
+        this.musicController = new MusicController();
 
         this.canvas = new GameObject("Canvas");
         this.labelCommands = new UIText(this.canvas);
@@ -55,6 +59,8 @@ public class Game
         try
         {
             Logger.Log("Starting Game");
+
+            this.musicController.LoadMusic("nature024.wav");
 
             this.window = new RenderWindow(new VideoMode(windowSize.X, windowSize.Y), windowTitle);
             this.window.SetFramerateLimit(120);
@@ -89,12 +95,12 @@ public class Game
             this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Left) elastic.GetComponent<Rigidbody>().AddForce(V2.Left * 200); };
             */
 
-            
+
             var inelastic = GameObjectCreator.CreateInelasticBrick(new Vector2f(300, 400));
             this.gameObjects.Add(inelastic);
             this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Right) inelastic.GetComponent<Rigidbody>().AddForce(V2.Right * 200); };
             this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Left) inelastic.GetComponent<Rigidbody>().AddForce(V2.Left * 200); };
-            
+
 
             /*
             var right = GameObjectCreator.CreateElasticBrick2(new Vector2f(300, 0));
@@ -111,6 +117,8 @@ public class Game
             this.window.KeyReleased += (sender, e) => { if (e.Code == Keyboard.Key.R) isRendering = !isRendering; };
 
             this.labelCommands.Display.Invoke(V2.Zero);
+
+            this.musicController.PlayAudio("nature024");
 
             Run();
         }
