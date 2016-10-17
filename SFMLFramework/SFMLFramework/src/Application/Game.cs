@@ -46,7 +46,7 @@ public class Game
         this.labelCommands = new UIText(this.canvas);
         this.canvas.Components.Add(labelCommands);
 
-        isDebugging = true;
+        isDebugging = false;
         isRendering = false;
     }
 
@@ -66,10 +66,8 @@ public class Game
                 "A = move player esquerda\n" +
                 "D = move player direita\n" +
                 "Seta esqueda = move cubo1 esquerda\n" +
-                "Seta direita = move cubo1 direita\n" +
-                "Numpad4 = move cubo2 esquerda\n" +
-                "Numpad6 = move cubo2 direita"
-                );
+                "Seta direita = move cubo1 direita\n");
+
             this.canvas.Position = new Vector2f(windowSize.X / 2, 0);
             this.gameObjects.Add(this.canvas);
 
@@ -78,22 +76,25 @@ public class Game
             this.player.Position = V2.Right * 650;
 
             /*
-            var elastic = GameObjectCreator.CreateElasticBrick(new Vector2f(500, 400));
-            this.gameObjects.Add(elastic);
-            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Right) elastic.GetComponent<Rigidbody>().AddForce(V2.Right * 200); };
-            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Left) elastic.GetComponent<Rigidbody>().AddForce(V2.Left * 200); };
-            
-
-            var inelastic = GameObjectCreator.CreateInelasticBrick(new Vector2f(100, 400));
-            this.gameObjects.Add(inelastic);
-            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Right) elastic.GetComponent<Rigidbody>().AddForce(V2.Right * 200); };
-            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Left) elastic.GetComponent<Rigidbody>().AddForce(V2.Left * 200); };
-            */
-
             var parcialInelastic = GameObjectCreator.CreatePartialInelasticBrick(new Vector2f(300, 400));
             this.gameObjects.Add(parcialInelastic);
             this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Right) parcialInelastic.GetComponent<Rigidbody>().AddForce(V2.Right * 200); };
             this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Left) parcialInelastic.GetComponent<Rigidbody>().AddForce(V2.Left * 200); };
+            */
+
+            /*
+            var elastic = GameObjectCreator.CreateElasticBrick(new Vector2f(500, 400));
+            this.gameObjects.Add(elastic);
+            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Right) elastic.GetComponent<Rigidbody>().AddForce(V2.Right * 200); };
+            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Left) elastic.GetComponent<Rigidbody>().AddForce(V2.Left * 200); };
+            */
+
+            
+            var inelastic = GameObjectCreator.CreateInelasticBrick(new Vector2f(300, 400));
+            this.gameObjects.Add(inelastic);
+            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Right) inelastic.GetComponent<Rigidbody>().AddForce(V2.Right * 200); };
+            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Left) inelastic.GetComponent<Rigidbody>().AddForce(V2.Left * 200); };
+            
 
             /*
             var right = GameObjectCreator.CreateElasticBrick2(new Vector2f(300, 0));

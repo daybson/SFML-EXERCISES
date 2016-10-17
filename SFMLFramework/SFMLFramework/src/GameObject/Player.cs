@@ -1,5 +1,6 @@
 ﻿using SFML.System;
 using SFMLFramework;
+using SFMLFramework.src.Audio;
 using SFMLFramework.src.Helper;
 
 public delegate void OnDirectionChange(EDirection direction);
@@ -34,6 +35,11 @@ public class Player : GameObject
     /// </summary>
     public PlatformPlayerController PlatformPlayerController { get; set; }
 
+    /// <summary>
+    /// Controlador de efeitos sonoros do personagem
+    /// </summary>
+    public AudioFXController AudioFXController { get; set; }
+
     #endregion
 
 
@@ -44,7 +50,7 @@ public class Player : GameObject
     {
         this.name = "Player 1";
         Renderer = new Renderer(Resources.LoadSpriteSheet("dragon.png"), this);
-        Rigidbody = new Rigidbody(5f, Renderer.SpriteSheet.Size, GameObjectCreator.InelasticMaterial, false, this, new Vector2f(300, 900));
+        Rigidbody = new Rigidbody(5f, Renderer.SpriteSheet.Size, GameObjectCreator.PlayerInelasticMaterial, false, this, new Vector2f(300, 900));
 
         var label = new UIText(this, new Vector2i(0, -28));
         this.Components.Add(label);
@@ -52,9 +58,18 @@ public class Player : GameObject
 
         PlatformPlayerController = new PlatformPlayerController(Rigidbody, Renderer);
         PlatformPlayerController.OnSpriteSheetOrientationChange += Renderer.OrientateSpriteSheetTo;
+
+        AudioFXController = new AudioFXController();
+        AudioFXController.LoadSoundFX("kick.wav");
+        AudioFXController.LoadSoundFX("punch.wav");
+        AudioFXController.LoadSoundFX("magick.wav");
+
+        PlatformPlayerController.AudioAdapter = AudioFXController;
+
         this.Components.Add(PlatformPlayerController);
         this.Components.Add(Rigidbody);
         this.Components.Add(Renderer);
+        this.Components.Add(AudioFXController);
     }
 
     public override void Update(float deltaTime)

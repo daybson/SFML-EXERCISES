@@ -1,4 +1,5 @@
-﻿using SFML.Graphics;
+﻿using SFML.Audio;
+using SFML.Graphics;
 using SFMLFramework.src.Helper;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,11 @@ namespace SFMLFramework
         /// Caminho padrão das fontes
         /// </summary>
         private static readonly string fontPath = "resources/fonts/";
+
+        /// <summary>
+        /// Caminho padrão dos audios
+        /// </summary>
+        private static readonly string audioPath = "resources/audio/";
 
         #endregion
 
@@ -57,6 +63,24 @@ namespace SFMLFramework
             try
             {
                 return new Font(fontPath + name);
+            }
+            catch (Exception e)
+            {
+                Logger.Log(e.Message);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Carrega um SoundBuffer do disco
+        /// </summary>
+        /// <param name="name">Nome do arquivo de SoundBuffer (com extensão)</param>
+        /// <returns>Instância do SoundBuffer ou <code>null</code> caso ocorra um erro</returns>
+        public static SoundBuffer LoadSSoundBuffer(string name)
+        {
+            try
+            {
+                return new SoundBuffer(audioPath + name);
             }
             catch (Exception e)
             {

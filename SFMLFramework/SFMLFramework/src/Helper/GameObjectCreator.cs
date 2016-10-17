@@ -12,8 +12,8 @@ namespace SFMLFramework.src.Helper
 
         public static readonly Material InelasticMaterial = new Material("Inelastic", 0.9f, ECollisionType.Inelastic);
         public static readonly Material ElasticMaterial = new Material("Elastic", 1, ECollisionType.Elastic);
-        public static readonly Material PartialInelasticMaterial = new Material("PartialInelastic", 0.4f, ECollisionType.PartialInelastic);
-
+        public static readonly Material PartialInelasticMaterial = new Material("PartialInelastic", 0.2f, ECollisionType.PartialInelastic);
+        public static readonly Material PlayerInelasticMaterial = new Material("PlayerInelasticMaterial", 0.2f, ECollisionType.Inelastic);
         #endregion
 
 
@@ -25,7 +25,7 @@ namespace SFMLFramework.src.Helper
             var renderer = new Renderer(Resources.LoadSpriteSheet("inelasticBrick.png"), inelasticBrick);
             inelasticBrick.Components.Add(renderer);
 
-            var rigidbody = new Rigidbody(3f, renderer.SpriteSheet.Size, InelasticMaterial, false, inelasticBrick, V2.One * 50);
+            var rigidbody = new Rigidbody(5f, renderer.SpriteSheet.Size, InelasticMaterial, false, inelasticBrick, V2.One * 150);
             inelasticBrick.Components.Add(rigidbody);
 
             var label = new UIText(inelasticBrick, new Vector2i(0, -28));
@@ -108,6 +108,11 @@ namespace SFMLFramework.src.Helper
             player.PlatformPlayerController.PlayerKeyboardController.keyPressedActions.Add(Keyboard.Key.D, () => player.PlatformPlayerController.Walk(EDirection.Right, true));
             player.PlatformPlayerController.PlayerKeyboardController.keyReleasedActions.Add(Keyboard.Key.A, () => player.PlatformPlayerController.Walk(EDirection.Left, false));
             player.PlatformPlayerController.PlayerKeyboardController.keyReleasedActions.Add(Keyboard.Key.D, () => player.PlatformPlayerController.Walk(EDirection.Right, false));
+
+            player.PlatformPlayerController.PlayerKeyboardController.keyReleasedActions.Add(Keyboard.Key.K, () => player.PlatformPlayerController.DoAttackCommand(AttackTypes.Kick));
+            player.PlatformPlayerController.PlayerKeyboardController.keyReleasedActions.Add(Keyboard.Key.P, () => player.PlatformPlayerController.DoAttackCommand(AttackTypes.Punch));
+            player.PlatformPlayerController.PlayerKeyboardController.keyReleasedActions.Add(Keyboard.Key.M, () => player.PlatformPlayerController.DoAttackCommand(AttackTypes.Magick));
+
             player.PlatformPlayerController.PlayerKeyboardController.keyPressedActions.Add(Keyboard.Key.Space, () => player.PlatformPlayerController.Jump());
             player.Rigidbody.OnCollisionResponse += player.PlatformPlayerController.OnCollisionResponse;
             return player;

@@ -1,5 +1,6 @@
 using SFML.System;
 using SFML.Window;
+using SFMLFramework.src.Audio;
 using SFMLFramework.src.Helper;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,13 @@ using System.Text;
 
 namespace SFMLFramework
 {
+    public enum AttackTypes
+    {
+        Punch,
+        Kick,
+        Magick
+    }
+
     /// <summary>
     /// Define o controllador do personagem específico para jogos de plataforma.
     /// </summary>
@@ -34,7 +42,7 @@ namespace SFMLFramework
         /// Personagem está se movendo para direita?
         /// </summary>
         protected bool moveRigth;
-
+        
         /// <summary>
         /// Modificador escalar do vetor de pulo
         /// </summary>
@@ -59,6 +67,11 @@ namespace SFMLFramework
         /// Delegado responsável por disparar a mudança de orientação do spritesheet
         /// </summary>
         public OnSpriteSheetOrientationChange OnSpriteSheetOrientationChange { get; set; }
+
+        /// <summary>
+        /// Adaptador de áudio para execução de sons
+        /// </summary>
+        public IAudioAdapter AudioAdapter { get; set; }
 
         public bool IsEnabled { get; set; }
 
@@ -135,7 +148,7 @@ namespace SFMLFramework
                 move = this.WALK_FORCE * V2.Left;
 
             IKineticController.AddForce(move);
-            Logger.Log(string.Format("Move: {0}", move.ToString()));
+            //Logger.Log(string.Format("Move: {0}", move.ToString()));
         }
 
         /// <summary>
@@ -155,6 +168,28 @@ namespace SFMLFramework
                     break;
                 case EDirection.Right:
                     this.moveRigth = false;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Efetua uma ação de ataque
+        /// </summary>
+        /// <param name="type">Tipo do ataque</param>
+        public void DoAttackCommand(AttackTypes type)
+        {
+            switch (type)
+            {
+                case AttackTypes.Kick:
+                    AudioAdapter.PlaySound("kick");
+                    break;
+
+                case AttackTypes.Magick:
+                    AudioAdapter.PlaySound("punch");
+                    break;
+
+                case AttackTypes.Punch:
+                    AudioAdapter.PlaySound("magick");
                     break;
             }
         }

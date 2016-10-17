@@ -19,7 +19,7 @@
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AMSAgQAAACAQACAgABEAAAAAAAAxAwAAA4AAAACUAAE=</HashCode>
+      <HashCode>AMSAkQEAADAwASAgIBEAAAAAAAAxAgAAA5AAACCUAAE=</HashCode>
       <FileName>src\Physics\Rigidbody.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -34,7 +34,7 @@
   <Class Name="SFMLFramework.Material">
     <Position X="1.25" Y="9" Width="6" />
     <TypeIdentifier>
-      <HashCode>AAABAAAAAQgAAAAAAAAAAAQBAQgEAQEAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAABAAAAAQgAAAAAAAAAAAQAAAgEAAAAAAAAAAAAAAA=</HashCode>
       <FileName>src\Physics\Material.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -94,7 +94,7 @@
   <Class Name="SpriteSheet">
     <Position X="11.75" Y="14" Width="3" />
     <TypeIdentifier>
-      <HashCode>EAABAAAAgAAIgAgAAIFAACQAABIgAgAQCACAAQAAAAE=</HashCode>
+      <HashCode>AAABAAAAgAAIgAgAAIFAAAQAABIAAgAQCACAAAAAAAA=</HashCode>
       <FileName>src\Renderization\SpriteSheet.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -108,7 +108,7 @@
   <Class Name="Game">
     <Position X="24.25" Y="0.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAQMACAABAAAAAAAAAAAAAAAAAQJIBACAUgCAAI=</HashCode>
+      <HashCode>AAQAAAAMACAABAAAAAAAAAACABEAAAQNABACAQAAACI=</HashCode>
       <FileName>src\Application\Game.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -139,7 +139,7 @@
     </ShowAsAssociation>
   </Interface>
   <Enum Name="ECollisionType">
-    <Position X="8.5" Y="9.25" Width="1.5" />
+    <Position X="8.25" Y="10.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>CAAAABAAAAAAABAAAAAAgAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
       <FileName>src\Collision\Collider.cs</FileName>

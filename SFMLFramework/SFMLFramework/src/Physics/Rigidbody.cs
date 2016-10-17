@@ -194,8 +194,6 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
         //Atualiza a posição via Property para atualizar os componentes inscritos em sua modificação
         Root.Position += this.netForce * deltaTime;
 
-        Console.WriteLine(Root.Position.ToString());
-
         //exibe velocidade atual no label
         var label = Root.GetComponent<UIText>();
         if (label != null)
@@ -212,7 +210,7 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
             return;
 
         this.netForce += force;
-        Logger.Log(string.Format("AddForce: {0}", this.netForce.ToString()));
+        //Logger.Log(string.Format("AddForce: {0}", this.netForce.ToString()));
 
         ClampForce();
     }
@@ -248,11 +246,8 @@ public sealed class Rigidbody : IComponent, ICollisionable, IKineticController
                  * Vbf = 2 * ma / (ma + mb) * Vai  +  ((mb - ma) / (ma + mb)) * Vbi                  
                  */
 
-                //TODO: rever cálculo: forças diferentes colidindo estão se igualando para a maior força...
-
-                if (hitInfo.RigidBody.Material.collisionType == ECollisionType.Elastic)
-                    Console.Write("");
-
+                //TODO: rever cálculo: as vezes forças diferentes estão se igualando para a maior força...
+                
                 var sumMasses = this.mass + hitInfo.RigidBody.Mass;
 
                 var myStep1 = Math.Abs(((this.mass - hitInfo.RigidBody.Mass) / sumMasses)) * this.initialVelocity;
