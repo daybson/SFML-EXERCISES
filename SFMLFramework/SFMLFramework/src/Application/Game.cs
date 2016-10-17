@@ -29,7 +29,8 @@ public class Game
     private List<GameObject> gameObjects;
     public List<GameObject> GameObjects { get { return gameObjects; } }
 
-    private MusicController musicController;
+    private MusicController levelMusicController;
+    private AudioFXController audioController;
 
     #endregion
 
@@ -44,14 +45,14 @@ public class Game
         this.clock = new Clock();
 
         this.gameObjects = new List<GameObject>();
-        this.musicController = new MusicController();
 
         this.canvas = new GameObject("Canvas");
         this.labelCommands = new UIText(this.canvas);
         this.canvas.Components.Add(labelCommands);
+        this.levelMusicController = new MusicController();
 
-        isDebugging = false;
-        isRendering = false;
+        isDebugging = true;
+        isRendering = true;
     }
 
     public void Start()
@@ -60,20 +61,23 @@ public class Game
         {
             Logger.Log("Starting Game");
 
-            this.musicController.LoadMusic("nature024.wav");
-            this.musicController.LoadMusic("battleSoundtrad.wav", true, 5, 1f);
+            this.levelMusicController.LoadMusic("nature024.wav");
+            this.levelMusicController.PlayAudio("nature024");
+            this.levelMusicController.ChangeVolume(25);
 
             this.window = new RenderWindow(new VideoMode(windowSize.X, windowSize.Y), windowTitle);
             this.window.SetFramerateLimit(120);
             this.keyboard = new KeyboardInput(ref this.window);
-
             this.window.Closed += OnGameOver;
 
             this.labelCommands.Display = (v) => this.labelCommands.SetMessage(
                 "A = move player esquerda\n" +
                 "D = move player direita\n" +
                 "Seta esqueda = move cubo1 esquerda\n" +
-                "Seta direita = move cubo1 direita\n");
+                "Seta direita = move cubo1 direita\n"+
+                "M = ataque magia\n" +
+                "P = ataque `punch\n" +
+                "K = ataque kick\n" );
 
             this.canvas.Position = new Vector2f(windowSize.X / 2, 0);
             this.gameObjects.Add(this.canvas);
@@ -82,36 +86,12 @@ public class Game
             this.gameObjects.Add(this.player);
             this.player.Position = V2.Right * 650;
 
-            /*
-            var parcialInelastic = GameObjectCreator.CreatePartialInelasticBrick(new Vector2f(300, 400));
-            this.gameObjects.Add(parcialInelastic);
-            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Right) parcialInelastic.GetComponent<Rigidbody>().AddForce(V2.Right * 200); };
-            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Left) parcialInelastic.GetComponent<Rigidbody>().AddForce(V2.Left * 200); };
-            */
 
-            /*
-            var elastic = GameObjectCreator.CreateElasticBrick(new Vector2f(500, 400));
-            this.gameObjects.Add(elastic);
-            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Right) elastic.GetComponent<Rigidbody>().AddForce(V2.Right * 200); };
-            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Left) elastic.GetComponent<Rigidbody>().AddForce(V2.Left * 200); };
-            */
+            var wolf = GameObjectCreator.CreateWolf(new Vector2f(33, 450));
+            this.gameObjects.Add(wolf);
+            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Right) wolf.GetComponent<Rigidbody>().AddForce(V2.Right * 200); };
+            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Left) wolf.GetComponent<Rigidbody>().AddForce(V2.Left * 200); };
 
-
-            var inelastic = GameObjectCreator.CreateInelasticBrick(new Vector2f(300, 400));
-
-            inelastic.Subscribe(this.musicController);
-
-            this.gameObjects.Add(inelastic);
-            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Right) inelastic.GetComponent<Rigidbody>().AddForce(V2.Right * 200); };
-            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Left) inelastic.GetComponent<Rigidbody>().AddForce(V2.Left * 200); };
-
-
-            /*
-            var right = GameObjectCreator.CreateElasticBrick2(new Vector2f(300, 0));
-            this.gameObjects.Add(right);
-            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Numpad6) right.GetComponent<Rigidbody>().AddForce(V2.Right * 200); };
-            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Numpad4) right.GetComponent<Rigidbody>().AddForce(V2.Left * 200); };
-            */
 
             this.gameObjects.Add(GameObjectCreator.CreatePlatform(EDirection.Down, new Vector2f(0, windowSize.Y - 32)));
             this.gameObjects.Add(GameObjectCreator.CreatePlatform(EDirection.Right, new Vector2f(windowSize.X - 33, 29)));
@@ -121,9 +101,6 @@ public class Game
             this.window.KeyReleased += (sender, e) => { if (e.Code == Keyboard.Key.R) isRendering = !isRendering; };
 
             this.labelCommands.Display.Invoke(V2.Zero);
-
-            this.musicController.PlayAudio("nature024");
-            this.musicController.PlayAudio("battleSoundtrad");
 
             Run();
         }
@@ -188,8 +165,11 @@ public class Game
                 g.GetComponent<Rigidbody>()?.ColliderLeft.Render(ref this.window);
                 g.GetComponent<AudioListener3D>()?.Render(ref this.window);
                 g.GetComponent<UIText>()?.Render(ref this.window);
+                g.GetComponent<MusicController>()?.Render(ref this.window);
+                this.levelMusicController.Render(ref this.window);
             }
         }
+
 
         this.window.Display();
     }

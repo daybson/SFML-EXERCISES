@@ -71,7 +71,7 @@ namespace SFMLFramework
         /// <summary>
         /// Adaptador de áudio para execução de sons
         /// </summary>
-        public IAudioAdapter AudioAdapter { get; set; }
+        public IAudioPlayer AudioAdapter { get; set; }
 
         public bool IsEnabled { get; set; }
 

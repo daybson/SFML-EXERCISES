@@ -1,5 +1,6 @@
 ﻿using SFML.System;
 using SFML.Window;
+using SFMLFramework.src.Audio;
 
 namespace SFMLFramework.src.Helper
 {
@@ -19,6 +20,30 @@ namespace SFMLFramework.src.Helper
 
         #region Public
 
+        public static GameObject CreateWolf(Vector2f position)
+        {
+            var wolf = new GameObject("Wolf");
+            var renderer = new Renderer(Resources.LoadSpriteSheet("wolf.png"), wolf);
+            wolf.Components.Add(renderer);
+
+            var rigidbody = new Rigidbody(5f, renderer.SpriteSheet.Size, InelasticMaterial, false, wolf, V2.One * 150);
+            wolf.Components.Add(rigidbody);
+
+            var label = new UIText(wolf, new Vector2i(0, -28));
+            wolf.Components.Add(label);
+            label.Display = (v) => label.SetMessage(string.Format("Vx: {0}\nVy: {1}", rigidbody.Velocity.X.ToString("0.0"), rigidbody.Velocity.Y.ToString("0.0")));
+
+            var battleSoundController = new MusicController();
+            battleSoundController.LoadMusic("battleSoundtrad.wav", false, 15, 7f);
+            wolf.Subscribe(battleSoundController);
+            wolf.Components.Add(battleSoundController);
+            battleSoundController.PlayAudio("battleSoundtrad");
+            battleSoundController.ChangeVolume(250);
+            wolf.Position = position;
+
+            return wolf;
+        }
+
         public static GameObject CreateInelasticBrick(Vector2f position)
         {
             var inelasticBrick = new GameObject("InelasticBrick");
@@ -31,6 +56,12 @@ namespace SFMLFramework.src.Helper
             var label = new UIText(inelasticBrick, new Vector2i(0, -28));
             inelasticBrick.Components.Add(label);
             label.Display = (v) => label.SetMessage(string.Format("Vx: {0}\nVy: {1}", rigidbody.Velocity.X.ToString("0.0"), rigidbody.Velocity.Y.ToString("0.0")));
+
+            var battleSoundController = new MusicController();
+            battleSoundController.LoadMusic("battleSoundtrad.wav", false, 20, 10);
+            inelasticBrick.Subscribe(battleSoundController);
+            inelasticBrick.Components.Add(battleSoundController);
+            battleSoundController.PlayAudio("battleSoundtrad");
 
             inelasticBrick.Position = position;
 
