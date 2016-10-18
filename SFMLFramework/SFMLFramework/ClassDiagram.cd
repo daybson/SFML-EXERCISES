@@ -49,14 +49,8 @@
         <Point X="18.25" Y="6.5" />
       </Path>
     </InheritanceLine>
-    <AssociationLine Name="Renderer" Type="Renderer" FixedToPoint="true">
-      <Path>
-        <Point X="18.062" Y="8.117" />
-        <Point X="18.062" Y="10.5" />
-      </Path>
-    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAAAAAAABAAAAAAAAAAAAAAAACAAAAgCAA=</HashCode>
+      <HashCode>AAQAAAAAAAAAAAAAAhAAAAAAAAAAAAAAAACAAAAgCAA=</HashCode>
       <FileName>src\GameObject\Player.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -75,7 +69,7 @@
   <Class Name="SFMLFramework.PlatformPlayerController">
     <Position X="22.75" Y="6.5" Width="6.75" />
     <TypeIdentifier>
-      <HashCode>AAQAAgAAAoAAACAMAAEAAEAAAAAAIAAAEIUACAEAAAA=</HashCode>
+      <HashCode>EAQAAkAAAoAAACAMAAEAAEAAAAAAIAAAEIUACAEAAAA=</HashCode>
       <FileName>src\Input\PlatformPlayerController.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -108,7 +102,7 @@
   <Class Name="Game">
     <Position X="24.25" Y="0.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAMACAABAAAAAAAAAACABEAAAQNABACAQAAACI=</HashCode>
+      <HashCode>AAQAIAAMACAABAAAAAAAAAACABEAAAQNABASAQAAACI=</HashCode>
       <FileName>src\Application\Game.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -128,6 +122,30 @@
       <Property Name="Game" />
     </ShowAsAssociation>
   </Class>
+  <Class Name="SFMLFramework.src.Audio.AudioFXController">
+    <Position X="31.75" Y="4.25" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>AEQACAAgAAiAAiIAAAEIAAIAAAAAAAAAAARAAAAAIAA=</HashCode>
+      <FileName>src\Audio\AudioFXController.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SFMLFramework.src.Audio.AudioListener3D">
+    <Position X="36.5" Y="4.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AEQAAAAAAACAACIAAAEAAAAAAAAAAAAABBAAAAAAAAA=</HashCode>
+      <FileName>src\Audio\AudioListener3D.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SFMLFramework.src.Audio.MusicController">
+    <Position X="40" Y="4.25" Width="6" />
+    <TypeIdentifier>
+      <HashCode>AEQIBAAgAACAACIAAAEIAAIAAAAAAAAQBBQAAAAAIAA=</HashCode>
+      <FileName>src\Audio\MusicController.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
   <Interface Name="SFMLFramework.ISpritesheetOrientable">
     <Position X="11.75" Y="12.25" Width="3.5" />
     <TypeIdentifier>
@@ -137,6 +155,13 @@
     <ShowAsAssociation>
       <Property Name="SpriteSheet" />
     </ShowAsAssociation>
+  </Interface>
+  <Interface Name="SFMLFramework.src.Audio.IAudioPlayer">
+    <Position X="33.75" Y="2" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAAAAAAIAAIAAAAAAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>src\Audio\IAudioAdapter.cs</FileName>
+    </TypeIdentifier>
   </Interface>
   <Enum Name="ECollisionType">
     <Position X="8.25" Y="10.75" Width="1.5" />
