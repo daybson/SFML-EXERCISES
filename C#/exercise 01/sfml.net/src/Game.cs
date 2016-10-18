@@ -22,6 +22,8 @@ namespace sfml.net.src
         private Player player;
         private World world;
 
+        public static Clock DeltaTime = new Clock();
+
         #endregion
 
 
@@ -34,6 +36,7 @@ namespace sfml.net.src
             this.window.SetFramerateLimit(maxFPS);
 
             this.player = new Player();
+            this.player.Move(new Vector2f(WINDOW_WIDTH/2, WINDOW_HEIGHT/2));
             this.world = new World();
 
             this.window.KeyPressed += ProcessPressedEvents;
@@ -53,6 +56,7 @@ namespace sfml.net.src
                 window.DispatchEvents();
                 Update();
                 Render();
+                DeltaTime.Restart();
             }
         }
 
@@ -94,7 +98,18 @@ namespace sfml.net.src
 
         private void Update()
         {
-            this.player.Update();
+            var movement = new Vector2f();
+
+            if (this.player.IsMovingUp)
+                movement.Y -= 1f;
+            if (this.player.IsMovingDown)
+                movement.Y += 1f;
+            if (this.player.IsMovingLeft)
+                movement.X -= 1f;
+            if (this.player.IsMovingRight)
+                movement.X += 1f;
+
+            this.player.Move(movement);
         }
 
         private void Render()

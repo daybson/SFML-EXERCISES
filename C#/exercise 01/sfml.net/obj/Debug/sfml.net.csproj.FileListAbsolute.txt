@@ -33,6 +33,6 @@ D:\Repository\SFML-EXERCISES\sfml demos\smfl.net\sfml.net\bin\Debug\sfmlnet-syst
 D:\Repository\SFML-EXERCISES\sfml demos\smfl.net\sfml.net\bin\Debug\sfmlnet-window-2.dll
 D:\Repository\SFML-EXERCISES\sfml demos\smfl.net\sfml.net\obj\Debug\sfml.net.exe
 D:\Repository\SFML-EXERCISES\sfml demos\smfl.net\sfml.net\obj\Debug\sfml.net.pdb
-D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 01\sfml.net\bin\Debug\sfml.net.exe.config
-D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 01\sfml.net\obj\Debug\sfml.net.exe
-D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 01\sfml.net\obj\Debug\sfml.net.pdb
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 02\sfml.net\bin\Debug\sfml.net.exe.config
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 02\sfml.net\obj\Debug\sfml.net.exe
+D:\Repository\SFML-EXERCISES\sfml demos\C#\exercise 02\sfml.net\obj\Debug\sfml.net.pdb
