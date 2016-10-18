@@ -130,7 +130,7 @@ namespace SFMLFramework.src.Audio
                 {
                     k.Value.Position = new SFML.System.Vector3f(value.Position.X, 0, value.Position.Y);
                     gizmos[k.Key].Position = value.Position;
-                    Console.WriteLine(k.Value.Position.ToString());
+                    //Console.WriteLine(k.Value.Position.ToString());
                     //Logger.Log("Music position: " + k.Value.Position.ToString());
                 }
             }

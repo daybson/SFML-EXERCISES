@@ -19,30 +19,25 @@ namespace SFMLFramework.src.Audio
 
         public AudioListener3D(GameObject root)
         {
-            Listener.GlobalVolume = 50;
+            Listener.GlobalVolume = 100;
             Root = root;
             Root.Subscribe(this);
-            Listener.Direction = new Vector3f(1, 0.5f, 1);
+            Listener.Direction = new Vector3f(0, 0, -1);
+            Listener.UpVector = new Vector3f(0, 1, 0);
             gizmo = new CircleShape(4);
             gizmo.OutlineThickness = 4;
             gizmo.OutlineColor = Color.Blue;
             gizmo.FillColor = Color.Transparent;
         }
 
-        public void OnCompleted()
-        {
-        }
+        public void OnCompleted() { }
 
-        public void OnError(Exception error)
-        {
-        }
+        public void OnError(Exception error) { }
 
         public void OnNext(GameObject value)
         {
             Listener.Position = new Vector3f(value.Position.X, 0, value.Position.Y);
             gizmo.Position = value.Position;
-            //Console.WriteLine("Listener:"+ Listener.Position.ToString());
-
         }
 
         public void Render(ref RenderWindow window)
@@ -50,9 +45,6 @@ namespace SFMLFramework.src.Audio
             window.Draw(this.gizmo);
         }
 
-        public void Update(float deltaTime)
-        {
-            
-        }
+        public void Update(float deltaTime) { }
     }
 }

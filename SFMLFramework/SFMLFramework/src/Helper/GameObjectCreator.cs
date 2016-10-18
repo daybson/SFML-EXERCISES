@@ -34,11 +34,11 @@ namespace SFMLFramework.src.Helper
             label.Display = (v) => label.SetMessage(string.Format("Vx: {0}\nVy: {1}", rigidbody.Velocity.X.ToString("0.0"), rigidbody.Velocity.Y.ToString("0.0")));
 
             var battleSoundController = new MusicController();
-            battleSoundController.LoadMusic("battleSoundtrad.wav", false, 15, 7f);
+            battleSoundController.LoadMusic("battleSoundtrad.wav", false, 50f, 5f);
             wolf.Subscribe(battleSoundController);
             wolf.Components.Add(battleSoundController);
             battleSoundController.PlayAudio("battleSoundtrad");
-            battleSoundController.ChangeVolume(250);
+            //battleSoundController.ChangeVolume(250);
             wolf.Position = position;
 
             return wolf;
