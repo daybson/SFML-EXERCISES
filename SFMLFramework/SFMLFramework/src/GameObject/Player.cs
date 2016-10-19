@@ -2,6 +2,7 @@
 using SFMLFramework;
 using SFMLFramework.src.Audio;
 using SFMLFramework.src.Helper;
+using SFMLFramework.src.Network;
 
 public delegate void OnDirectionChange(EDirection direction);
 public enum EDirection
@@ -72,7 +73,7 @@ public class Player : GameObject
         this.Components.Add(Rigidbody);
         this.Components.Add(Renderer);
         this.Components.Add(AudioFXController);
-        this.Components.Add(listener3d);
+        this.Components.Add(listener3d);        
     }
 
     public override void Update(float deltaTime)

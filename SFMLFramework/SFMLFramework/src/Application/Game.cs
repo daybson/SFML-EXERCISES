@@ -6,17 +6,23 @@ using SFML.System;
 using SFMLFramework;
 using SFMLFramework.src.Helper;
 using SFMLFramework.src.Audio;
+using GameNetwork.src;
+using System.Threading;
+using System.IO;
+using System.Xml;
+using System.Net.Sockets;
 
 public class Game
 {
     #region Fields
+
+    private INetworkAgent netClient;
 
     public static readonly Vector2u windowSize = new Vector2u(800, 600);
     public string windowTitle;
     public Clock clock;
     protected RenderWindow window;
     private KeyboardInput keyboard;
-
     private GameObject canvas;
     private UIText labelCommands;
 
@@ -30,7 +36,13 @@ public class Game
     public List<GameObject> GameObjects { get { return gameObjects; } }
 
     private MusicController levelMusicController;
-    private AudioFXController audioController;
+
+    private Thread thread;
+    private StreamReader reader;
+    protected XmlDocument xmlConfig;
+    private StreamWriter writer;
+    private NetworkStream netStream;
+
 
     #endregion
 
@@ -51,8 +63,9 @@ public class Game
         this.canvas.Components.Add(labelCommands);
         this.levelMusicController = new MusicController();
 
-        isDebugging = true;
-        isRendering = true;
+        isDebugging = false;
+        isRendering = false;
+
     }
 
     public void Start()
@@ -74,10 +87,10 @@ public class Game
                 "A = move player esquerda\n" +
                 "D = move player direita\n" +
                 "Seta esqueda = move cubo1 esquerda\n" +
-                "Seta direita = move cubo1 direita\n"+
+                "Seta direita = move cubo1 direita\n" +
                 "M = ataque magia\n" +
                 "P = ataque `punch\n" +
-                "K = ataque kick\n" );
+                "K = ataque kick\n");
 
             this.canvas.Position = new Vector2f(windowSize.X / 2, 0);
             this.gameObjects.Add(this.canvas);
@@ -102,6 +115,21 @@ public class Game
 
             this.labelCommands.Display.Invoke(V2.Zero);
 
+
+            // NETWORK SETUP
+            this.thread = new Thread(new ThreadStart(ProcessNetworkData));
+            this.xmlConfig = new XmlDocument();
+            this.xmlConfig.Load("config.xml");
+            var ipserver = xmlConfig.DocumentElement.SelectSingleNode("/gamenetwork/ipserver");
+            var nodePort = xmlConfig.DocumentElement.SelectSingleNode("/gamenetwork/port");
+
+            TcpClient tcpClient = new TcpClient(ipserver.InnerText, int.Parse(nodePort.InnerText));
+            this.netStream = tcpClient.GetStream();
+            reader = new StreamReader(netStream);
+            this.writer = new StreamWriter(netStream);
+
+            //thread.Start();
+
             Run();
         }
         catch (Exception e)
@@ -112,6 +140,8 @@ public class Game
 
     public void Update(float deltaTime)
     {
+        string netPackage = string.Empty;
+
         foreach (var g in this.gameObjects)
         {
             g.Update(deltaTime);
@@ -129,12 +159,20 @@ public class Game
             }
             #endregion
         }
+
+        //writer.WriteLine(this.player.name + ";" + this.player.Position.ToString() + Environment.NewLine);
+        //writer.Flush();
     }
 
     #endregion
 
 
     #region Protected
+
+    protected void ProcessNetworkData()
+    {
+        Thread.Sleep(10);
+    }
 
     protected void Run()
     {
@@ -176,6 +214,11 @@ public class Game
 
     private void OnGameOver(object sender, EventArgs e)
     {
+        Logger.Log("Stop network");
+        this.netStream.Close();
+        this.reader.Close();
+        this.writer.Close();
+
         Logger.Log("Closing the window");
         Logger.Close();
         this.window.Close();

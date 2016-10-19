@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B1D46C33-7000-42A5-BA95-978B052C2F5F}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SFMLFramework</RootNamespace>
     <AssemblyName>SFMLFramework</AssemblyName>
@@ -96,6 +96,7 @@
     <Compile Include="src\Helper\Logger.cs" />
     <Compile Include="src\Helper\Resources.cs" />
     <Compile Include="src\Helper\DesignPatterns\Singleton.cs" />
+    <Compile Include="src\Network\NetClient.cs" />
     <Compile Include="src\UI\UIText.cs" />
     <Compile Include="src\Input\IKeyboardInput.cs" />
     <Compile Include="src\Input\KeyboardEventDispatcher.cs" />
@@ -120,6 +121,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="config.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="csfml-audio-2.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -236,6 +240,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GameNetwork\GameNetwork.csproj">
+      <Project>{80AF0015-DFDB-40BE-9516-325C2BC92200}</Project>
+      <Name>GameNetwork</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
