@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B1D46C33-7000-42A5-BA95-978B052C2F5F}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SFMLFramework</RootNamespace>
     <AssemblyName>SFMLFramework</AssemblyName>
@@ -96,7 +96,9 @@
     <Compile Include="src\Helper\Logger.cs" />
     <Compile Include="src\Helper\Resources.cs" />
     <Compile Include="src\Helper\DesignPatterns\Singleton.cs" />
+    <Compile Include="src\Network\AsynchronousClient.cs" />
     <Compile Include="src\Network\NetClient.cs" />
+    <Compile Include="src\Network\StateObject.cs" />
     <Compile Include="src\UI\UIText.cs" />
     <Compile Include="src\Input\IKeyboardInput.cs" />
     <Compile Include="src\Input\KeyboardEventDispatcher.cs" />
