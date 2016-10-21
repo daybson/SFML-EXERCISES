@@ -13,6 +13,9 @@ namespace Server
     class Program
     {
         static List<HandleClient> clients = new List<HandleClient>();
+        private static TcpClient clientSocket;
+        static int count = 0;
+        private static TcpListener serverSocket;
 
         static void Main(string[] args)
         {
@@ -24,31 +27,24 @@ namespace Server
 
             clients = new List<HandleClient>();
 
-            TcpListener serverSocket = new TcpListener(2929);
-            TcpClient clientSocket = default(TcpClient);
-            int count = 0;
+            serverSocket = new TcpListener(2929);
+            clientSocket = default(TcpClient);
             serverSocket.Start();
 
             while (true)
             {
-                count++;
-                clientSocket = serverSocket.AcceptTcpClient();
-                Console.WriteLine(">> Client {0} has joined", count);
-                HandleClient client = new HandleClient();
-                //clients.Add(client);
-                client.StartClient(clientSocket, Convert.ToString(count));
-                
-                /*
+                serverSocket.BeginAcceptSocket(new AsyncCallback(AcceptCallback), serverSocket);
                 lock (clients)
                 {
-                    foreach (var c in clients)
+                    foreach (var c in clients.Reverse<HandleClient>())
                     {
-                        if (!c.Equals(client))
+                        //if (!c.Equals(client))
                         {
                             c.SendMessage(c.DataFromClient);
+                            Console.WriteLine("enviou");
                         }
                     }
-                }*/
+                }
             }
 
             clientSocket.Close();
@@ -56,5 +52,18 @@ namespace Server
             Console.WriteLine(">> Exiting...");
             Console.ReadLine();
         }
-    }
+
+        public static void AcceptCallback(IAsyncResult ar)
+        {
+            var tcpl = (TcpListener)ar.AsyncState;
+
+            var tcpClient = tcpl.EndAcceptTcpClient(ar);
+            count++;
+            Console.WriteLine(">> Client {0} has joined", count);
+            HandleClient client = new HandleClient();
+            clients.Add(client);
+            client.StartClient(tcpClient, Convert.ToString(count));
+            //serverSocket.BeginAcceptSocket(new AsyncCallback(AcceptCallback), serverSocket);
+        }
+    }    
 }

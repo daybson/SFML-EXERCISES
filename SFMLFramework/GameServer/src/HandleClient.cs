@@ -27,7 +27,7 @@ namespace GameNetwork.src.ServerChat
         private void doChat()
         {
             int requestCount = 0;
-            byte[] bytesFrom = new byte[1024];
+            
             dataFromClient = null;
             Byte[] sendBytes = null;
             string serverResponse = null;
@@ -40,10 +40,11 @@ namespace GameNetwork.src.ServerChat
                 {
                     requestCount++;
                     NetworkStream stream = clientSocket.GetStream();
+                    byte[] bytesFrom = new byte[clientSocket.ReceiveBufferSize]; 
                     stream.Read(bytesFrom, 0, clientSocket.ReceiveBufferSize);
                     dataFromClient = Encoding.ASCII.GetString(bytesFrom);
-                    //dataFromClient = dataFromClient.Substring(0, dataFromClient.IndexOf("$"));
-                    //Logger.Log(string.Format(">>{0} says: {1}", clientNumber, dataFromClient));
+                    dataFromClient = dataFromClient.Substring(0, dataFromClient.IndexOf("<EOF>"));
+                    Logger.Log(string.Format(">>{0} says: {1}", clientNumber, dataFromClient));
 
                     /*
                     rCount = Convert.ToString(requestCount);
@@ -63,13 +64,13 @@ namespace GameNetwork.src.ServerChat
             }
         }
 
-        internal void SendMessage(string dataFromClient)
+        internal void SendMessage(string dataToSend)
         {
-            byte[] bytesFrom = new byte[1024];
-            NetworkStream stream = clientSocket.GetStream();
-            stream.Read(bytesFrom, 0, clientSocket.ReceiveBufferSize);
-            dataFromClient = Encoding.ASCII.GetString(bytesFrom);
-            Logger.Log(string.Format(">>{0} says: {1}", clientNumber, dataFromClient));
+            var response = string.Format("Server to client {0} {1}<EOF>", clientNumber, dataToSend);
+            var sendBytes = Encoding.ASCII.GetBytes(response);
+            var stream = clientSocket.GetStream();
+            stream.Write(sendBytes, 0, sendBytes.Length);
+            stream.Flush();            
         }
     }
 }

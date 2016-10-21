@@ -120,7 +120,7 @@ namespace SFMLFramework.src.Network
                 Socket client = (Socket)ar.AsyncState;
 
                 int bytesSent = client.EndSend(ar);
-                Console.WriteLine("Sent: {0}bytes -> {1}", bytesSent, Encoding.ASCII.GetString(byteData));
+                //Console.WriteLine("Sent: {0}bytes -> {1}", bytesSent, Encoding.ASCII.GetString(byteData));
 
                 sendDone.Set();
             }

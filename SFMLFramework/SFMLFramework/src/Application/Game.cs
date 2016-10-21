@@ -156,8 +156,29 @@ public class Game
                 serverStream.Flush();
             }
 
+            if (this.clientSocket.Connected && this.serverStream.CanRead)
+            {
+                var buffer = new byte[clientSocket.ReceiveBufferSize];
+                serverStream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(ReadCallback), buffer);
+                //Console.WriteLine("Received{0}", messageReceived);
+                //Logger.Log(string.Format("Received: {0}", messageReceived));
+            }
+
             #endregion
         }
+    }
+
+
+    public void ReadCallback(IAsyncResult ar)
+    {
+        byte[] buffer = ar.AsyncState as byte[];
+        string data = Encoding.ASCII.GetString(buffer, 0, buffer.Length);
+        data = data.Substring(0, data.IndexOf("<EOF>"));
+        //Do something with the data object here.
+        Console.WriteLine("Received{0}", data);
+        Logger.Log(string.Format("Received: {0}", data));
+
+        serverStream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(ReadCallback), buffer);
     }
 
     #endregion
