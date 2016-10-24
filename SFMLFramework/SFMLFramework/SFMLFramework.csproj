@@ -96,9 +96,6 @@
     <Compile Include="src\Helper\Logger.cs" />
     <Compile Include="src\Helper\Resources.cs" />
     <Compile Include="src\Helper\DesignPatterns\Singleton.cs" />
-    <Compile Include="src\Network\AsynchronousClient.cs" />
-    <Compile Include="src\Network\NetClient.cs" />
-    <Compile Include="src\Network\StateObject.cs" />
     <Compile Include="src\UI\UIText.cs" />
     <Compile Include="src\Input\IKeyboardInput.cs" />
     <Compile Include="src\Input\KeyboardEventDispatcher.cs" />
@@ -242,11 +239,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logs\" />
+    <Folder Include="src\Network\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GameNetwork\GameNetwork.csproj">
-      <Project>{80AF0015-DFDB-40BE-9516-325C2BC92200}</Project>
-      <Name>GameNetwork</Name>
+    <ProjectReference Include="..\ServerData\ServerData.csproj">
+      <Project>{39c58c6d-0608-4a8b-bc1b-fbd44797f19b}</Project>
+      <Name>ServerData</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

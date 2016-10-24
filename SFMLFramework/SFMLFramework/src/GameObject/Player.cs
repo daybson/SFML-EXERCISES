@@ -2,7 +2,6 @@
 using SFMLFramework;
 using SFMLFramework.src.Audio;
 using SFMLFramework.src.Helper;
-using SFMLFramework.src.Network;
 
 public delegate void OnDirectionChange(EDirection direction);
 public enum EDirection

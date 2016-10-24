@@ -1,7 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<gamenetwork>
-  <hasrouter>false</hasrouter>
-  <myip></myip>
-  <ipserver>127.0.0.1</ipserver>
-  <port>2929</port>
-</gamenetwork>

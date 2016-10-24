@@ -6,18 +6,17 @@ using SFML.System;
 using SFMLFramework;
 using SFMLFramework.src.Helper;
 using SFMLFramework.src.Audio;
-using GameNetwork.src;
 using System.Threading;
 using System.IO;
 using System.Xml;
 using System.Net.Sockets;
-using SFMLFramework.src.Network;
 using System.Text;
+using System.Net;
+using System.Threading.Tasks;
+using ServerData;
 
 public class Game
 {
-    #region Fields
-
     public static readonly Vector2u windowSize = new Vector2u(800, 600);
     public string windowTitle;
     public Clock clock;
@@ -37,14 +36,9 @@ public class Game
 
     private MusicController levelMusicController;
 
-    private TcpClient clientSocket;
-    private NetworkStream serverStream;
+    private static Socket socket;
+    private static byte[] receiveBuffer = new byte[8142];
 
-
-    #endregion
-
-
-    #region Public
 
     public Game(string title)
     {
@@ -60,24 +54,20 @@ public class Game
         this.canvas.Components.Add(labelCommands);
         this.levelMusicController = new MusicController();
 
-        clientSocket = new TcpClient();
+
 
         isDebugging = false;
-        isRendering = false;
+        isRendering = true;
 
     }
 
     public void Start()
     {
-        try
-        {
-            this.clientSocket.Connect("127.0.0.1", 2929);
-            this.serverStream = clientSocket.GetStream();
-        }
-        catch (Exception e)
-        {
-            Logger.Log(e.ToString());
-        }
+
+        socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        var ipEndpoint = new IPEndPoint(IPAddress.Parse(Packet.GetIP4Address()), 2929);
+        socket.Connect(ipEndpoint);
+        Console.WriteLine("Connected to host {0}!", socket.RemoteEndPoint.ToString());
 
         Logger.Log("Starting Game");
 
@@ -116,6 +106,38 @@ public class Game
         this.window.KeyReleased += (sender, e) => { if (e.Code == Keyboard.Key.F) isDebugging = !isDebugging; };
         this.window.KeyReleased += (sender, e) => { if (e.Code == Keyboard.Key.R) isRendering = !isRendering; };
 
+        this.window.KeyReleased += (sender, e) =>
+        {
+            if (e.Code == Keyboard.Key.X)
+            {
+                Console.WriteLine(">: SENDING POSITION TO SERVER...");
+                var t = new Thread(new ThreadStart(() =>
+                  {
+                      Packet p = new Packet(PacketType.Chat, this.player.name);
+                      p.SenderID = this.player.name;
+                      p.Data = this.player.Position.ToString();
+                      byte[] bytes = p.ToBytes();
+                      socket.BeginSend(bytes, 0, bytes.Length, SocketFlags.None, new AsyncCallback(SendCallback), socket);
+                  }));
+                t.Start();
+            }
+        };
+
+
+        this.window.KeyReleased += (sender, e) =>
+        {
+            if (e.Code == Keyboard.Key.Z)
+            {
+                Console.WriteLine(">: RECEIVING FROM TO SERVER...");
+                var t = new Thread(new ThreadStart(() =>
+                {
+                    byte[] bytes = new byte[Packet.PacketSize];
+                    socket.BeginReceive(bytes, 0, bytes.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), socket);
+                }));
+                t.Start();
+            }
+        };
+
         this.labelCommands.Display.Invoke(V2.Zero);
 
         this.gameObjects.Add(this.player);
@@ -132,8 +154,6 @@ public class Game
         {
             g.Update(deltaTime);
 
-
-            #region Loop de colisão
             for (var i = 0; i < this.gameObjects.Count; i++)
             {
                 //evita teste de colisão consigo mesmo
@@ -144,51 +164,9 @@ public class Game
                     CollisionDispatcher.CollisionCheck(ref gRigidBody, ref gIndexRigidBody, deltaTime);
                 }
             }
-            #endregion
 
 
-            #region Network send
-
-            if (this.clientSocket.Connected && this.serverStream.CanWrite)
-            {
-                byte[] outStream = Encoding.ASCII.GetBytes(this.player.Position.ToString() + "<EOF>");
-                serverStream.Write(outStream, 0, outStream.Length);
-                serverStream.Flush();
-            }
-
-            if (this.clientSocket.Connected && this.serverStream.CanRead)
-            {
-                var buffer = new byte[clientSocket.ReceiveBufferSize];
-                serverStream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(ReadCallback), buffer);
-                //Console.WriteLine("Received{0}", messageReceived);
-                //Logger.Log(string.Format("Received: {0}", messageReceived));
-            }
-
-            #endregion
         }
-    }
-
-
-    public void ReadCallback(IAsyncResult ar)
-    {
-        byte[] buffer = ar.AsyncState as byte[];
-        string data = Encoding.ASCII.GetString(buffer, 0, buffer.Length);
-        data = data.Substring(0, data.IndexOf("<EOF>"));
-        //Do something with the data object here.
-        Console.WriteLine("Received{0}", data);
-        Logger.Log(string.Format("Received: {0}", data));
-
-        serverStream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(ReadCallback), buffer);
-    }
-
-    #endregion
-
-
-    #region Protected
-
-    protected void ProcessNetworkData()
-    {
-        Thread.Sleep(10);
     }
 
     protected void Run()
@@ -196,7 +174,12 @@ public class Game
         while (this.window.IsOpen)
         {
             var timer = this.clock.Restart();
-
+            var t = new Thread(new ThreadStart(() =>
+            {
+                byte[] bytes = new byte[Packet.PacketSize];
+                socket.BeginReceive(bytes, 0, bytes.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), socket);
+            }));
+            t.Start();
             window.DispatchEvents();
             Update(timer.AsSeconds());
             Render();
@@ -232,12 +215,31 @@ public class Game
     private void OnGameOver(object sender, EventArgs e)
     {
         Logger.Log("Stop network");
-        AsynchronousClient.Close();
 
         Logger.Log("Closing the window");
         Logger.Close();
         this.window.Close();
     }
 
+
+    #region CALLBACKS
+
+    public static void SendCallback(IAsyncResult ar)
+    {
+        Socket s = (Socket)ar.AsyncState;
+        int countSent = s.EndSend(ar);
+        Console.WriteLine(">: POSITION SENT!");
+    }
+
+    public static void ReceiveCallback(IAsyncResult ar)
+    {
+        Socket s = (Socket)ar.AsyncState;
+        int countReceived = s.EndReceive(ar);
+        byte[] buffer = new byte[countReceived];
+        Array.Copy(buffer, 0, buffer, 0, countReceived);
+        Packet p = new Packet(buffer);
+        Console.WriteLine(">: POSITION RECEIVED: " + p.Data);
+    }
     #endregion
 }
+
