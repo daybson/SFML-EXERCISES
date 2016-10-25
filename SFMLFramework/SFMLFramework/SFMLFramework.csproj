@@ -96,6 +96,8 @@
     <Compile Include="src\Helper\Logger.cs" />
     <Compile Include="src\Helper\Resources.cs" />
     <Compile Include="src\Helper\DesignPatterns\Singleton.cs" />
+    <Compile Include="src\Level\GameLevel.cs" />
+    <Compile Include="src\Level\Level1.cs" />
     <Compile Include="src\UI\UIText.cs" />
     <Compile Include="src\Input\IKeyboardInput.cs" />
     <Compile Include="src\Input\KeyboardEventDispatcher.cs" />
