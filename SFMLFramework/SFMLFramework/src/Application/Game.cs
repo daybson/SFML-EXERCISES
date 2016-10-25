@@ -6,14 +6,6 @@ using SFML.System;
 using SFMLFramework;
 using SFMLFramework.src.Helper;
 using SFMLFramework.src.Audio;
-using System.Threading;
-using System.IO;
-using System.Xml;
-using System.Net.Sockets;
-using System.Text;
-using System.Net;
-using System.Threading.Tasks;
-using ServerData;
 
 public class Game
 {
@@ -35,10 +27,6 @@ public class Game
     public List<GameObject> GameObjects { get { return gameObjects; } }
 
     private MusicController levelMusicController;
-
-    private static Socket socket;
-    private static byte[] receiveBuffer = new byte[8142];
-
 
     public Game(string title)
     {
@@ -63,12 +51,6 @@ public class Game
 
     public void Start()
     {
-
-        socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        var ipEndpoint = new IPEndPoint(IPAddress.Parse(Packet.GetIP4Address()), 2929);
-        socket.Connect(ipEndpoint);
-        Console.WriteLine("Connected to host {0}!", socket.RemoteEndPoint.ToString());
-
         Logger.Log("Starting Game");
 
         this.levelMusicController.LoadMusic("nature024.wav");
@@ -106,38 +88,6 @@ public class Game
         this.window.KeyReleased += (sender, e) => { if (e.Code == Keyboard.Key.F) isDebugging = !isDebugging; };
         this.window.KeyReleased += (sender, e) => { if (e.Code == Keyboard.Key.R) isRendering = !isRendering; };
 
-        this.window.KeyReleased += (sender, e) =>
-        {
-            if (e.Code == Keyboard.Key.X)
-            {
-                Console.WriteLine(">: SENDING POSITION TO SERVER...");
-                var t = new Thread(new ThreadStart(() =>
-                  {
-                      Packet p = new Packet(PacketType.Chat, this.player.name);
-                      p.SenderID = this.player.name;
-                      p.Data = this.player.Position.ToString();
-                      byte[] bytes = p.ToBytes();
-                      socket.BeginSend(bytes, 0, bytes.Length, SocketFlags.None, new AsyncCallback(SendCallback), socket);
-                  }));
-                t.Start();
-            }
-        };
-
-
-        this.window.KeyReleased += (sender, e) =>
-        {
-            if (e.Code == Keyboard.Key.Z)
-            {
-                Console.WriteLine(">: RECEIVING FROM TO SERVER...");
-                var t = new Thread(new ThreadStart(() =>
-                {
-                    byte[] bytes = new byte[Packet.PacketSize];
-                    socket.BeginReceive(bytes, 0, bytes.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), socket);
-                }));
-                t.Start();
-            }
-        };
-
         this.labelCommands.Display.Invoke(V2.Zero);
 
         this.gameObjects.Add(this.player);
@@ -174,12 +124,7 @@ public class Game
         while (this.window.IsOpen)
         {
             var timer = this.clock.Restart();
-            var t = new Thread(new ThreadStart(() =>
-            {
-                byte[] bytes = new byte[Packet.PacketSize];
-                socket.BeginReceive(bytes, 0, bytes.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), socket);
-            }));
-            t.Start();
+
             window.DispatchEvents();
             Update(timer.AsSeconds());
             Render();
@@ -220,26 +165,5 @@ public class Game
         Logger.Close();
         this.window.Close();
     }
-
-
-    #region CALLBACKS
-
-    public static void SendCallback(IAsyncResult ar)
-    {
-        Socket s = (Socket)ar.AsyncState;
-        int countSent = s.EndSend(ar);
-        Console.WriteLine(">: POSITION SENT!");
-    }
-
-    public static void ReceiveCallback(IAsyncResult ar)
-    {
-        Socket s = (Socket)ar.AsyncState;
-        int countReceived = s.EndReceive(ar);
-        byte[] buffer = new byte[countReceived];
-        Array.Copy(buffer, 0, buffer, 0, countReceived);
-        Packet p = new Packet(buffer);
-        Console.WriteLine(">: POSITION RECEIVED: " + p.Data);
-    }
-    #endregion
 }
 

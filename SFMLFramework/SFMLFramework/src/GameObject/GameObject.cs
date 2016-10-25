@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using SFMLFramework.src;
 using SFML.System;
-using ServerData;
 
 namespace SFMLFramework
 {

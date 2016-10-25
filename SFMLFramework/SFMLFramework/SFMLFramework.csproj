@@ -239,13 +239,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logs\" />
-    <Folder Include="src\Network\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ServerData\ServerData.csproj">
-      <Project>{39c58c6d-0608-4a8b-bc1b-fbd44797f19b}</Project>
-      <Name>ServerData</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
