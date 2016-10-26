@@ -9,9 +9,12 @@ using System.Text;
 namespace NetData
 {
     [Serializable]
-    public enum Type
+    public enum MessageType
     {
         Handhsake,
+        ClientReady,
+        StartParty,
+        Disconnect,
         Update
     }
 
@@ -24,7 +27,7 @@ namespace NetData
         public string name;
         public float posX;
         public float posY;
-        public Type type;
+        public MessageType type;
 
         #endregion
 

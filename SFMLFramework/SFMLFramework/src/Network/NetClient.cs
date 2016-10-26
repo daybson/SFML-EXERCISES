@@ -86,15 +86,28 @@ namespace SFMLFramework.src.Network
                     var tempBuffer = new byte[count];
                     Buffer.BlockCopy(this.bufferIn, 0, tempBuffer, 0, count);
 
-                    RemoteClient remote = RemoteClient.Deserialize(tempBuffer);
-                    this.remote = remote;
-                    switch (remote.type)
+                    this.remote = RemoteClient.Deserialize(tempBuffer);
+
+                    switch (this.remote.type)
                     {
-                        case NetData.Type.Handhsake:
+                        case NetData.MessageType.Handhsake:
                             Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("HANDSHAKE: [{0}]", remote.clientID);
+                            Console.WriteLine("HANDSHAKE: [{0}]", this.remote.clientID);
+                            //aguardar input de Ready
                             break;
-                        case NetData.Type.Update:
+
+                        case NetData.MessageType.Update:
+                            //atualizar o objeto do remoteClient dentro do Level
+                            break;
+
+                        case NetData.MessageType.ClientReady:
+                            //aguardar resposta de StartParty do servidor (só chega quando todos os clientes enviarem um Ready)
+                            //carregar novo level
+                            //instanciar objeto do remoteClient
+                            //iniciar loop de leitura/escrita de posição, status...
+                            break;
+
+                        case NetData.MessageType.Disconnect:
                             break;
                     }
                 }
