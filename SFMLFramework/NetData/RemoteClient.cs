@@ -19,7 +19,7 @@ namespace NetData
     public class RemoteClient
     {
         #region Fields
-        //public TcpClient tcpClient;
+        
         public string clientID = string.Empty;
         public string name;
         public float posX;
@@ -30,12 +30,7 @@ namespace NetData
 
 
         #region Public
-
-        //public RemoteClient(TcpClient tcpClient)
-        //{
-        //this.tcpClient = tcpClient;
-        //}
-
+        
         public static byte[] Serialize(RemoteClient remote)
         {
             using (var memoryStream = new MemoryStream())

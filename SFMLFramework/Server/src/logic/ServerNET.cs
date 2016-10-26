@@ -96,7 +96,14 @@ namespace Server.src.logic
                 Console.WriteLine("Client disconnected!");
                 lock (clients)
                 {
-                    //clients.Remove(client);
+                    foreach (var c in clients.Reverse())
+                    {
+                        if (c.Value.Equals(client))
+                        {
+                            clients.Remove(c.Key);
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -118,7 +125,14 @@ namespace Server.src.logic
                 Console.WriteLine("Client disconnected!");
                 lock (clients)
                 {
-                    //clients.Remove(client);
+                    foreach (var c in clients.Reverse())
+                    {
+                        if (c.Value.Equals(client))
+                        {
+                            clients.Remove(c.Key);
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -161,26 +175,5 @@ namespace Server.src.logic
             if (stream.CanWrite)
                 stream.BeginWrite(this.bufferOut, 0, this.bufferOut.Length, WriteCallback, clients[remote]);
         }
-
-
-        /*
-        public void AsyncAcceptNewClients()
-        {
-            listener.BeginAcceptTcpClient(new AsyncCallback(BeginAccetpClient), listener);
-            Console.WriteLine("Server is listening...");
-        }
-        public void BeginAccetpClient(IAsyncResult ar)
-        {
-            TcpClient client = ((TcpListener)ar.AsyncState).EndAcceptTcpClient(ar);
-            lock (clients)
-            {
-                clients.Add(client);
-                Console.WriteLine("New client accepted. Clients connected: {0}", clients.Count);
-                StopListen();
-            }
-
-            listener.BeginAcceptTcpClient(new AsyncCallback(BeginAccetpClient), listener);
-        }
-        */
     }
 }

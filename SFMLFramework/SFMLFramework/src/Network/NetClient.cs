@@ -92,7 +92,7 @@ namespace SFMLFramework.src.Network
                     {
                         case NetData.Type.Handhsake:
                             Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("Hanshake: [ID={0}]", remote.clientID);
+                            Console.WriteLine("HANDSHAKE: [{0}]", remote.clientID);
                             break;
                         case NetData.Type.Update:
                             break;
