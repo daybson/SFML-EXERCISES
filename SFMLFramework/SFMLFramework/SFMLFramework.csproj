@@ -98,6 +98,8 @@
     <Compile Include="src\Helper\DesignPatterns\Singleton.cs" />
     <Compile Include="src\Level\GameLevel.cs" />
     <Compile Include="src\Level\Level1.cs" />
+    <Compile Include="src\Level\LobbyLevel.cs" />
+    <Compile Include="src\Network\NetClient.cs" />
     <Compile Include="src\UI\UIText.cs" />
     <Compile Include="src\Input\IKeyboardInput.cs" />
     <Compile Include="src\Input\KeyboardEventDispatcher.cs" />
@@ -241,6 +243,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NetData\NetData.csproj">
+      <Project>{dc075fb6-cef8-4360-a8c3-b57f383b34e2}</Project>
+      <Name>NetData</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

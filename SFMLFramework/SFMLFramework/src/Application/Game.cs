@@ -45,7 +45,9 @@ public class Game
         this.window.KeyReleased += (sender, e) => { if (e.Code == Keyboard.Key.F) isDebugging = !isDebugging; };
         this.window.KeyReleased += (sender, e) => { if (e.Code == Keyboard.Key.R) isRendering = !isRendering; };
 
-        this.levels.Add(new Level1(ref window, ref keyboard));
+        //this.levels.Add(new Level1(ref window, ref keyboard));
+        this.levels.Add(new LobbyLevel());
+        this.currentLevel = 0;
 
         Run();
     }
@@ -68,8 +70,6 @@ public class Game
                     CollisionDispatcher.CollisionCheck(ref gRigidBody, ref gIndexRigidBody, deltaTime);
                 }
             }
-
-
         }
     }
 

@@ -12,7 +12,7 @@ namespace SFMLFramework.src.Level
     {
         protected int sequence;
         protected string name;
-        protected List<GameObject> gameObjects;
+        protected List<GameObject> gameObjects = new List<GameObject>();
         protected MusicController levelMusicController;
         protected UIText labelCommands;
         protected RenderWindow window;
