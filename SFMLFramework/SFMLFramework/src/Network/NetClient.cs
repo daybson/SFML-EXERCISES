@@ -5,27 +5,35 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using NetData;
+using SFMLFramework.src.Level;
 
 namespace SFMLFramework.src.Network
 {
     public class NetClient
     {
+
         private const int DEFAULT_PORT = 2929;
         private RemoteClient remote;
+        public RemoteClient Remote { get { return remote; } }
         private TcpClient tcp;
         private byte[] bufferOut;
         private byte[] bufferIn;
-        private string guid;
+        private string id;
+        public string ID { get { return id; } }
 
         public NetClient()
         {
             this.remote = new RemoteClient();
             this.tcp = new TcpClient(GetIP4Address().ToString(), DEFAULT_PORT);
+            ReceiveMessageFromServer();
         }
 
-        public void SendMessageToServer(string data)
+        public void SendMessageToServer(RemoteClient remote)
         {
-            this.bufferOut = Encoding.ASCII.GetBytes(this.guid + "::" + data);
+            remote.clientID = this.remote.clientID;
+            remote.name = this.remote.name;
+            this.bufferOut = RemoteClient.Serialize(remote);
+
             try
             {
                 NetworkStream outStream = this.tcp.GetStream();
@@ -45,8 +53,6 @@ namespace SFMLFramework.src.Network
             {
                 NetworkStream outStream = (NetworkStream)ar.AsyncState;
                 outStream.EndWrite(ar);
-                bufferOut = Encoding.ASCII.GetBytes(this.guid + "::abcdefgh");
-                outStream.BeginWrite(bufferOut, 0, bufferOut.Length, WriteCallback, outStream);
             }
             catch (Exception e) when (e is SocketException || e is System.IO.IOException)
             {
@@ -90,24 +96,46 @@ namespace SFMLFramework.src.Network
 
                     switch (this.remote.type)
                     {
-                        case NetData.MessageType.Handhsake:
+                        case MessageType.Handhsake:
                             Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("HANDSHAKE: [{0}]", this.remote.clientID);
+                            Console.WriteLine("CONECTADO!\nHANDSHAKE: [{0}]\n", this.remote.clientID);
+                            this.id = this.remote.clientID;
                             //aguardar input de Ready
+                            ReceiveMessageFromServer();
                             break;
 
-                        case NetData.MessageType.Update:
+                        case MessageType.Update:
                             //atualizar o objeto do remoteClient dentro do Level
                             break;
 
-                        case NetData.MessageType.ClientReady:
+                        case MessageType.ClientReady:
+                            Console.WriteLine(this.remote.ToString() + "\n");
+                            ReceiveMessageFromServer();
                             //aguardar resposta de StartParty do servidor (só chega quando todos os clientes enviarem um Ready)
                             //carregar novo level
                             //instanciar objeto do remoteClient
                             //iniciar loop de leitura/escrita de posição, status...
                             break;
 
-                        case NetData.MessageType.Disconnect:
+                        case MessageType.StartParty:
+                            Console.WriteLine(this.remote.ToString() + "\n");
+                            LobbyLevel.LobbyIsDone(this, new EventArgs());
+                            //criar novo nivel em Game
+                            //instanciar os players
+                            ReceiveMessageFromServer();
+                            break;
+
+                        case MessageType.InstantiatePlayers:
+                            Console.WriteLine("InstantiatePlayers");
+                            Level1.InstantiatePlayers(this, new EventArgs());
+                            ReceiveMessageFromServer();
+                            break;
+
+                        case MessageType.Disconnect:
+                            break;
+
+                        default:
+                            Console.WriteLine("Unknow type");
                             break;
                     }
                 }

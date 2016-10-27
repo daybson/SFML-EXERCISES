@@ -47,6 +47,12 @@ namespace Server.src.logic
 
                 lock (clients)
                 {
+                    if (this.clients.Count >= this.minPlayers)
+                    {
+                        Console.WriteLine("Party is full!");
+                        continue;
+                    }
+
                     clients.Add(remote, tcpClient);
 
                     Console.ForegroundColor = ConsoleColor.DarkGreen;
@@ -56,16 +62,6 @@ namespace Server.src.logic
                           () =>
                           {
                               Handshake(ref remote);
-
-                              /*
-                              var stream = tcpClient.GetStream(); //tcpClient.GetStream();
-                              this.bufferIn = new byte[tcpClient.ReceiveBufferSize];
-                              if (stream.CanRead)
-                                  stream.BeginRead(this.bufferIn, 0, this.bufferIn.Length, ReadCallback, tcpClient);
-                              */
-                              //this.bufferOut = Encoding.ASCII.GetBytes("Server eccho"); //new byte[newClient.SendBufferSize];
-                              //if (stream.CanWrite)
-                              //stream.BeginWrite(this.bufferOut, 0, this.bufferOut.Length, WriteCallback, rc.tcpClient);
                           }
                       );
                     ioThread.Start();
@@ -74,12 +70,13 @@ namespace Server.src.logic
             }
         }
 
+
         public void ReadCallback(IAsyncResult ar)
         {
             TcpClient tcp = (TcpClient)ar.AsyncState;
             try
             {
-                var remote = this.clients.FirstOrDefault(c => c.Value.Equals(tcp)).Key;
+                RemoteClient remote = this.clients.First(c => c.Value.Equals(tcp)).Key;
                 NetworkStream inStream = tcp.GetStream();
                 int count = inStream.EndRead(ar);
 
@@ -89,6 +86,8 @@ namespace Server.src.logic
                     Buffer.BlockCopy(this.bufferIn, 0, tempBuffer, 0, count);
                     remote = RemoteClient.Deserialize(tempBuffer);
 
+                    this.clients.First(c => c.Value.Equals(tcp)).Key.type = remote.type;
+
                     switch (remote.type)
                     {
                         case MessageType.Update:
@@ -96,9 +95,11 @@ namespace Server.src.logic
                             break;
 
                         case MessageType.ClientReady:
-                            var totalReady = this.clients.Where(c => c.Key.type != MessageType.ClientReady).Count();
-                            if (totalReady == this.clients.Count)
+
+                            var totalReady = this.clients.Where(c => c.Key.type == MessageType.ClientReady).Count();
+                            if (totalReady == this.clients.Count && totalReady == this.minPlayers)
                             {
+                                StartParty();
                                 //enviar StartParty
                                 //carregar novo level
                                 //instanciar objeto do remoteClient
@@ -111,9 +112,8 @@ namespace Server.src.logic
                             break;
                     }
 
-                    string data = Encoding.ASCII.GetString(tempBuffer);
                     Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                    Console.WriteLine("Received: {0}", data);
+                    Console.WriteLine("Received: {0}", remote.ToString());
                 }
 
                 inStream.BeginRead(this.bufferIn, 0, tcp.ReceiveBufferSize, ReadCallback, tcp);
@@ -129,6 +129,45 @@ namespace Server.src.logic
             }
         }
 
+        private void StartParty()
+        {
+            Console.WriteLine("Party is starting...");
+            foreach (var clientTarget in this.clients)
+            {
+                var stream = clientTarget.Value.GetStream();
+                var remote = new RemoteClient();
+                remote.clientID = clientTarget.Key.clientID;
+                remote.name = clientTarget.Key.name;
+                remote.type = MessageType.StartParty;
+
+                this.bufferOut = RemoteClient.Serialize(remote);
+                if (stream.CanWrite)
+                    stream.BeginWrite(this.bufferOut, 0, this.bufferOut.Length, WriteCallback, clientTarget.Value);
+            }
+
+            InstantiatePlayers();
+        }
+
+        public void InstantiatePlayers()
+        {
+            int i = 0;
+            foreach (var target in this.clients)
+            {
+                foreach (var remoteData in this.clients)
+                {
+                    var stream = target.Value.GetStream();
+                    remoteData.Key.type = MessageType.InstantiatePlayers;
+                    remoteData.Key.posX = i * 128;
+                    remoteData.Key.posY = 0;
+
+                    this.bufferOut = RemoteClient.Serialize(remoteData.Key);
+                    if (stream.CanWrite)
+                        stream.BeginWrite(this.bufferOut, 0, this.bufferOut.Length, WriteCallback, target.Value);
+                    i++;
+                }
+            }
+        }
+
         public void WriteCallback(IAsyncResult ar)
         {
             TcpClient tcp = (TcpClient)ar.AsyncState;
@@ -136,9 +175,6 @@ namespace Server.src.logic
             {
                 NetworkStream outStream = tcp.GetStream();
                 outStream.EndWrite(ar);
-                this.bufferOut = Encoding.ASCII.GetBytes("Server eccho: " + DateTime.Now.ToLongTimeString().ToString());
-
-                outStream.BeginWrite(this.bufferOut, 0, this.bufferOut.Length, WriteCallback, tcp);
             }
             catch (Exception e)
             {
@@ -151,6 +187,8 @@ namespace Server.src.logic
             }
         }
 
+
+
         public void StopListen()
         {
             isListening = false;
@@ -162,6 +200,7 @@ namespace Server.src.logic
             Thread.CurrentThread.Abort();
         }
 
+
         private static IPAddress GetIP4Address()
         {
             IPAddress[] ips = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
@@ -172,6 +211,7 @@ namespace Server.src.logic
 
             return IPAddress.Parse("127.0.0.1");
         }
+
 
         private void Handshake(ref RemoteClient remote)
         {
@@ -185,13 +225,14 @@ namespace Server.src.logic
             this.bufferOut = RemoteClient.Serialize(remote);
             Console.WriteLine("HANDSHAKE: [{0}]", remote.clientID);
 
+            //envia o handshake para o client
             if (stream.CanWrite)
                 stream.BeginWrite(this.bufferOut, 0, this.bufferOut.Length, WriteCallback, clients[remote]);
 
+            //inicia a espera de leitura pelo 'ready' do client
             this.bufferIn = new byte[clients[remote].ReceiveBufferSize];
             if (stream.CanRead)
                 stream.BeginRead(this.bufferIn, 0, this.bufferIn.Length, ReadCallback, clients[remote]);
-
         }
     }
 }

@@ -14,6 +14,7 @@ namespace NetData
         Handhsake,
         ClientReady,
         StartParty,
+        InstantiatePlayers,
         Disconnect,
         Update
     }
@@ -22,7 +23,7 @@ namespace NetData
     public class RemoteClient
     {
         #region Fields
-        
+
         public string clientID = string.Empty;
         public string name;
         public float posX;
@@ -33,7 +34,7 @@ namespace NetData
 
 
         #region Public
-        
+
         public static byte[] Serialize(RemoteClient remote)
         {
             using (var memoryStream = new MemoryStream())
@@ -71,6 +72,10 @@ namespace NetData
             return false;
         }
 
+        public string ToString()
+        {
+            return String.Format("Client ID: {0}\nName: {1}\nPosX: {2}\nPosY: {3}\nType: {4}", this.clientID, this.name, this.posX, this.posY, this.type.ToString());
+        }
         #endregion
     }
 }

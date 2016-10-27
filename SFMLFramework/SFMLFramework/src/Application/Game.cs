@@ -1,6 +1,7 @@
 using SFML.Graphics;
 using SFML.Window;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using SFML.System;
 using SFMLFramework;
@@ -14,13 +15,14 @@ public class Game
     public string windowTitle;
     public Clock clock;
     protected RenderWindow window;
-    
+
     private bool isDebugging;
     private bool isRendering;
-    
+
     private KeyboardInput keyboard;
     private int currentLevel = 0;
     private List<GameLevel> levels;
+    private LobbyLevel lobby;
 
     public Game(string title)
     {
@@ -36,7 +38,7 @@ public class Game
     public void Start()
     {
         Logger.Log("Starting Game");
-        
+
         this.window = new RenderWindow(new VideoMode(windowSize.X, windowSize.Y), windowTitle);
         this.window.SetFramerateLimit(120);
         this.keyboard = new KeyboardInput(ref this.window);
@@ -46,17 +48,27 @@ public class Game
         this.window.KeyReleased += (sender, e) => { if (e.Code == Keyboard.Key.R) isRendering = !isRendering; };
 
         //this.levels.Add(new Level1(ref window, ref keyboard));
-        this.levels.Add(new LobbyLevel());
+        this.lobby = new LobbyLevel(ref this.window);
+        this.levels.Add(lobby);
+        LobbyLevel.LobbyIsDone += StartLevel1;
         this.currentLevel = 0;
+
+        this.lobby.Initialize(ref this.lobby);
 
         Run();
     }
 
+    private void StartLevel1(object sender, EventArgs e)
+    {
+        Level1 level1 = new Level1(ref this.window, ref this.keyboard);
+        this.levels.Add(level1);
+        this.currentLevel++;
+        level1.Initialize(ref this.lobby);
+    }
+
     public void Update(float deltaTime)
     {
-        string netPackage = string.Empty;
-
-        foreach (var g in this.levels[currentLevel].GameObjects)
+        foreach (var g in this.levels[currentLevel].GameObjects.Reverse<GameObject>())
         {
             g.Update(deltaTime);
 
@@ -75,8 +87,6 @@ public class Game
 
     protected void Run()
     {
-        this.levels[currentLevel].Initialize();
-
         while (this.window.IsOpen)
         {
             var timer = this.clock.Restart();
@@ -91,7 +101,7 @@ public class Game
     {
         this.window.Clear(new Color(150, 150, 150));
 
-        foreach (var g in this.levels[currentLevel].GameObjects)
+        foreach (var g in this.levels[currentLevel].GameObjects.Reverse<GameObject>())
         {
             if (isRendering)
                 g.GetComponent<Renderer>()?.Render(ref this.window);
@@ -103,12 +113,11 @@ public class Game
                 g.GetComponent<Rigidbody>()?.ColliderRight.Render(ref this.window);
                 g.GetComponent<Rigidbody>()?.ColliderLeft.Render(ref this.window);
                 g.GetComponent<AudioListener3D>()?.Render(ref this.window);
-                g.GetComponent<UIText>()?.Render(ref this.window);
                 g.GetComponent<MusicController>()?.Render(ref this.window);
                 this.levels[currentLevel].LevelMusicController.Render(ref this.window);
             }
+            g.GetComponent<UIText>()?.Render(ref this.window);
         }
-
 
         this.window.Display();
     }

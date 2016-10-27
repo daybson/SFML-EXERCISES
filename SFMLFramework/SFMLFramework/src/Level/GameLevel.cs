@@ -10,7 +10,8 @@ namespace SFMLFramework.src.Level
 {
     public abstract class GameLevel
     {
-        protected int sequence;
+        protected static int sequence;
+        public static int Sequence { get { return sequence; } }
         protected string name;
         protected List<GameObject> gameObjects = new List<GameObject>();
         protected MusicController levelMusicController;
@@ -46,7 +47,7 @@ namespace SFMLFramework.src.Level
         }
 
 
-        public abstract void Initialize();
+        public abstract void Initialize(ref LobbyLevel lobby);
 
     }
 }
