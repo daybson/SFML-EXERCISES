@@ -8,6 +8,9 @@ using SFMLFramework;
 using SFMLFramework.src.Helper;
 using SFMLFramework.src.Audio;
 using SFMLFramework.src.Level;
+using System.Threading;
+using NetData;
+using SFMLFramework.src.Network;
 
 public class Game
 {
@@ -23,6 +26,12 @@ public class Game
     private int currentLevel = 0;
     private List<GameLevel> levels;
     private LobbyLevel lobby;
+    private bool isFocused;
+
+    protected NetClient client;
+    public NetClient Client { get { return client; } }
+    private Thread ioThread;
+    private bool isSyncing;
 
     public Game(string title)
     {
@@ -33,6 +42,7 @@ public class Game
         this.levels = new List<GameLevel>();
         isDebugging = false;
         isRendering = true;
+        isFocused = true;
     }
 
     public void Start()
@@ -46,21 +56,32 @@ public class Game
 
         this.window.KeyReleased += (sender, e) => { if (e.Code == Keyboard.Key.F) isDebugging = !isDebugging; };
         this.window.KeyReleased += (sender, e) => { if (e.Code == Keyboard.Key.R) isRendering = !isRendering; };
+        this.window.LostFocus += Window_LostFocus;
+        this.window.GainedFocus += Window_GainedFocus;
 
-        //this.levels.Add(new Level1(ref window, ref keyboard));
-        this.lobby = new LobbyLevel(ref this.window);
+        this.lobby = new LobbyLevel(ref this.window, this);
         this.levels.Add(lobby);
         LobbyLevel.LobbyIsDone += StartLevel1;
-        this.currentLevel = 0;
-
         this.lobby.Initialize(ref this.lobby);
 
         Run();
     }
 
+    private void Window_GainedFocus(object sender, EventArgs e)
+    {
+        this.isFocused = true;
+        //Console.WriteLine("Janela focada");
+    }
+
+    private void Window_LostFocus(object sender, EventArgs e)
+    {
+        this.isFocused = false;
+        //Console.WriteLine("Janela desfocada");
+    }
+
     private void StartLevel1(object sender, EventArgs e)
     {
-        Level1 level1 = new Level1(ref this.window, ref this.keyboard);
+        Level1 level1 = new Level1(ref this.window, ref this.keyboard, this);
         this.levels.Add(level1);
         this.currentLevel++;
         level1.Initialize(ref this.lobby);
@@ -68,18 +89,21 @@ public class Game
 
     public void Update(float deltaTime)
     {
-        foreach (var g in this.levels[currentLevel].GameObjects.Reverse<GameObject>())
+        lock (this.levels[currentLevel].GameObjects)
         {
-            g.Update(deltaTime);
-
-            for (var i = 0; i < this.levels[currentLevel].GameObjects.Count; i++)
+            foreach (var g in this.levels[currentLevel].GameObjects.Reverse<GameObject>())
             {
-                //evita teste de colisão consigo mesmo
-                if (!g.Equals(this.levels[currentLevel].GameObjects[i]))
+                g.Update(deltaTime);
+
+                for (var i = 0; i < this.levels[currentLevel].GameObjects.Count; i++)
                 {
-                    var gRigidBody = (ICollisionable)g.GetComponent<Rigidbody>();
-                    var gIndexRigidBody = (ICollisionable)this.levels[currentLevel].GameObjects[i].GetComponent<Rigidbody>();
-                    CollisionDispatcher.CollisionCheck(ref gRigidBody, ref gIndexRigidBody, deltaTime);
+                    //evita teste de colisão consigo mesmo
+                    if (!g.Equals(this.levels[currentLevel].GameObjects[i]))
+                    {
+                        var gRigidBody = (ICollisionable)g.GetComponent<Rigidbody>();
+                        var gIndexRigidBody = (ICollisionable)this.levels[currentLevel].GameObjects[i].GetComponent<Rigidbody>();
+                        CollisionDispatcher.CollisionCheck(ref gRigidBody, ref gIndexRigidBody, deltaTime);
+                    }
                 }
             }
         }
@@ -92,8 +116,10 @@ public class Game
             var timer = this.clock.Restart();
 
             window.DispatchEvents();
-            Update(timer.AsSeconds());
-            Render();
+            {
+                Update(timer.AsSeconds());
+                Render();
+            }
         }
     }
 
@@ -124,11 +150,52 @@ public class Game
 
     private void OnGameOver(object sender, EventArgs e)
     {
-        Logger.Log("Stop network");
-
         Logger.Log("Closing the window");
         Logger.Close();
         this.window.Close();
     }
+
+
+    #region NET
+
+    public void NetStart()
+    {
+        this.ioThread = new Thread(() => { this.client = new NetClient(this); });
+        ioThread.Start();
+    }
+
+    public void NetReady()
+    {
+        var remoteReady = new RemoteClient();
+        remoteReady.type = MessageType.ClientReady;
+        this.client.SendMessageToServer(remoteReady);
+    }
+
+    public void UpdateFromServer(RemoteClient remote)
+    {
+        lock (this.levels[currentLevel].GameObjects)
+        {
+            foreach (var g in this.levels[currentLevel].GameObjects.Reverse<GameObject>())
+            {
+                if (g.name.Equals(remote.name))
+                {
+                    Console.WriteLine("Update from server {0}", remote.name);
+                    g.Position = new Vector2f(remote.posX, remote.posY);
+                    break;
+                }
+                
+                var remoteUpdate = new RemoteClient();
+                remoteUpdate.type = MessageType.Update;
+                remoteUpdate.name = g.name;
+                remoteUpdate.posX = g.Position.X;
+                remoteUpdate.posY = g.Position.Y;
+                this.client.SendMessageToServer(remoteUpdate);
+                Thread.Sleep(50);
+            }
+        }
+        this.isSyncing = true;
+    }
+
+    #endregion
 }
 

@@ -11,6 +11,8 @@ namespace Server.src.logic
 {
     public class ServerNET
     {
+        #region Fields
+
         private TcpListener listener;
         private Dictionary<RemoteClient, TcpClient> clients;
         private const int DEFAULT_PORT = 2929;
@@ -21,6 +23,9 @@ namespace Server.src.logic
         public bool IsListening { get { return isListening; } }
 
         private int minPlayers = 2;
+        private Thread ioThread;
+
+        #endregion
 
 
         /// <summary>
@@ -58,7 +63,7 @@ namespace Server.src.logic
                     Console.ForegroundColor = ConsoleColor.DarkGreen;
                     Console.WriteLine("New client accepted. Clients connected: {0}", clients.Count);
 
-                    var ioThread = new Thread(
+                    this.ioThread = new Thread(
                           () =>
                           {
                               Handshake(ref remote);
@@ -92,6 +97,7 @@ namespace Server.src.logic
                     {
                         case MessageType.Update:
                             //replicar o remote para todos os demais clients (exceto o proprio client sender do remote)
+                            ReplicateUpdate(remote);
                             break;
 
                         case MessageType.ClientReady:
@@ -100,6 +106,8 @@ namespace Server.src.logic
                             if (totalReady == this.clients.Count && totalReady == this.minPlayers)
                             {
                                 StartParty();
+                                //ioThread = new Thread(() => StartParty());
+                                //ioThread.Start();
                                 //enviar StartParty
                                 //carregar novo level
                                 //instanciar objeto do remoteClient
@@ -129,6 +137,18 @@ namespace Server.src.logic
             }
         }
 
+        private void ReplicateUpdate(RemoteClient remote)
+        {
+            Console.WriteLine("Replicating...");
+            foreach (var clientTarget in this.clients)
+            {
+                var stream = clientTarget.Value.GetStream();
+                this.bufferOut = RemoteClient.Serialize(remote);
+                if (stream.CanWrite)
+                    stream.BeginWrite(this.bufferOut, 0, this.bufferOut.Length, WriteCallback, clientTarget.Value);
+            }
+        }
+
         private void StartParty()
         {
             Console.WriteLine("Party is starting...");
@@ -150,9 +170,9 @@ namespace Server.src.logic
 
         public void InstantiatePlayers()
         {
-            int i = 0;
             foreach (var target in this.clients)
             {
+                int i = 0;
                 foreach (var remoteData in this.clients)
                 {
                     var stream = target.Value.GetStream();
@@ -164,6 +184,30 @@ namespace Server.src.logic
                     if (stream.CanWrite)
                         stream.BeginWrite(this.bufferOut, 0, this.bufferOut.Length, WriteCallback, target.Value);
                     i++;
+                    Thread.Sleep(150);
+                }
+            }
+
+            UpdatePlayers();
+        }
+
+        public void UpdatePlayers()
+        {
+            int i = 0;
+            foreach (var target in this.clients)
+            {
+                foreach (var remoteData in this.clients)
+                {
+                    var stream = target.Value.GetStream();
+                    remoteData.Key.type = MessageType.Update;
+                    remoteData.Key.posX = i * 128;
+                    remoteData.Key.posY = 0;
+
+                    this.bufferOut = RemoteClient.Serialize(remoteData.Key);
+                    if (stream.CanWrite)
+                        stream.BeginWrite(this.bufferOut, 0, this.bufferOut.Length, WriteCallback, target.Value);
+                    i++;
+                    Thread.Sleep(150);
                 }
             }
         }
@@ -186,8 +230,6 @@ namespace Server.src.logic
                 }
             }
         }
-
-
 
         public void StopListen()
         {

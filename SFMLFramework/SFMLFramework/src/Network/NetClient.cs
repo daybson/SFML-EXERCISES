@@ -11,6 +11,7 @@ namespace SFMLFramework.src.Network
 {
     public class NetClient
     {
+        #region Fields
 
         private const int DEFAULT_PORT = 2929;
         private RemoteClient remote;
@@ -20,12 +21,25 @@ namespace SFMLFramework.src.Network
         private byte[] bufferIn;
         private string id;
         public string ID { get { return id; } }
+        Game game;
+        
+        #endregion
 
-        public NetClient()
+
+        public NetClient(Game game)
         {
-            this.remote = new RemoteClient();
-            this.tcp = new TcpClient(GetIP4Address().ToString(), DEFAULT_PORT);
-            ReceiveMessageFromServer();
+            this.game = game;
+            try
+            {
+                this.remote = new RemoteClient();
+                this.tcp = new TcpClient(GetIP4Address().ToString(), DEFAULT_PORT);
+                ReceiveMessageFromServer();
+            }
+            catch (Exception e) when (e is SocketException)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Error: Server is offline");
+            }
         }
 
         public void SendMessageToServer(RemoteClient remote)
@@ -74,7 +88,7 @@ namespace SFMLFramework.src.Network
             catch (Exception e)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Server is offline!");
+                Console.WriteLine("Error: Server is offline");
             }
         }
 
@@ -104,10 +118,6 @@ namespace SFMLFramework.src.Network
                             ReceiveMessageFromServer();
                             break;
 
-                        case MessageType.Update:
-                            //atualizar o objeto do remoteClient dentro do Level
-                            break;
-
                         case MessageType.ClientReady:
                             Console.WriteLine(this.remote.ToString() + "\n");
                             ReceiveMessageFromServer();
@@ -131,6 +141,13 @@ namespace SFMLFramework.src.Network
                             ReceiveMessageFromServer();
                             break;
 
+                        case MessageType.Update:
+                            //Console.WriteLine("Update");
+                            ReceiveUpdate(remote);
+                            //atualizar o objeto do remoteClient dentro do Level
+                            ReceiveMessageFromServer();
+                            break;
+
                         case MessageType.Disconnect:
                             break;
 
@@ -145,8 +162,14 @@ namespace SFMLFramework.src.Network
             catch (Exception e) when (e is SocketException || e is System.IO.IOException)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Server is offline!");
+                Console.WriteLine("Error: Server is offline");
             }
+        }
+
+        private void ReceiveUpdate(RemoteClient remote)
+        {
+            //Console.WriteLine("Client Update {0}", remote.ToString());
+            this.game.UpdateFromServer(remote);
         }
 
         private static IPAddress GetIP4Address()

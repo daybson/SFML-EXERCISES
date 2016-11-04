@@ -8,21 +8,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace SFMLFramework.src.Level
 {
     public class LobbyLevel : GameLevel
     {
-        protected NetClient client;
-        public NetClient Client { get { return client; } }
+        #region Fields
 
         protected KeyboardInput keyboard;
         protected RenderWindow window;
         public static EventHandler LobbyIsDone;
         private bool isReady = false;
+        private Thread ioThread;
+        private Game game;
 
-        public LobbyLevel(ref RenderWindow window)
+        #endregion
+
+        public LobbyLevel(ref RenderWindow window, Game game)
         {
+            this.game = game;
             sequence = 0;
             this.canvas = new GameObject("Canvas");
             this.labelCommands = new UIText(this.canvas);
@@ -34,25 +39,18 @@ namespace SFMLFramework.src.Level
 
             this.window = window;
             this.keyboard = new KeyboardInput(ref this.window);
-            this.window.KeyReleased += (sender, e) =>
-            {
-                if (e.Code == Keyboard.Key.R && !isReady)
-                    Ready();
-            };
-
+            this.window.KeyReleased += (sender, e) => { if (e.Code == Keyboard.Key.R && !isReady) Ready(); };
         }
 
         private void Ready()
         {
             isReady = true;
-            var remoteReady = new RemoteClient();
-            remoteReady.type = MessageType.ClientReady;
-            this.client.SendMessageToServer(remoteReady);
+            this.game.NetReady();
         }
 
         public override void Initialize(ref LobbyLevel lobby)
         {
-            this.client = new NetClient();
+            this.game.NetStart();
         }
     }
 }

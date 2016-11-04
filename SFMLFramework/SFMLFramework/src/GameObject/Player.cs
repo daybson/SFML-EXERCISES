@@ -46,11 +46,12 @@ public class Player : GameObject
     #region Methods
 
     //TODO: parametrizar construtor futuramente...
-    public Player()
+    public Player(string name)
     {
-        this.name = "Player 1";
-        Renderer = new Renderer(Resources.LoadSpriteSheet("dragon.png"), this);
+        Renderer = new Renderer(Resources.LoadSpriteSheet(name.ToUpper() + ".png"), this);
         Rigidbody = new Rigidbody(5f, Renderer.SpriteSheet.Size, GameObjectCreator.PlayerInelasticMaterial, false, this, new Vector2f(300, 900));
+
+        this.name = name;
 
         var label = new UIText(this, new Vector2i(0, -28));
         this.Components.Add(label);
@@ -67,12 +68,12 @@ public class Player : GameObject
         PlatformPlayerController.AudioAdapter = AudioFXController;
 
         var listener3d = new AudioListener3D(this);
-        
+
         this.Components.Add(PlatformPlayerController);
         this.Components.Add(Rigidbody);
         this.Components.Add(Renderer);
         this.Components.Add(AudioFXController);
-        this.Components.Add(listener3d);        
+        this.Components.Add(listener3d);
     }
 
     public override void Update(float deltaTime)

@@ -14,9 +14,11 @@ namespace SFMLFramework.src.Level
     {
         LobbyLevel lobby;
         public static EventHandler InstantiatePlayers;
+        Game game;
 
-        public Level1(ref RenderWindow window, ref KeyboardInput keyboard)
+        public Level1(ref RenderWindow window, ref KeyboardInput keyboard, Game game)
         {
+            this.game = game;
             sequence = 1;
             this.window = window;
             this.keyboard = keyboard;
@@ -25,21 +27,26 @@ namespace SFMLFramework.src.Level
             this.labelCommands = new UIText(this.canvas);
             this.canvas.Components.Add(labelCommands);
             this.levelMusicController = new MusicController();
-            InstantiatePlayers += CreatePlayer;
+            lock (this)
+            {
+                InstantiatePlayers += CreatePlayer;
+            }
         }
 
         private void CreatePlayer(object sender, EventArgs e)
         {
-            Player player = null;
+            lock (this)
+            {
+                Player player = null;
 
-            if (this.lobby.Client.Remote.clientID.Equals(this.lobby.Client.ID))
-                player = GameObjectCreator.CreatePlayer(ref this.keyboard);
-            else
-                player = new Player();
+                if (this.game.Client.Remote.clientID.Equals(this.game.Client.ID))
+                    player = GameObjectCreator.CreatePlayer(ref this.keyboard, this.game.Client.Remote.name);
+                else
+                    player = new Player(this.game.Client.Remote.name);
 
-            player.name = this.lobby.Client.Remote.name;
-            player.Position = new Vector2f(this.lobby.Client.Remote.posX, this.lobby.Client.Remote.posY);
-            this.gameObjects.Add(player);
+                player.Position = new Vector2f(this.game.Client.Remote.posX, this.game.Client.Remote.posY);
+                this.gameObjects.Add(player);
+            }
         }
 
         public override void Initialize(ref LobbyLevel lobby)
@@ -74,19 +81,6 @@ namespace SFMLFramework.src.Level
 
             this.canvas.Position = new Vector2f(Game.windowSize.X / 2, 0);
             this.gameObjects.Add(this.canvas);
-
-            /*
-            var p = GameObjectCreator.CreatePlayer(ref this.keyboard);
-            p.Position = V2.Right * 650;
-            this.gameObjects.Add(p);
-            */
-
-            /*
-            var wolf = GameObjectCreator.CreateWolf(new Vector2f(33, 450));
-            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Right) wolf.GetComponent<Rigidbody>().AddForce(V2.Right * 200); };
-            this.window.KeyPressed += (sender, e) => { if (e.Code == Keyboard.Key.Left) wolf.GetComponent<Rigidbody>().AddForce(V2.Left * 200); };
-            this.gameObjects.Add(wolf);
-            */
         }
 
     }

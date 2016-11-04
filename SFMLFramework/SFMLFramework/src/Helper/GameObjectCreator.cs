@@ -131,9 +131,9 @@ namespace SFMLFramework.src.Helper
             return platform;
         }
 
-        public static Player CreatePlayer(ref KeyboardInput keyboard)
+        public static Player CreatePlayer(ref KeyboardInput keyboard, string name)
         {
-            var player = new Player();
+            var player = new Player(name);
             player.SetKeyboardInput(ref keyboard);
             player.PlatformPlayerController.PlayerKeyboardController.keyPressedActions.Add(Keyboard.Key.A, () => player.PlatformPlayerController.Walk(EDirection.Left, true));
             player.PlatformPlayerController.PlayerKeyboardController.keyPressedActions.Add(Keyboard.Key.D, () => player.PlatformPlayerController.Walk(EDirection.Right, true));

@@ -46,8 +46,6 @@ namespace SFMLFramework.src.Level
             }
         }
 
-
         public abstract void Initialize(ref LobbyLevel lobby);
-
     }
 }
