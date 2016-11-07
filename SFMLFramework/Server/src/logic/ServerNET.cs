@@ -170,44 +170,60 @@ namespace Server.src.logic
 
         public void InstantiatePlayers()
         {
+            float[] posPlayers = new float[2];
+            posPlayers[0] = 64;
+            posPlayers[1] = 192;
+
+            foreach (var target in this.clients)
+            {
+                int i = 0;              
+                foreach (var remoteData in this.clients)
+                {
+                    //if (remoteData.Key.clientID.Equals(target.Key.clientID))
+                    {
+                        var stream = target.Value.GetStream();
+                        remoteData.Key.type = MessageType.InstantiatePlayers;
+                        remoteData.Key.posX = posPlayers[i];
+                        remoteData.Key.posY = 0;
+                        this.bufferOut = RemoteClient.Serialize(remoteData.Key);
+
+                        if (stream.CanWrite)
+                            stream.BeginWrite(this.bufferOut, 0, this.bufferOut.Length, WriteCallback, target.Value);
+
+                        i++;
+                        Thread.Sleep(100);
+                    }
+                }
+            }
+
+            //UpdatePlayers();
+        }
+
+        public void UpdatePlayers()
+        {
+            float[] posPlayers = new float[2];
+            posPlayers[0] = 64;
+            posPlayers[1] = 192;
+
             foreach (var target in this.clients)
             {
                 int i = 0;
                 foreach (var remoteData in this.clients)
                 {
-                    var stream = target.Value.GetStream();
-                    remoteData.Key.type = MessageType.InstantiatePlayers;
-                    remoteData.Key.posX = i * 128;
-                    remoteData.Key.posY = 0;
+                    if (!remoteData.Key.clientID.Equals(target.Key.clientID))
+                    {
+                        var stream = target.Value.GetStream();
+                        remoteData.Key.type = MessageType.Update;
+                        remoteData.Key.posX = posPlayers[i];
+                        remoteData.Key.posY = 0;
+                        this.bufferOut = RemoteClient.Serialize(remoteData.Key);
 
-                    this.bufferOut = RemoteClient.Serialize(remoteData.Key);
-                    if (stream.CanWrite)
-                        stream.BeginWrite(this.bufferOut, 0, this.bufferOut.Length, WriteCallback, target.Value);
-                    i++;
-                    Thread.Sleep(150);
-                }
-            }
+                        if (stream.CanWrite)
+                            stream.BeginWrite(this.bufferOut, 0, this.bufferOut.Length, WriteCallback, target.Value);
 
-            UpdatePlayers();
-        }
-
-        public void UpdatePlayers()
-        {
-            int i = 0;
-            foreach (var target in this.clients)
-            {
-                foreach (var remoteData in this.clients)
-                {
-                    var stream = target.Value.GetStream();
-                    remoteData.Key.type = MessageType.Update;
-                    remoteData.Key.posX = i * 128;
-                    remoteData.Key.posY = 0;
-
-                    this.bufferOut = RemoteClient.Serialize(remoteData.Key);
-                    if (stream.CanWrite)
-                        stream.BeginWrite(this.bufferOut, 0, this.bufferOut.Length, WriteCallback, target.Value);
-                    i++;
-                    Thread.Sleep(150);
+                        i++;
+                        Thread.Sleep(150);
+                    }
                 }
             }
         }

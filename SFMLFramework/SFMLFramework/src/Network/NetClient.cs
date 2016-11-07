@@ -111,24 +111,21 @@ namespace SFMLFramework.src.Network
                     switch (this.remote.type)
                     {
                         case MessageType.Handhsake:
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("CONECTADO!\nHANDSHAKE: [{0}]\n", this.remote.clientID);
+                            //Console.ForegroundColor = ConsoleColor.Yellow;
+                            //Console.WriteLine("CONECTADO!\nHANDSHAKE: [{0}]\n", this.remote.clientID);
                             this.id = this.remote.clientID;
                             //aguardar input de Ready
                             ReceiveMessageFromServer();
                             break;
 
                         case MessageType.ClientReady:
-                            Console.WriteLine(this.remote.ToString() + "\n");
+                            //Console.WriteLine(this.remote.ToString() + "\n");
                             ReceiveMessageFromServer();
                             //aguardar resposta de StartParty do servidor (só chega quando todos os clientes enviarem um Ready)
-                            //carregar novo level
-                            //instanciar objeto do remoteClient
-                            //iniciar loop de leitura/escrita de posição, status...
                             break;
 
                         case MessageType.StartParty:
-                            Console.WriteLine(this.remote.ToString() + "\n");
+                            //Console.WriteLine(this.remote.ToString() + "\n");
                             LobbyLevel.LobbyIsDone(this, new EventArgs());
                             //criar novo nivel em Game
                             //instanciar os players
@@ -136,7 +133,7 @@ namespace SFMLFramework.src.Network
                             break;
 
                         case MessageType.InstantiatePlayers:
-                            Console.WriteLine("InstantiatePlayers");
+                            //Console.WriteLine("InstantiatePlayers");
                             Level1.InstantiatePlayers(this, new EventArgs());
                             ReceiveMessageFromServer();
                             break;
@@ -152,7 +149,7 @@ namespace SFMLFramework.src.Network
                             break;
 
                         default:
-                            Console.WriteLine("Unknow type");
+                            //Console.WriteLine("Unknow type");
                             break;
                     }
                 }
