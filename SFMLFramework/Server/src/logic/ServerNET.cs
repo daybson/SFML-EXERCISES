@@ -97,7 +97,7 @@ namespace Server.src.logic
                     {
                         case MessageType.Update:
                             //replicar o remote para todos os demais clients (exceto o proprio client sender do remote)
-                            ReplicateUpdate(remote);
+                            Broadcast(remote);
                             break;
 
                         case MessageType.ClientReady:
@@ -137,11 +137,14 @@ namespace Server.src.logic
             }
         }
 
-        private void ReplicateUpdate(RemoteClient remote)
+        private void Broadcast(RemoteClient remote)
         {
-            Console.WriteLine("Replicating...");
+            //Console.WriteLine("Replicating...");
             foreach (var clientTarget in this.clients)
             {
+                if (clientTarget.Key.clientID.Equals(remote.clientID))
+                    continue;
+
                 var stream = clientTarget.Value.GetStream();
                 this.bufferOut = RemoteClient.Serialize(remote);
                 if (stream.CanWrite)
@@ -176,7 +179,7 @@ namespace Server.src.logic
 
             foreach (var target in this.clients)
             {
-                int i = 0;              
+                int i = 0;
                 foreach (var remoteData in this.clients)
                 {
                     //if (remoteData.Key.clientID.Equals(target.Key.clientID))

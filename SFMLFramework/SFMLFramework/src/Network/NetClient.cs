@@ -140,7 +140,8 @@ namespace SFMLFramework.src.Network
 
                         case MessageType.Update:
                             //Console.WriteLine("Update");
-                            ReceiveUpdate(remote);
+                            this.game.IsSyncing = true;
+                            this.game.UpdateFromServer(remote);
                             //atualizar o objeto do remoteClient dentro do Level
                             ReceiveMessageFromServer();
                             break;
@@ -166,7 +167,7 @@ namespace SFMLFramework.src.Network
         private void ReceiveUpdate(RemoteClient remote)
         {
             //Console.WriteLine("Client Update {0}", remote.ToString());
-            this.game.UpdateFromServer(remote);
+            //this.game.UpdateFromServer(remote);
         }
 
         private static IPAddress GetIP4Address()

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NetData;
 
 namespace SFMLFramework.src.Level
 {
@@ -15,6 +16,7 @@ namespace SFMLFramework.src.Level
         LobbyLevel lobby;
         public static EventHandler InstantiatePlayers;
         Game game;
+        public Player mainPlayer;
 
         public Level1(ref RenderWindow window, ref KeyboardInput keyboard, Game game)
         {
@@ -46,6 +48,17 @@ namespace SFMLFramework.src.Level
 
                 player.Position = new Vector2f(this.game.Client.Remote.posX, this.game.Client.Remote.posY);
                 this.gameObjects.Add(player);
+
+                var remote = new RemoteClient();
+                remote.clientID = this.game.Client.ID;
+                remote.name = player.name;
+                remote.posX = player.Position.X;
+                remote.posY = player.Position.Y;
+                remote.type = MessageType.Update;
+
+                this.game.Client.SendMessageToServer(remote);
+
+                this.mainPlayer = player;
             }
         }
 

@@ -28,10 +28,10 @@ public class Game
     private LobbyLevel lobby;
     private bool isFocused;
 
-    protected NetClient client;
-    public NetClient Client { get { return client; } }
+    protected NetClient netClient;
+    public NetClient Client { get { return netClient; } }
     private Thread ioThread;
-    private bool isSyncing;
+    public bool IsSyncing { get; set; }
 
     public Game(string title)
     {
@@ -105,6 +105,17 @@ public class Game
                         CollisionDispatcher.CollisionCheck(ref gRigidBody, ref gIndexRigidBody, deltaTime);
                     }
                 }
+                /*
+                if (this.isSyncing)
+                {
+                    var remoteUpdate = new RemoteClient();
+                    remoteUpdate.type = MessageType.Update;
+                    remoteUpdate.name = g.name;
+                    remoteUpdate.posX = g.Position.X;
+                    remoteUpdate.posY = g.Position.Y;
+                    this.netClient.SendMessageToServer(remoteUpdate);
+                }
+                */
             }
         }
     }
@@ -160,7 +171,7 @@ public class Game
 
     public void NetStart()
     {
-        this.ioThread = new Thread(() => { this.client = new NetClient(this); });
+        this.ioThread = new Thread(() => { this.netClient = new NetClient(this); });
         ioThread.Start();
     }
 
@@ -168,32 +179,36 @@ public class Game
     {
         var remoteReady = new RemoteClient();
         remoteReady.type = MessageType.ClientReady;
-        this.client.SendMessageToServer(remoteReady);
+        this.netClient.SendMessageToServer(remoteReady);
     }
 
     public void UpdateFromServer(RemoteClient remote)
     {
+        //GameObject player = null;
+
         lock (this.levels[currentLevel].GameObjects)
         {
             foreach (var g in this.levels[currentLevel].GameObjects.Reverse<GameObject>())
             {
                 if (g.name.Equals(remote.name))
                 {
-                    Console.WriteLine("Update from server {0}", remote.name);
+                    //player = g;
+                    //Console.WriteLine("Update from server {0}", remote.name);
                     g.Position = new Vector2f(remote.posX, remote.posY);
-                    break;
+                    //break;
                 }
-                
+            }
+
+            if (this.IsSyncing)
+            {
                 var remoteUpdate = new RemoteClient();
                 remoteUpdate.type = MessageType.Update;
-                remoteUpdate.name = g.name;
-                remoteUpdate.posX = g.Position.X;
-                remoteUpdate.posY = g.Position.Y;
-                this.client.SendMessageToServer(remoteUpdate);
-                Thread.Sleep(50);
+                remoteUpdate.name = ((Level1)this.levels[currentLevel]).mainPlayer.name;
+                remoteUpdate.posX = ((Level1)this.levels[currentLevel]).mainPlayer.Position.X;
+                remoteUpdate.posY = ((Level1)this.levels[currentLevel]).mainPlayer.Position.Y;
+                this.netClient.SendMessageToServer(remoteUpdate);
             }
         }
-        this.isSyncing = true;
     }
 
     #endregion
