@@ -37,28 +37,33 @@ namespace SFMLFramework.src.Level
 
         private void CreatePlayer(object sender, EventArgs e)
         {
-            lock (this)
+            Console.WriteLine("Create Player " + this.game.NetClient.Remote.name);
+            Player player = null;
+
+            if (this.game.NetClient.Remote.clientID.Equals(this.game.NetClient.ID))
             {
-                Player player = null;
-
-                if (this.game.Client.Remote.clientID.Equals(this.game.Client.ID))
-                    player = GameObjectCreator.CreatePlayer(ref this.keyboard, this.game.Client.Remote.name);
-                else
-                    player = new Player(this.game.Client.Remote.name);
-
-                player.Position = new Vector2f(this.game.Client.Remote.posX, this.game.Client.Remote.posY);
-                this.gameObjects.Add(player);
-
-                var remote = new RemoteClient();
-                remote.clientID = this.game.Client.ID;
-                remote.name = player.name;
-                remote.posX = player.Position.X;
-                remote.posY = player.Position.Y;
-                remote.type = MessageType.Update;
-
-                this.game.Client.SendMessageToServer(remote);
-
+                player = GameObjectCreator.CreatePlayer(ref this.keyboard, this.game.NetClient.Remote.name);
+                player.Position = new Vector2f(this.game.NetClient.Remote.posX, this.game.NetClient.Remote.posY);
                 this.mainPlayer = player;
+            }
+            else
+            {
+                player = new Player(this.game.NetClient.Remote.name);
+                player.Position = new Vector2f(this.game.NetClient.Remote.posX, this.game.NetClient.Remote.posY);
+            }
+
+            this.gameObjects.Add(player);
+
+            if (this.gameObjects.Where(g => g.GetType()== typeof(Player)).Count()==2)
+            {
+                var remote = new RemoteClient();
+                remote.clientID = this.game.NetClient.ID;
+                remote.name = this.mainPlayer.name;
+                remote.posX = this.mainPlayer.Position.X;
+                remote.posY = this.mainPlayer.Position.Y;
+                remote.type = MessageType.Update;
+                Logger.Log("Sending first Update of " + remote.ToString());
+                this.game.NetClient.SendMessageToServer(remote);
             }
         }
 

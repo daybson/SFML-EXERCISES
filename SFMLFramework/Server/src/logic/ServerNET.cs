@@ -106,12 +106,7 @@ namespace Server.src.logic
                             if (totalReady == this.clients.Count && totalReady == this.minPlayers)
                             {
                                 StartParty();
-                                //ioThread = new Thread(() => StartParty());
-                                //ioThread.Start();
-                                //enviar StartParty
-                                //carregar novo level
-                                //instanciar objeto do remoteClient
-                                //iniciar loop de leitura/escrita de posição, status...
+                                InstantiatePlayers();
                             }
                             break;
 
@@ -167,8 +162,6 @@ namespace Server.src.logic
                 if (stream.CanWrite)
                     stream.BeginWrite(this.bufferOut, 0, this.bufferOut.Length, WriteCallback, clientTarget.Value);
             }
-
-            InstantiatePlayers();
         }
 
         public void InstantiatePlayers()

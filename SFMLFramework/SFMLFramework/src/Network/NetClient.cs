@@ -111,51 +111,34 @@ namespace SFMLFramework.src.Network
                     switch (this.remote.type)
                     {
                         case MessageType.Handhsake:
-                            //Console.ForegroundColor = ConsoleColor.Yellow;
-                            //Console.WriteLine("CONECTADO!\nHANDSHAKE: [{0}]\n", this.remote.clientID);
                             this.id = this.remote.clientID;
-                            //aguardar input de Ready
                             ReceiveMessageFromServer();
                             break;
 
                         case MessageType.ClientReady:
-                            //Console.WriteLine(this.remote.ToString() + "\n");
                             ReceiveMessageFromServer();
-                            //aguardar resposta de StartParty do servidor (só chega quando todos os clientes enviarem um Ready)
                             break;
 
                         case MessageType.StartParty:
-                            //Console.WriteLine(this.remote.ToString() + "\n");
                             LobbyLevel.LobbyIsDone(this, new EventArgs());
-                            //criar novo nivel em Game
-                            //instanciar os players
                             ReceiveMessageFromServer();
                             break;
 
                         case MessageType.InstantiatePlayers:
-                            //Console.WriteLine("InstantiatePlayers");
                             Level1.InstantiatePlayers(this, new EventArgs());
                             ReceiveMessageFromServer();
                             break;
 
                         case MessageType.Update:
-                            //Console.WriteLine("Update");
                             this.game.IsSyncing = true;
                             this.game.UpdateFromServer(remote);
-                            //atualizar o objeto do remoteClient dentro do Level
                             ReceiveMessageFromServer();
                             break;
 
                         case MessageType.Disconnect:
                             break;
-
-                        default:
-                            //Console.WriteLine("Unknow type");
-                            break;
                     }
                 }
-
-                //inStream.BeginRead(this.bufferIn, 0, client.ReceiveBufferSize, ReadCallback, client);
             }
             catch (Exception e) when (e is SocketException || e is System.IO.IOException)
             {
