@@ -79,6 +79,11 @@ public class Game
         //Console.WriteLine("Janela desfocada");
     }
 
+    /// <summary>
+    /// Cria um objeto de Level1 e inicializa o level
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void StartLevel1(object sender, EventArgs e)
     {
         Level1 level1 = new Level1(ref this.window, ref this.keyboard, this);
